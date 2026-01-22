@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        01/22/2026  14:14:52  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        01/22/2026  14:37:29  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
@@ -20,7 +20,7 @@ LINK MAP OF MODULE:  .\Objects\blinky (BLINK)
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
-            CODE    0000H     001CH     ABSOLUTE     
+            CODE    0000H     001FH     ABSOLUTE     
 
 
 
@@ -43,7 +43,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\blinky (BLINK)
   D:00F2H         SYMBOL        ADCOFSH
   D:00F1H         SYMBOL        ADCOFSL
   D:00F0H         SYMBOL        B
-  C:0002H         SYMBOL        BLINK
+  C:0000H         SYMBOL        BLINK
   B:00C8H.0       SYMBOL        CAP2
   B:00D8H.5       SYMBOL        CCONV
   D:00AFH         SYMBOL        CFG841
@@ -59,15 +59,15 @@ SYMBOL TABLE OF MODULE:  .\Objects\blinky (BLINK)
   D:00FAH         SYMBOL        DAC0H
   D:00F9H         SYMBOL        DAC0L
   D:00FCH         SYMBOL        DAC1H
-BL51 BANKED LINKER/LOCATER V6.22                                                      01/22/2026  14:14:52  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/22/2026  14:37:29  PAGE 2
 
 
   D:00FBH         SYMBOL        DAC1L
   D:00FDH         SYMBOL        DACCON
   D:00E8H         SYMBOL        DCON
-  C:0010H         SYMBOL        DELAY
-  C:0013H         SYMBOL        DLY1
-  C:0011H         SYMBOL        DLY2
+  C:0013H         SYMBOL        DELAY
+  C:0016H         SYMBOL        DLY1
+  C:0014H         SYMBOL        DLY2
   B:00D8H.6       SYMBOL        DMA
   D:00D3H         SYMBOL        DMAH
   D:00D2H         SYMBOL        DMAL
@@ -119,13 +119,13 @@ SYMBOL TABLE OF MODULE:  .\Objects\blinky (BLINK)
   B:00B0H.3       SYMBOL        INT1
   D:00A6H         SYMBOL        INTVAL
   D:00B8H         SYMBOL        IP
-BL51 BANKED LINKER/LOCATER V6.22                                                      01/22/2026  14:14:52  PAGE 3
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/22/2026  14:37:29  PAGE 3
 
 
   B:00F8H.7       SYMBOL        ISPI
   B:0088H.0       SYMBOL        IT0
   B:0088H.2       SYMBOL        IT1
-  B:00B0H.4       SYMBOL        LED
+  D:0080H         SYMBOL        LED
   B:00E8H.5       SYMBOL        MCO
   B:00E8H.6       SYMBOL        MDE
   B:00E8H.4       SYMBOL        MDI
@@ -179,13 +179,14 @@ SYMBOL TABLE OF MODULE:  .\Objects\blinky (BLINK)
   B:00F8H.5       SYMBOL        SPE
   D:00B7H         SYMBOL        SPH
   D:00F8H         SYMBOL        SPICON
-BL51 BANKED LINKER/LOCATER V6.22                                                      01/22/2026  14:14:52  PAGE 4
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/22/2026  14:37:29  PAGE 4
 
 
   D:00F7H         SYMBOL        SPIDAT
   B:00F8H.4       SYMBOL        SPIM
   B:00F8H.0       SYMBOL        SPR0
   B:00F8H.1       SYMBOL        SPR1
+  D:00A0H         SYMBOL        SWITCHES
   B:00B0H.4       SYMBOL        T0
   B:00B0H.5       SYMBOL        T1
   B:0090H.0       SYMBOL        T2
@@ -219,29 +220,30 @@ SYMBOL TABLE OF MODULE:  .\Objects\blinky (BLINK)
   B:00C0H.2       SYMBOL        WDS
   B:00C0H.0       SYMBOL        WDWR
   B:00B0H.6       SYMBOL        WR
-  C:0000H         LINE#         26
-  C:0002H         LINE#         28
-  C:0004H         LINE#         29
-  C:0006H         LINE#         31
-  C:0008H         LINE#         32
-  C:000AH         LINE#         33
-  C:000CH         LINE#         34
-  C:000EH         LINE#         35
-  C:0010H         LINE#         40
-  C:0011H         LINE#         41
-  C:0013H         LINE#         42
-  C:0015H         LINE#         43
-  C:0017H         LINE#         44
-  C:0019H         LINE#         45
-  C:001BH         LINE#         46
+  C:0000H         LINE#         28
+  C:0002H         LINE#         29
+  C:0004H         LINE#         30
+  C:0006H         LINE#         33
+  C:0008H         LINE#         34
+  C:000AH         LINE#         35
+  C:000DH         LINE#         36
+  C:000FH         LINE#         37
+  C:0011H         LINE#         39
+  C:0013H         LINE#         44
+  C:0014H         LINE#         45
+  C:0016H         LINE#         46
+  C:0018H         LINE#         47
+  C:001AH         LINE#         48
+  C:001CH         LINE#         49
+  C:001EH         LINE#         50
   -------         ENDMOD        BLINK
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 001CH BYTE ( 1%) *
+BL51 BANKED LINKER/LOCATER V6.22                                                      01/22/2026  14:37:29  PAGE 5
+
+
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 001FH BYTE ( 1%) *
 ******************************************************************************
-BL51 BANKED LINKER/LOCATER V6.22                                                      01/22/2026  14:14:52  PAGE 5
 
-
-
-Program Size: data=8.0 xdata=0 code=28
+Program Size: data=8.0 xdata=0 code=31
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

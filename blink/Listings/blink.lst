@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  BLINK                                                                01/22/2026 14:14:52 PAGE     1
+A51 MACRO ASSEMBLER  BLINK                                                                01/22/2026 14:37:28 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.02c
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
   00B1          +1    55     PWM0L    DATA  0B1H  ;PWM DATA REGISTER
   00B2          +1    56     PWM0H    DATA  0B2H  ;PWM DATA REGISTER
   00B3          +1    57     PWM1L    DATA  0B3H  ;PWM DATA REGISTER
-A51 MACRO ASSEMBLER  BLINK                                                                01/22/2026 14:14:52 PAGE     2
+A51 MACRO ASSEMBLER  BLINK                                                                01/22/2026 14:37:28 PAGE     2
 
   00B4          +1    58     PWM1H    DATA  0B4H  ;PWM DATA REGISTER
   00B7          +1    59     SPH      DATA  0B7H  ;EXTENDED STACK POINTER REGISTER
@@ -133,7 +133,7 @@ LOC  OBJ            LINE     SOURCE
   00AA          +1   121     EX1      BIT   0AAH  ;IE.2 - EXTERNAL INTERRUPT 1 ENABLE
   00AB          +1   122     ET1      BIT   0ABH  ;IE.3 - TIMER 1 INTERRUPT ENABLE
   00AC          +1   123     ES       BIT   0ACH  ;IE.4 - SERIAL PORT INTERRUPT ENABLE
-A51 MACRO ASSEMBLER  BLINK                                                                01/22/2026 14:14:52 PAGE     3
+A51 MACRO ASSEMBLER  BLINK                                                                01/22/2026 14:37:28 PAGE     3
 
   00AD          +1   124     ET2      BIT   0ADH  ;IE.5 - TIMER 2 INTERRUPT ENABLE
   00AE          +1   125     EADC     BIT   0AEH  ;IE.6 - ENABLE ADC INTURRUPT
@@ -201,7 +201,7 @@ LOC  OBJ            LINE     SOURCE
   00F8          +1   187     SPR0     BIT   0F8H  ;SPICON.0 - SPI BITRATE SELECT BIT0
   00F9          +1   188     SPR1     BIT   0F9H  ;SPICON.1 - SPI BITRATE SELECT BIT1
   00FA          +1   189     CPHA     BIT   0FAH  ;SPICON.2 - SPI CLOCK PHASE SELECT
-A51 MACRO ASSEMBLER  BLINK                                                                01/22/2026 14:14:52 PAGE     4
+A51 MACRO ASSEMBLER  BLINK                                                                01/22/2026 14:37:28 PAGE     4
 
   00FB          +1   190     CPOL     BIT   0FBH  ;SPICON.3 - SPI CLOCK POLARITY SELECT
   00FC          +1   191     SPIM     BIT   0FCH  ;SPICON.4 - SPI MASTER/SLAVE MODE SELECT
@@ -209,39 +209,43 @@ LOC  OBJ            LINE     SOURCE
   00FE          +1   193     WCOL     BIT   0FEH  ;SPICON.6 - SPI WRITE COLLISION ERROR FLAG
   00FF          +1   194     ISPI     BIT   0FFH  ;SPICON.7 - SPI END OF TRANSFER FLAG
                      195     
-  00B4               196     LED             EQU     P3.4            ; P3.4 is red LED on eval board
-                     197     
-                     198     ;____________________________________________________________________
-                     199                     ; MAIN PROGRAM
-----                 200     CSEG            ; working in code segment - program memory
-                     201     
-0000                 202                     ORG     0000h           ; starting at address 0
-0000 D2B4            203                     SETB LED                ; Turn off the LED to start
-0002                 204     BLINK:  
-0002 745A            205                     MOV     A, #090 ; set delay length for 200 ms
-0004 1110            206                     CALL    DELAY           ; call software delay routine
-                     207     
-0006 B2B4            208                     CPL     LED             ; change state of red LED
-0008 741E            209                     MOV A, #030; Load in 
-000A 1110            210                     CALL    DELAY           ; call software delay routine
-000C B2B4            211                     CPL     LED             ; change state of red LED
-000E 80F2            212                     JMP     BLINK           ; repeat indefinately
-                     213     
-                     214     ;____________________________________________________________________
-                     215                     ; SUBROUTINES
-0010                 216     DELAY:  ; delay for time A x 10 ms.  A is not changed. 
-0010 FD              217                     MOV     R5, A           ; set number of repetitions for outer loop
-0011 7E90            218     DLY2:   MOV     R6, #144                ; middle loop repeats 144 times         
-0013 7FFF            219     DLY1:   MOV     R7, #255                ; inner loop repeats 255 times      
-0015 DFFE            220                     DJNZ    R7, $           ; inner loop 255 x 3 cycles = 765 cycles           
+  0080               196     LED                     EQU     P0              ; P3.4 is red LED on eval board
+  00A0               197     SWITCHES        EQU P2
+                     198     
+                     199     ;____________________________________________________________________
+                     200                     ; MAIN PROGRAM
+----                 201     CSEG            ; working in code segment - program memory
+                     202     
+0000                 203                     ORG     0000h                   ; starting at address 0
+0000                 204     BLINK:  
+0000 E5A0            205                     MOV A, SWITCHES ; Copy the value from the switches
+0002 54DF            206                     ANL A, #11011111b; Or mask to exclude bit 5
+0004 F580            207                     MOV LED, A; Pass on to the LEDs
+                     208                     
+                     209                     
+0006 745A            210                     MOV     A, #090 ; set delay length for 200 ms
+0008 1113            211                     CALL    DELAY           ; call software delay routine
+000A 7580DF          212                     MOV LED, #11011111b             ; Turn off the LED to start
+000D 741E            213                     MOV A, #030; Load in 
+000F 1113            214                     CALL    DELAY           ; call software delay routine
+                     215                     
+0011 80ED            216                     JMP     BLINK           ; repeat indefinately
+                     217     
+                     218     ;____________________________________________________________________
+                     219                     ; SUBROUTINES
+0013                 220     DELAY:  ; delay for time A x 10 ms.  A is not changed. 
+0013 FD              221                     MOV     R5, A           ; set number of repetitions for outer loop
+0014 7E90            222     DLY2:   MOV     R6, #144                ; middle loop repeats 144 times         
+0016 7FFF            223     DLY1:   MOV     R7, #255                ; inner loop repeats 255 times      
+0018 DFFE            224                     DJNZ    R7, $           ; inner loop 255 x 3 cycles = 765 cycles           
                               
-0017 DEFA            221                     DJNZ    R6, DLY1                ; + 5 to reload, x 144 = 110880 cycles
-0019 DDF6            222                     DJNZ    R5, DLY2                ; + 5 to reload = 110885 cycles = 10.0264 m
+001A DEFA            225                     DJNZ    R6, DLY1                ; + 5 to reload, x 144 = 110880 cycles
+001C DDF6            226                     DJNZ    R5, DLY2                ; + 5 to reload = 110885 cycles = 10.0264 m
                              s
-001B 22              223                     RET                             ; return from subroutine
-                     224     
-                     225     ;____________________________________________________________________
-                     226     
+001E 22              227                     RET                             ; return from subroutine
+                     228     
+                     229     ;____________________________________________________________________
+                     230     
 
 
 REGISTER BANK(S) USED: 0 

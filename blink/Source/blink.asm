@@ -16,22 +16,26 @@
 $NOMOD51			; for Keil uVision - do not pre-define 8051 SFRs
 $INCLUDE (MOD841)	; load this definition file instead
 
-LED		EQU	P3.4		; P3.4 is red LED on eval board
+LED			EQU	P0		; P3.4 is red LED on eval board
+SWITCHES 	EQU P2
 
 ;____________________________________________________________________
 		; MAIN PROGRAM
 CSEG		; working in code segment - program memory
 
-		ORG	0000h		; starting at address 0
-		SETB LED		; Turn off the LED to start
+		ORG	0000h			; starting at address 0
 BLINK:	
+		MOV A, SWITCHES ; Copy the value from the switches
+		ANL A, #11011111b; Or mask to exclude bit 5
+		MOV LED, A; Pass on to the LEDs
+		
+		
 		MOV	A, #090	; set delay length for 200 ms
 		CALL	DELAY   	; call software delay routine
-
-		CPL	LED     	; change state of red LED
+		MOV LED, #11011111b		; Turn off the LED to start
 		MOV A, #030; Load in 
 		CALL	DELAY   	; call software delay routine
-		CPL	LED     	; change state of red LED
+		
 		JMP	BLINK   	; repeat indefinately
 
 ;____________________________________________________________________
