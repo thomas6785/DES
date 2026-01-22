@@ -1,0 +1,250 @@
+A51 MACRO ASSEMBLER  BLINK                                                                01/22/2026 14:14:52 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.02c
+OBJECT MODULE PLACED IN .\Objects\blink.obj
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE Source\blink.asm SET(SMALL) DEBUG PRINT(.\Listings\blink.lst) NOCOND NO
+                      SYMBOLS OBJECT(.\Objects\blink.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+                       1     ;********************************************************************
+                       2     ; Example program for Analog Devices EVAL-ADuC841 board.
+                       3     ; Based on example code from Analog Devices, 
+                       4     ; author        : ADI - Apps            www.analog.com/MicroConverter
+                       5     ; Date          : October 2003
+                       6     ;
+                       7     ; File          : blink.asm
+                       8     ;
+                       9     ; Hardware      : ADuC841 with clock frequency 11.0592 MHz
+                      10     ;
+                      11     ; Description   : Blinks LED on port 3 pin 4 continuously.
+                      12     ;                 400 ms period @ 50% duty cycle.
+                      13     ;
+                      14     ;********************************************************************
+                      15     
+                      16     $nomod51                        ; for Keil uVision - do not pre-define 8051 SFRs
+                      17     ;$include (MOD841) ; load this definition file instead
+                +1    18     ;REV.  1.0   30 September 2003
+                +1    19     ;ADuC841   Apps, Analog Devices Inc.
+  0080          +1    20     P0       DATA  080H  ;PORT 0    
+  0081          +1    21     SP       DATA  081H  ;STACK POINTER     
+  0082          +1    22     DPL      DATA  082H  ;DATA POINTER - LOW BYTE
+  0083          +1    23     DPH      DATA  083H  ;DATA POINTER - HIGH BYTE
+  0084          +1    24     DPP      DATA  084H  ;DATA POINTER - PAGE BYTE
+  0087          +1    25     PCON     DATA  087H  ;POWER CONTROL
+  0088          +1    26     TCON     DATA  088H  ;TIMER CONTROL
+  0089          +1    27     TMOD     DATA  089H  ;TIMER MODE
+  008A          +1    28     TL0      DATA  08AH  ;TIMER 0 - LOW BYTE
+  008B          +1    29     TL1      DATA  08BH  ;TIMER 1 - LOW BYTE
+  008C          +1    30     TH0      DATA  08CH  ;TIMER 0 - HIGH BYTE
+  008D          +1    31     TH1      DATA  08DH  ;TIMER 1 - HIGH BYTE
+  0090          +1    32     P1       DATA  090H  ;PORT 1
+  0091          +1    33     I2CADD1  DATA  091H  ;I2C ADDRESS REGISTER1
+  0092          +1    34     I2CADD2  DATA  092H  ;I2C ADDRESS REGISTER2
+  0093          +1    35     I2CADD3  DATA  093H  ;I2C ADDRESS REGISTER3
+  0098          +1    36     SCON     DATA  098H  ;SERIAL PORT CONTROL
+  0099          +1    37     SBUF     DATA  099H  ;SERIAL PORT BUFFER
+  009A          +1    38     I2CDAT   DATA  09AH  ;I2C DATA REGISTER
+  009B          +1    39     I2CADD   DATA  09BH  ;I2C ADDRESS REGISTER
+  009E          +1    40     T3CON    DATA  09EH  ;TIMER 3 CONTROL
+  009D          +1    41     T3FD     DATA  09DH  ;TIMER 3 FRACTIONAL DIVIDER
+  00A0          +1    42     P2       DATA  0A0H  ;PORT 2
+  00A1          +1    43     TIMECON  DATA  0A1H  ;TIC CONTROL
+  00A2          +1    44     HTHSEC   DATA  0A2H  ;TIC - HTHSEC DATA
+  00A3          +1    45     SEC      DATA  0A3H  ;TIC - SEC DATA
+  00A4          +1    46     MIN      DATA  0A4H  ;TIC - MIN DATA
+  00A5          +1    47     HOUR     DATA  0A5H  ;TIC - HOUR DATA
+  00A6          +1    48     INTVAL   DATA  0A6H  ;TIC INTERVAL REGISTER
+  00A7          +1    49     DPCON    DATA  0A7H  ;DUAL DATA POINTER CONTROL REGISTER
+  00A8          +1    50     IE       DATA  0A8H  ;INTERRUPT ENABLE 1
+  00A9          +1    51     IEIP2    DATA  0A9H  ;INTERRUPT ENABLE 2
+  00AE          +1    52     PWMCON   DATA  0AEH  ;PWM CONTROL REGISTER
+  00AF          +1    53     CFG841   DATA  0AFH  ;GENERAL FLASH/PWM CONTROL REGISTER
+  00B0          +1    54     P3       DATA  0B0H  ;PORT 3
+  00B1          +1    55     PWM0L    DATA  0B1H  ;PWM DATA REGISTER
+  00B2          +1    56     PWM0H    DATA  0B2H  ;PWM DATA REGISTER
+  00B3          +1    57     PWM1L    DATA  0B3H  ;PWM DATA REGISTER
+A51 MACRO ASSEMBLER  BLINK                                                                01/22/2026 14:14:52 PAGE     2
+
+  00B4          +1    58     PWM1H    DATA  0B4H  ;PWM DATA REGISTER
+  00B7          +1    59     SPH      DATA  0B7H  ;EXTENDED STACK POINTER REGISTER
+  00B8          +1    60     IP       DATA  0B8H  ;INTERRUPT PRIORITY
+  00B9          +1    61     ECON     DATA  0B9H  ;FLASH EEPROM CONTROL
+  00BC          +1    62     EDATA1   DATA  0BCH  ;FLASH EEPROM DATA1 
+  00BD          +1    63     EDATA2   DATA  0BDH  ;FLASH EEPROM DATA2 
+  00BE          +1    64     EDATA3   DATA  0BEH  ;FLASH EEPROM DATA3 
+  00BF          +1    65     EDATA4   DATA  0BFH  ;FLASH EEPROM DATA4 
+  00C0          +1    66     WDCON    DATA  0C0H  ;WATCHDOG TIMER CONTROL
+  00C2          +1    67     CHIPID   DATA  0C2H  ;CHIPID REGISTER
+  00C6          +1    68     EADRL    DATA  0C6H  ;FLASH EEPROM PAGE ADDRESS - LOW BYTE
+  00C7          +1    69     EADRH    DATA  0C7H  ;FLASH EEPROM PAGE ADDRESS - LOW BYTE
+  00C8          +1    70     T2CON    DATA  0C8H  ;TIMER 2 CONTROL
+  00CA          +1    71     RCAP2L   DATA  0CAH  ;TIMER 2 CAPTURE REGISTER - LOW BYTE
+  00CB          +1    72     RCAP2H   DATA  0CBH  ;TIMER 2 CAPTURE REGISTER - HIGH BYTE
+  00CC          +1    73     TL2      DATA  0CCH  ;TIMER 2 - LOW BYTE
+  00CD          +1    74     TH2      DATA  0CDH  ;TIMER 2 - HIGH BYTE
+  00D0          +1    75     PSW      DATA  0D0H  ;PROGRAM STATUS WORD
+  00D2          +1    76     DMAL     DATA  0D2H  ;DMA ADDRESS LOW BYTE
+  00D3          +1    77     DMAH     DATA  0D3H  ;DMA ADDRESS HIGH BYTE
+  00D4          +1    78     DMAP     DATA  0D4H  ;DMA ADDRESS PAGE BYTE
+  00D7          +1    79     PLLCON   DATA  0D7H  ;PLL CONTROL
+  00D8          +1    80     ADCCON2  DATA  0D8H  ;ADC CONTROL
+  00D9          +1    81     ADCDATAL DATA  0D9H  ;ADC DATA LOW BYTE
+  00DA          +1    82     ADCDATAH DATA  0DAH  ;ADC DATA HIGH BYTE
+  00DF          +1    83     PSMCON   DATA  0DFH  ;POWER SUPPLY MONITOR
+  00E0          +1    84     ACC      DATA  0E0H  ;ACCUMULATOR
+  00E8          +1    85     DCON     DATA  0E8H  ;D1 AND D0 CONTROL
+  00E8          +1    86     I2CCON   DATA  0E8H  ;I2C CONTROL
+  00EF          +1    87     ADCCON1  DATA  0EFH  ;ADC CONTROL
+  00F0          +1    88     B        DATA  0F0H  ;MULTIPLICATION REGISTER
+  00F1          +1    89     ADCOFSL  DATA  0F1H  ;ADC OFFSET LOW BYTE
+  00F2          +1    90     ADCOFSH  DATA  0F2H  ;ADC OFFSET HIGH BYTE
+  00F3          +1    91     ADCGAINL DATA  0F3H  ;ADC GAIN LOW BYTE
+  00F4          +1    92     ADCGAINH DATA  0F4H  ;ADC GAIN HIGH BYTE
+  00F5          +1    93     ADCCON3  DATA  0F5H  ;ADC CONTROL
+  00F7          +1    94     SPIDAT   DATA  0F7H  ;SPI DATA REGISTER
+  00F8          +1    95     SPICON   DATA  0F8H  ;SPI CONTROL REGISTER
+  00F9          +1    96     DAC0L    DATA  0F9H  ;DAC0 LOW BYTE
+  00FA          +1    97     DAC0H    DATA  0FAH  ;DAC0 HIGH BYTE
+  00FB          +1    98     DAC1L    DATA  0FBH  ;DAC1 LOW BYTE
+  00FC          +1    99     DAC1H    DATA  0FCH  ;DAC1 HIGH BYTE
+  00FD          +1   100     DACCON   DATA  0FDH  ;DAC CONTROL REGISTER
+  0088          +1   101     IT0      BIT   088H  ;TCON.0 - EXT. INTERRUPT 0 TYPE
+  0089          +1   102     IE0      BIT   089H  ;TCON.1 - EXT. INTERRUPT 0 EDGE FLAG
+  008A          +1   103     IT1      BIT   08AH  ;TCON.2 - EXT. INTERRUPT 1 TYPE
+  008B          +1   104     IE1      BIT   08BH  ;TCON.3 - EXT. INTERRUPT 1 EDGE FLAG
+  008C          +1   105     TR0      BIT   08CH  ;TCON.4 - TIMER 0 ON/OFF CONTROL
+  008D          +1   106     TF0      BIT   08DH  ;TCON.5 - TIMER 0 OVERFLOW FLAG
+  008E          +1   107     TR1      BIT   08EH  ;TCON.6 - TIMER 1 ON/OFF CONTROL
+  008F          +1   108     TF1      BIT   08FH  ;TCON.7 - TIMER 1 OVERFLOW FLAG
+  0090          +1   109     T2       BIT   090H  ;P1.0 - TIMER 2 TRIGGER INPUT
+  0091          +1   110     T2EX     BIT   091H  ;P1.1 - TIMER 2 COUNT INPUT
+  0098          +1   111     RI       BIT   098H  ;SCON.0 - RECEIVE INTERRUPT FLAG
+  0099          +1   112     TI       BIT   099H  ;SCON.1 - TRANSMIT INTERRUPT FLAG
+  009A          +1   113     RB8      BIT   09AH  ;SCON.2 - RECEIVE BIT 8
+  009B          +1   114     TB8      BIT   09BH  ;SCON.3 - TRANSMIT BIT 8
+  009C          +1   115     REN      BIT   09CH  ;SCON.4 - RECEIVE ENABLE
+  009D          +1   116     SM2      BIT   09DH  ;SCON.5 - SERIAL MODE CONTROL BIT 2
+  009E          +1   117     SM1      BIT   09EH  ;SCON.6 - SERIAL MODE CONTROL BIT 1
+  009F          +1   118     SM0      BIT   09FH  ;SCON.7 - SERIAL MODE CONTROL BIT 0
+  00A8          +1   119     EX0      BIT   0A8H  ;IE.0 - EXTERNAL INTERRUPT 0 ENABLE
+  00A9          +1   120     ET0      BIT   0A9H  ;IE.1 - TIMER 0 INTERRUPT ENABLE
+  00AA          +1   121     EX1      BIT   0AAH  ;IE.2 - EXTERNAL INTERRUPT 1 ENABLE
+  00AB          +1   122     ET1      BIT   0ABH  ;IE.3 - TIMER 1 INTERRUPT ENABLE
+  00AC          +1   123     ES       BIT   0ACH  ;IE.4 - SERIAL PORT INTERRUPT ENABLE
+A51 MACRO ASSEMBLER  BLINK                                                                01/22/2026 14:14:52 PAGE     3
+
+  00AD          +1   124     ET2      BIT   0ADH  ;IE.5 - TIMER 2 INTERRUPT ENABLE
+  00AE          +1   125     EADC     BIT   0AEH  ;IE.6 - ENABLE ADC INTURRUPT
+  00AF          +1   126     EA       BIT   0AFH  ;IE.7 - GLOBAL INTERRUPT ENABLE
+  00B0          +1   127     RXD      BIT   0B0H  ;P3.0 - SERIAL PORT RECEIVE INPUT
+  00B1          +1   128     TXD      BIT   0B1H  ;P3.1 - SERIAL PORT TRANSMIT OUTPUT
+  00B2          +1   129     INT0     BIT   0B2H  ;P3.2 - EXTERNAL INTERRUPT 0 INPUT
+  00B3          +1   130     INT1     BIT   0B3H  ;P3.3 - EXTERNAL INTERRUPT 1 INPUT
+  00B4          +1   131     T0       BIT   0B4H  ;P3.4 - TIMER 0 COUNT INPUT
+  00B5          +1   132     T1       BIT   0B5H  ;P3.5 - TIMER 1 COUNT INPUT
+  00B6          +1   133     WR       BIT   0B6H  ;P3.6 - WRITE CONTROL FOR EXT. MEMORY
+  00B7          +1   134     RD       BIT   0B7H  ;P3.7 - READ CONTROL FOR EXT. MEMORY
+  00B8          +1   135     PX0      BIT   0B8H  ;IP.0 - EXTERNAL INTERRUPT 0 PRIORITY
+  00B9          +1   136     PT0      BIT   0B9H  ;IP.1 - TIMER 0 PRIORITY
+  00BA          +1   137     PX1      BIT   0BAH  ;IP.2 - EXTERNAL INTERRUPT 1 PRIORITY
+  00BB          +1   138     PT1      BIT   0BBH  ;IP.3 - TIMER 1 PRIORITY
+  00BC          +1   139     PS       BIT   0BCH  ;IP.4 - SERIAL PORT PRIORITY
+  00BD          +1   140     PT2      BIT   0BDH  ;IP.5 - TIMER 2 PRIORITY
+  00BE          +1   141     PADC     BIT   0BEH  ;IP.6 - ADC PRIORITY
+  00BF          +1   142     PSI      BIT   0BFH  ;IP.7 - SPI OR 2-WIRE SERIAL INTERFACE PRIORITY
+  00C0          +1   143     WDWR     BIT   0C0H  ;WDCON.0 - WATCHDOG WRITE ENABLE
+  00C1          +1   144     WDE      BIT   0C1H  ;WDCON.1 - WATCHDOG ENABLE
+  00C2          +1   145     WDS      BIT   0C2H  ;WDCON.2 - WATCHDOG STATUS BIT
+  00C3          +1   146     WDIR     BIT   0C3H  ;WDCON.3 - WATCHDOG INTERRUPT RESPONSE ENABLE BIT
+  00C4          +1   147     PRE0     BIT   0C4H  ;WDCON.4 - WATCHDOG TIMEOUT SELECTION BIT0
+  00C5          +1   148     PRE1     BIT   0C5H  ;WDCON.5 - WATCHDOG TIMEOUT SELECTION BIT1
+  00C6          +1   149     PRE2     BIT   0C6H  ;WDCON.6 - WATCHDOG TIMEOUT SELECTION BIT2
+  00C7          +1   150     PRE3     BIT   0C7H  ;WDCON.7 - WATCHDOG TIMEOUT SELECTION BIT3
+  00C8          +1   151     CAP2     BIT   0C8H  ;T2CON.0 - CAPTURE OR RELOAD SELECT
+  00C9          +1   152     CNT2     BIT   0C9H  ;T2CON.1 - TIMER OR COUNTER SELECT
+  00CA          +1   153     TR2      BIT   0CAH  ;T2CON.2 - TIMER 2 ON/OFF CONTROL
+  00CB          +1   154     EXEN2    BIT   0CBH  ;T2CON.3 - TIMER 2 EXTERNAL ENABLE FLAG
+  00CC          +1   155     TCLK     BIT   0CCH  ;T2CON.4 - TRANSMIT CLOCK SELECT
+  00CD          +1   156     RCLK     BIT   0CDH  ;T2CON.5 - RECEIVE CLOCK SELECTT
+  00CE          +1   157     EXF2     BIT   0CEH  ;T2CON.6 - EXTERNAL TRANSITION FLAG
+  00CF          +1   158     TF2      BIT   0CFH  ;T2CON.7 - TIMER 2 OVERFLOW FLAG
+  00D0          +1   159     P        BIT   0D0H  ;PSW.0 - ACCUMULATOR PARITY FLAG
+  00D1          +1   160     F1       BIT   0D1H  ;PSW.1 - FLAG 0
+  00D2          +1   161     OV       BIT   0D2H  ;PSW.2 - OVERFLOW FLAG
+  00D3          +1   162     RS0      BIT   0D3H  ;PSW.3 - REGISTER BANK SELECT 0
+  00D4          +1   163     RS1      BIT   0D4H  ;PSW.4 - REGISTER BANK SELECT 1
+  00D5          +1   164     F0       BIT   0D5H  ;PSW.5 - FLAG 0
+  00D6          +1   165     AC       BIT   0D6H  ;PSW.6 - AUXILIARY CARRY FLAG
+  00D7          +1   166     CY       BIT   0D7H  ;PSW.7 - CARRY FLAG
+  00D8          +1   167     CS0      BIT   0D8H  ;ADCCON2.0 - ADC INPUT CHANNEL SELECT BIT0
+  00D9          +1   168     CS1      BIT   0D9H  ;ADCCON2.1 - ADC INPUT CHANNEL SELECT BIT1
+  00DA          +1   169     CS2      BIT   0DAH  ;ADCCON2.2 - ADC INPUT CHANNEL SELECT BIT2
+  00DB          +1   170     CS3      BIT   0DBH  ;ADCCON2.3 - ADC INPUT CHANNEL SELECT BIT3
+  00DC          +1   171     SCONV    BIT   0DCH  ;ADCCON2.4 - SINGLE CONVERSION ENABLE
+  00DD          +1   172     CCONV    BIT   0DDH  ;ADCCON2.5 - CONTINUOUS CONVERSION ENABLE
+  00DE          +1   173     DMA      BIT   0DEH  ;ADCCON2.6 - DMA MODE ENABLE
+  00DF          +1   174     ADCI     BIT   0DFH  ;ADCCON2.7 - ADC INTURRUPT FLAG
+  00E8          +1   175     I2CI     BIT   0E8H  ;I2CCON.0 - I2C INTURRUPT FLAG
+  00E9          +1   176     I2CTX    BIT   0E9H  ;I2CCON.1 - I2C TRANSMIT SELECT
+  00EA          +1   177     I2CRS    BIT   0EAH  ;I2CCON.2 - I2C RESET
+  00EB          +1   178     I2CM     BIT   0EBH  ;I2CCON.3 - I2C MASTER MODE SELECT
+  00EC          +1   179     MDI      BIT   0ECH  ;I2CCON.4 - I2C MASTER MODE SDATA INPUT
+  00EC          +1   180     I2CID0   BIT   0ECH  ;I2CCON.4 - I2C SLAVE MODE INTERRUPT DECODE
+  00ED          +1   181     MCO      BIT   0EDH  ;I2CCON.5 - I2C MASTER MODE SCLOCK OUTPUT
+  00ED          +1   182     I2CID1   BIT   0EDH  ;I2CCON.5 - I2C SLAVE MODE INTERRUPT DECODE
+  00EE          +1   183     MDE      BIT   0EEH  ;I2CCON.6 - I2C MASTER MODE SDATA ENABLE
+  00EE          +1   184     I2CGC    BIT   0EEH  ;I2CCON.6 - I2C SLAVE MODE GENERAL CALL STATUS BIT
+  00EF          +1   185     MDO      BIT   0EFH  ;I2CCON.7 - I2C MASTER MODE SDATA OUTPUT
+  00EF          +1   186     I2CSI    BIT   0EFH  ;I2CCON.7 - I2C SLAVE  MODE STOP INTERRUPT ENABLE 
+  00F8          +1   187     SPR0     BIT   0F8H  ;SPICON.0 - SPI BITRATE SELECT BIT0
+  00F9          +1   188     SPR1     BIT   0F9H  ;SPICON.1 - SPI BITRATE SELECT BIT1
+  00FA          +1   189     CPHA     BIT   0FAH  ;SPICON.2 - SPI CLOCK PHASE SELECT
+A51 MACRO ASSEMBLER  BLINK                                                                01/22/2026 14:14:52 PAGE     4
+
+  00FB          +1   190     CPOL     BIT   0FBH  ;SPICON.3 - SPI CLOCK POLARITY SELECT
+  00FC          +1   191     SPIM     BIT   0FCH  ;SPICON.4 - SPI MASTER/SLAVE MODE SELECT
+  00FD          +1   192     SPE      BIT   0FDH  ;SPICON.5 - SPI INTERFACE ENABLE
+  00FE          +1   193     WCOL     BIT   0FEH  ;SPICON.6 - SPI WRITE COLLISION ERROR FLAG
+  00FF          +1   194     ISPI     BIT   0FFH  ;SPICON.7 - SPI END OF TRANSFER FLAG
+                     195     
+  00B4               196     LED             EQU     P3.4            ; P3.4 is red LED on eval board
+                     197     
+                     198     ;____________________________________________________________________
+                     199                     ; MAIN PROGRAM
+----                 200     CSEG            ; working in code segment - program memory
+                     201     
+0000                 202                     ORG     0000h           ; starting at address 0
+0000 D2B4            203                     SETB LED                ; Turn off the LED to start
+0002                 204     BLINK:  
+0002 745A            205                     MOV     A, #090 ; set delay length for 200 ms
+0004 1110            206                     CALL    DELAY           ; call software delay routine
+                     207     
+0006 B2B4            208                     CPL     LED             ; change state of red LED
+0008 741E            209                     MOV A, #030; Load in 
+000A 1110            210                     CALL    DELAY           ; call software delay routine
+000C B2B4            211                     CPL     LED             ; change state of red LED
+000E 80F2            212                     JMP     BLINK           ; repeat indefinately
+                     213     
+                     214     ;____________________________________________________________________
+                     215                     ; SUBROUTINES
+0010                 216     DELAY:  ; delay for time A x 10 ms.  A is not changed. 
+0010 FD              217                     MOV     R5, A           ; set number of repetitions for outer loop
+0011 7E90            218     DLY2:   MOV     R6, #144                ; middle loop repeats 144 times         
+0013 7FFF            219     DLY1:   MOV     R7, #255                ; inner loop repeats 255 times      
+0015 DFFE            220                     DJNZ    R7, $           ; inner loop 255 x 3 cycles = 765 cycles           
+                              
+0017 DEFA            221                     DJNZ    R6, DLY1                ; + 5 to reload, x 144 = 110880 cycles
+0019 DDF6            222                     DJNZ    R5, DLY2                ; + 5 to reload = 110885 cycles = 10.0264 m
+                             s
+001B 22              223                     RET                             ; return from subroutine
+                     224     
+                     225     ;____________________________________________________________________
+                     226     
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

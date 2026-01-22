@@ -1,0 +1,4 @@
+".\Objects\blink.obj" 
+TO ".\Objects\blinky" 
+PRINT(".\Listings\blinky.m51") NOPUBLICS 
+RAMSIZE(256) 
