@@ -1,0 +1,3 @@
+".\Objects\software_frequency.obj" 
+TO ".\Objects\software_frequency" 
+PRINT(".\Listings\software_frequency.m51") RAMSIZE(256) 
