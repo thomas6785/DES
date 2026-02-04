@@ -1,10 +1,10 @@
-A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   01/29/2026 14:09:03 PAGE     1
+A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/04/2026 16:14:18 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.02c
 OBJECT MODULE PLACED IN .\Objects\software_frequency.obj
-ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE Source\software_frequency.a51 SET(SMALL) DEBUG PRINT(.\Listings\softwar
-                      e_frequency.lst) OBJECT(.\Objects\software_frequency.obj) EP
+ASSEMBLER INVOKED BY: C:\Program Files\uVision\C51\BIN\A51.EXE Source\software_frequency.a51 SET(SMALL) DEBUG PRINT(.\Li
+                      stings\software_frequency.lst) OBJECT(.\Objects\software_frequency.obj) EP
 
 LOC  OBJ            LINE     SOURCE
 
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
   00B2          +1    55     PWM0H    DATA  0B2H  ;PWM DATA REGISTER
   00B3          +1    56     PWM1L    DATA  0B3H  ;PWM DATA REGISTER
   00B4          +1    57     PWM1H    DATA  0B4H  ;PWM DATA REGISTER
-A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   01/29/2026 14:09:03 PAGE     2
+A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/04/2026 16:14:18 PAGE     2
 
   00B7          +1    58     SPH      DATA  0B7H  ;EXTENDED STACK POINTER REGISTER
   00B8          +1    59     IP       DATA  0B8H  ;INTERRUPT PRIORITY
@@ -133,7 +133,7 @@ LOC  OBJ            LINE     SOURCE
   00AB          +1   121     ET1      BIT   0ABH  ;IE.3 - TIMER 1 INTERRUPT ENABLE
   00AC          +1   122     ES       BIT   0ACH  ;IE.4 - SERIAL PORT INTERRUPT ENABLE
   00AD          +1   123     ET2      BIT   0ADH  ;IE.5 - TIMER 2 INTERRUPT ENABLE
-A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   01/29/2026 14:09:03 PAGE     3
+A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/04/2026 16:14:18 PAGE     3
 
   00AE          +1   124     EADC     BIT   0AEH  ;IE.6 - ENABLE ADC INTURRUPT
   00AF          +1   125     EA       BIT   0AFH  ;IE.7 - GLOBAL INTERRUPT ENABLE
@@ -201,7 +201,7 @@ LOC  OBJ            LINE     SOURCE
   00F9          +1   187     SPR1     BIT   0F9H  ;SPICON.1 - SPI BITRATE SELECT BIT1
   00FA          +1   188     CPHA     BIT   0FAH  ;SPICON.2 - SPI CLOCK PHASE SELECT
   00FB          +1   189     CPOL     BIT   0FBH  ;SPICON.3 - SPI CLOCK POLARITY SELECT
-A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   01/29/2026 14:09:03 PAGE     4
+A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/04/2026 16:14:18 PAGE     4
 
   00FC          +1   190     SPIM     BIT   0FCH  ;SPICON.4 - SPI MASTER/SLAVE MODE SELECT
   00FD          +1   191     SPE      BIT   0FDH  ;SPICON.5 - SPI INTERFACE ENABLE
@@ -214,28 +214,40 @@ LOC  OBJ            LINE     SOURCE
 ----                 198     CSEG            ; working in code segment - program memory
                      199     
 0000                 200                     ORG     0000h                   ; starting at address 0
-                     201                     
-0000                 202     MAIN:
-                     203     
-0000 1104            204                     CALL    DELAY           ; call software delay routine
-                     205                     
-0002 B2B6            206                     CPL SOUND;
-                     207     
-                     208     ;____________________________________________________________________
-                     209                     ; SUBROUTINES
-0004                 210     DELAY:  ; delay for time A x 10 ms.  A is not changed. 
-0004 7D08            211                     MOV     R5, #8          ; set number of repetitions for outer loop      
-0006 7FFF            212     DLY1:   MOV     R7, #255                ; inner loop repeats 255 times      
-0008 DFFE            213                     DJNZ    R7, $           ; inner loop 255 x 3 cycles = 765 cycles           
-                              
-000A DDFA            214                     DJNZ    R5, DLY1                ; + 5 to reload, x 144 = 110880 cycles
-000C 22              215                     RET                             ; return from subroutine
-                     216             
-                     217     
-                     218     ;____________________________________________________________________
-                     219     
-                     220     END
-A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   01/29/2026 14:09:03 PAGE     5
+0000                 201     MAIN:
+0000                 202     LOOP:
+0000 1106            203                     CALL  DELAY                     ; call software delay routine           (3 
+                             cycles for jump + see subroutine)
+0002 B2B6            204                     CPL   SOUND                     ; flip the output bit 'SOUND'           (2 
+                             cycles)
+0004 80FA            205                     JMP   LOOP                      ; return to loop start                     
+                                  (3 cycles)
+                     206                     ; NOTE: next address is 0003h which is reserved for interrupts. If we need 
+                             more setup instructions, we'll have to put in a jump to MAIN elsewhere
+                     207                     ; Loop is 6144 clocks total giving precisely 900 Hz wave at 11.0592 MHz
+                     208     
+                     209     ;____________________________________________________________________
+                     210                     ; SUBROUTINES
+0006                 211     DELAY:  ; Delay for using two nested FOR loops
+                     212                     ; Delay is 6139 clocks including CALL and RET
+                     213                     ; R5 and R7 are changed
+0006 7D10            214                     MOV     R5, #16                 ; set outer loop to 16 repetitions      (2 
+                             cycles)
+0008 7F7E            215     DLY1:   MOV     R7, #126                ; set inner loop to 126 repetitions     (2 cycles *
+                              16)
+000A DFFE            216                     DJNZ    R7, $           ; DJNZ inner loop                                  
+                                  (3 cycles * 126 * 16)
+000C DDFA            217                     DJNZ    R5, DLY1        ; DJNZ outer loop                                  
+                                  (3 cycles * 16)
+000E 00              218                     NOP                             ; (1 cycle)
+000F 00              219                     NOP                                     ; Two "NOP" are necessary to get pr
+                             ecisely 900 Hz (1 cycle each)
+0010 22              220                     RET                                     ; return from subroutine (4 cycles)
+                     221     
+                     222     ;____________________________________________________________________
+                     223     
+                     224     END
+A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/04/2026 16:14:18 PAGE     5
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -274,8 +286,8 @@ DAC1H. . . . . . .  D ADDR   00FCH   A
 DAC1L. . . . . . .  D ADDR   00FBH   A   
 DACCON . . . . . .  D ADDR   00FDH   A   
 DCON . . . . . . .  D ADDR   00E8H   A   
-DELAY. . . . . . .  C ADDR   0004H   A   
-DLY1 . . . . . . .  C ADDR   0006H   A   
+DELAY. . . . . . .  C ADDR   0006H   A   
+DLY1 . . . . . . .  C ADDR   0008H   A   
 DMA. . . . . . . .  B ADDR   00D8H.6 A   
 DMAH . . . . . . .  D ADDR   00D3H   A   
 DMAL . . . . . . .  D ADDR   00D2H   A   
@@ -303,7 +315,7 @@ EXEN2. . . . . . .  B ADDR   00C8H.3 A
 EXF2 . . . . . . .  B ADDR   00C8H.6 A   
 F0 . . . . . . . .  B ADDR   00D0H.5 A   
 F1 . . . . . . . .  B ADDR   00D0H.1 A   
-A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   01/29/2026 14:09:03 PAGE     6
+A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/04/2026 16:14:18 PAGE     6
 
 HOUR . . . . . . .  D ADDR   00A5H   A   
 HTHSEC . . . . . .  D ADDR   00A2H   A   
@@ -332,6 +344,7 @@ IP . . . . . . . .  D ADDR   00B8H   A
 ISPI . . . . . . .  B ADDR   00F8H.7 A   
 IT0. . . . . . . .  B ADDR   0088H.0 A   
 IT1. . . . . . . .  B ADDR   0088H.2 A   
+LOOP . . . . . . .  C ADDR   0000H   A   
 MAIN . . . . . . .  C ADDR   0000H   A   
 MCO. . . . . . . .  B ADDR   00E8H.5 A   
 MDE. . . . . . . .  B ADDR   00E8H.6 A   
@@ -370,9 +383,9 @@ RCAP2H . . . . . .  D ADDR   00CBH   A
 RCAP2L . . . . . .  D ADDR   00CAH   A   
 RCLK . . . . . . .  B ADDR   00C8H.5 A   
 RD . . . . . . . .  B ADDR   00B0H.7 A   
-REN. . . . . . . .  B ADDR   0098H.4 A   
-A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   01/29/2026 14:09:03 PAGE     7
+A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/04/2026 16:14:18 PAGE     7
 
+REN. . . . . . . .  B ADDR   0098H.4 A   
 RI . . . . . . . .  B ADDR   0098H.0 A   
 RS0. . . . . . . .  B ADDR   00D0H.3 A   
 RS1. . . . . . . .  B ADDR   00D0H.4 A   

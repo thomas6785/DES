@@ -21,22 +21,26 @@ SOUND		EQU	P3.6		; P3.4 is red LED on eval board
 CSEG		; working in code segment - program memory
 
 		ORG	0000h			; starting at address 0
-		
 MAIN:
-
-		CALL	DELAY   	; call software delay routine
-		
-		CPL SOUND;
+LOOP:
+		CALL  DELAY			; call software delay routine		(3 cycles for jump + see subroutine)
+		CPL   SOUND			; flip the output bit 'SOUND'		(2 cycles)
+		JMP   LOOP			; return to loop start				(3 cycles)
+		; NOTE: next address is 0003h which is reserved for interrupts. If we need more setup instructions, we'll have to put in a jump to MAIN elsewhere
+		; Loop is 6144 clocks total giving precisely 900 Hz wave at 11.0592 MHz
 
 ;____________________________________________________________________
 		; SUBROUTINES
-DELAY:	; delay for time A x 10 ms.  A is not changed. 
-		MOV	R5, #8		; set number of repetitions for outer loop      
-DLY1:	MOV	R7, #255		; inner loop repeats 255 times      
-		DJNZ	R7, $		; inner loop 255 x 3 cycles = 765 cycles            
-		DJNZ	R5, DLY1		; + 5 to reload, x 144 = 110880 cycles
-		RET				; return from subroutine
-	
+DELAY:	; Delay for using two nested FOR loops
+		; Delay is 6139 clocks including CALL and RET
+		; R5 and R7 are changed
+		MOV	R5, #16			; set outer loop to 16 repetitions	(2 cycles)
+DLY1:	MOV	R7, #126		; set inner loop to 126 repetitions	(2 cycles * 16)
+		DJNZ	R7, $		; DJNZ inner loop					(3 cycles * 126 * 16)
+		DJNZ	R5, DLY1	; DJNZ outer loop					(3 cycles * 16)
+		NOP 				; (1 cycle)
+		NOP					; Two "NOP" are necessary to get precisely 900 Hz (1 cycle each)
+		RET					; return from subroutine (4 cycles)
 
 ;____________________________________________________________________
 

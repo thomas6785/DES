@@ -1,9 +1,9 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        01/29/2026  14:18:53  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        02/04/2026  16:14:18  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
-C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\software_frequency.obj TO .\Objects\software_frequency PRINT (.\Listings\software_
->> frequency.m51) RAMSIZE (256)
+C:\PROGRAM FILES\UVISION\C51\BIN\BL51.EXE .\Objects\software_frequency.obj TO .\Objects\software_frequency PRINT (.\List
+>> ings\software_frequency.m51) RAMSIZE (256)
 
 
 INPUT MODULES INCLUDED:
@@ -20,7 +20,7 @@ LINK MAP OF MODULE:  .\Objects\software_frequency (SOFTWARE_FREQUENCY)
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
-            CODE    0000H     000DH     ABSOLUTE     
+            CODE    0000H     0011H     ABSOLUTE     
 
 
 
@@ -59,13 +59,13 @@ SYMBOL TABLE OF MODULE:  .\Objects\software_frequency (SOFTWARE_FREQUENCY)
   D:00F9H         SYMBOL        DAC0L
   D:00FCH         SYMBOL        DAC1H
   D:00FBH         SYMBOL        DAC1L
-BL51 BANKED LINKER/LOCATER V6.22                                                      01/29/2026  14:18:53  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/04/2026  16:14:18  PAGE 2
 
 
   D:00FDH         SYMBOL        DACCON
   D:00E8H         SYMBOL        DCON
-  C:0004H         SYMBOL        DELAY
-  C:0006H         SYMBOL        DLY1
+  C:0006H         SYMBOL        DELAY
+  C:0008H         SYMBOL        DLY1
   B:00D8H.6       SYMBOL        DMA
   D:00D3H         SYMBOL        DMAH
   D:00D2H         SYMBOL        DMAL
@@ -119,10 +119,11 @@ SYMBOL TABLE OF MODULE:  .\Objects\software_frequency (SOFTWARE_FREQUENCY)
   D:00B8H         SYMBOL        IP
   B:00F8H.7       SYMBOL        ISPI
   B:0088H.0       SYMBOL        IT0
-BL51 BANKED LINKER/LOCATER V6.22                                                      01/29/2026  14:18:53  PAGE 3
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/04/2026  16:14:18  PAGE 3
 
 
   B:0088H.2       SYMBOL        IT1
+  C:0000H         SYMBOL        LOOP
   C:0000H         SYMBOL        MAIN
   B:00E8H.5       SYMBOL        MCO
   B:00E8H.6       SYMBOL        MDE
@@ -178,10 +179,10 @@ SYMBOL TABLE OF MODULE:  .\Objects\software_frequency (SOFTWARE_FREQUENCY)
   B:00F8H.5       SYMBOL        SPE
   D:00B7H         SYMBOL        SPH
   D:00F8H         SYMBOL        SPICON
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/04/2026  16:14:18  PAGE 4
+
+
   D:00F7H         SYMBOL        SPIDAT
-BL51 BANKED LINKER/LOCATER V6.22                                                      01/29/2026  14:18:53  PAGE 4
-
-
   B:00F8H.4       SYMBOL        SPIM
   B:00F8H.0       SYMBOL        SPR0
   B:00F8H.1       SYMBOL        SPR1
@@ -218,18 +219,21 @@ SYMBOL TABLE OF MODULE:  .\Objects\software_frequency (SOFTWARE_FREQUENCY)
   B:00C0H.2       SYMBOL        WDS
   B:00C0H.0       SYMBOL        WDWR
   B:00B0H.6       SYMBOL        WR
-  C:0000H         LINE#         27
-  C:0002H         LINE#         29
-  C:0004H         LINE#         34
-  C:0006H         LINE#         35
-  C:0008H         LINE#         36
-  C:000AH         LINE#         37
-  C:000CH         LINE#         38
+  C:0000H         LINE#         26
+  C:0002H         LINE#         27
+  C:0004H         LINE#         28
+  C:0006H         LINE#         37
+  C:0008H         LINE#         38
+  C:000AH         LINE#         39
+  C:000CH         LINE#         40
+  C:000EH         LINE#         41
+  C:000FH         LINE#         42
+  C:0010H         LINE#         43
   -------         ENDMOD        SOFTWARE_FREQUENCY
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 000DH BYTE ( 0%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0011H BYTE ( 0%) *
 ******************************************************************************
 
-Program Size: data=8.0 xdata=0 code=13
+Program Size: data=8.0 xdata=0 code=17
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
