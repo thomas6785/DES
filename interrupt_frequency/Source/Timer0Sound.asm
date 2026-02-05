@@ -6,8 +6,10 @@
 $NOMOD51
 $INCLUDE (MOD841)
 
-SOUND	EQU  	P3.6		; P3.6 will drive a transducer
-PULSE	EQU		P3.4		; P3.4 will drive a "heartbeat" or "pulse" LED
+SOUND		EQU		P3.6		; P3.6 will drive a transducer
+PULSE		EQU		P3.4		; P3.4 will drive a "heartbeat" or "pulse" LED
+SWITCHES	EQU 	P2			; P2 are the eight input switches
+DISPLAY		EQU		P0			; there are LED's for displaying info to the user on P0
 
 CSEG
 ;--------------------------------------------------------------------
@@ -21,7 +23,7 @@ CSEG
 
 		ORG		001Bh		; Timer 1 overflow interrupt address
 		JMP		ISR_TIMER_1
-		
+
 		ORG		002Bh		; Timer 2 overflow interrupt address
 		JMP		ISR_TIMER_2
 
@@ -37,35 +39,58 @@ MAIN:
 		MOV		IE,    #10101001b	; Disable interrupts except Timer 1, Timer 2, and external interrupt 0
 		MOV		IP,    #00100000b	; Give timer 2 interupt priority
 		; Fall through to main LOOP (indefinitely loop)
-LOOP:	NOP					; this does nothing, uses 1 clock cycle
-		; TODO set timer 2 reload value according to switches. for now it defaults to 0
-		JMP		LOOP		; repeat - waiting for interrupt
+LOOP:
+		MOV A, SWITCHES						; Load the switch info into R3 (TODO MASK THIS ; TODO INDICATOR LIGHT NEEDED)
+		ANL A, #07h							; Mask all but the last three bits
+		MOV R3, A							; Store for future use
+		
+		MOV DPTR, #RELOAD_VALUE_TABLE_L		; Prepare the data pointer with the table of lower bytes for the reload values
+		MOVC A, @A+DPTR						; Read from the table into A
+		MOV RCAP2L, A						; Write A to the timer 2 config register (lower byte)
+
+		MOV A, R3							; Retrieve which index in the lookup table we want
+		MOV DPTR, #RELOAD_VALUE_TABLE_H		; Prepare the data pointer with the table of upper bytes for the reload values
+		MOVC A, @A+DPTR						; Read from the table into A
+		MOV RCAP2H, A						; Write A to the timer 2 config register (upper byte)
+
+		MOV A, R3							; Retrieve which index in the lookup table we want
+		MOV DPTR, #ONE_HOT_DECODE_BYTE		; Prepare the data pointer with the table of one-hot coded bytes (0-7)
+		MOVC A, @A+DPTR						; Read from the table into A
+		MOV DISPLAY, A						; Write A to the display LED's to show which frequency is selected
+
+		JMP		LOOP						; repeat main loop (checking switches)
+
+;--------------------------------------------------------------------
+; Lookup table for the reload value for timer 2 to give various frequencies
+;--------------------------------------------------------------------
+RELOAD_VALUE_TABLE_H:	DB	0DFh,	0E5h,	0EAh,	0EFh,	0F5h,	0F7h,	0FAh,	0FBh;
+RELOAD_VALUE_TABLE_L:	DB	03Ch,	0FFh,	022h,	09Eh,	011h,	0CFh,	088h,	0E8h;
+ONE_HOT_DECODE_BYTE:	DB	01h,	02h,	04h,	08h,	10h,	20h,	40h,	80h;
+;							E5		G#5		B5		E6		B6		E7		B7		E8
+; Values are calculated such that (11.0592 MHz) / (2*(65536 - RELOAD_VALUE)) is the target frequency
+; Output wave is square so expect to see harmonics
 
 ;--------------------------------------------------------------------
 ; Interrupt service routines
 ;--------------------------------------------------------------------
 
 ISR_USER_BUTTON: ; user pressing the button can disable the 'heartbeat' LED
-		; Prevent another identical interrupt from coming due to bouncing (disable this external interrupt)
-		CLR		EX0			; temporarily disable this interrupt to avoid physical bouncing causing multiple ISR's
-		
 		; Toggle timer 1 (the behaviour of this button)
 		CPL		TR1			;
-		
+
 		; It would be best if the light immediately came on/off so the user knows the button worked
 		MOV		C, TR1		; Copy TR1 to C as an intermediate storage
 		MOV		PULSE, C	; Copy C to PULSE
-		
+
 		; If the light is being switched back on, best if it doesn't immediately toggle off, so reset the counter to 0
 		MOV		R1, #0		; reset the counter that toggles the light (just in case it was at 255, we don't want the light to immediately switch off leaving the user wondering if they pressed the button properly)
-		
+
 		; Before re-enabling the IRQ, call a delay to avoid bounces (other interrupts can still happen)
 		MOV		R5, #5		; load 5 as a duration argument for "DELAY" to give a ~50 ms delay. Can be interrupted but this is fine
 		CALL	DELAY		; call a ~20 ms delay to avoid another ISR due to bouncing
-		
-		SETB	EX0			; re-enable this interrupt for future button pressed
+
 		CLR		IE0			; ignore any subsequent interrupts that took place while this one was being handled (caused by bounces)
-		
+
 		; Return
 		RETI				; Return from the ISR
 
