@@ -40,7 +40,7 @@ MAIN:
 		MOV		IP,    #00100000b	; Give timer 2 interupt priority
 		; Fall through to main LOOP (indefinitely loop)
 LOOP:
-		MOV A, SWITCHES						; Load the switch info into R3 (TODO MASK THIS ; TODO INDICATOR LIGHT NEEDED)
+		MOV A, SWITCHES						; Load the switch info into R3
 		ANL A, #07h							; Mask all but the last three bits
 		MOV R3, A							; Store for future use
 		
@@ -75,6 +75,7 @@ ONE_HOT_DECODE_BYTE:	DB	01h,	02h,	04h,	08h,	10h,	20h,	40h,	80h;
 ;--------------------------------------------------------------------
 
 ISR_USER_BUTTON: ; user pressing the button can disable the 'heartbeat' LED
+		; Could consider moving this to the main loop instead of using an interrupt to keep code cleaner
 		; Toggle timer 1 (the behaviour of this button)
 		CPL		TR1			;
 
