@@ -91,6 +91,7 @@ ISR_USER_BUTTON: ; user pressing the button can disable the 'heartbeat' LED
 		CALL	DELAY		; call a ~20 ms delay to avoid another ISR due to bouncing
 
 		CLR		IE0			; ignore any subsequent interrupts that took place while this one was being handled (caused by bounces)
+							; note this only works because ADuC841 will not let an ISR interrupt another ISR of equal priority
 
 		; Return
 		RETI				; Return from the ISR
