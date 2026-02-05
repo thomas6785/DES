@@ -43,7 +43,7 @@ LOOP:
 		MOV A, SWITCHES						; Load the switch info into R3
 		ANL A, #07h							; Mask all but the last three bits
 		MOV R3, A							; Store for future use
-		
+
 		MOV DPTR, #RELOAD_VALUE_TABLE_L		; Prepare the data pointer with the table of lower bytes for the reload values
 		MOVC A, @A+DPTR						; Read from the table into A
 		MOV RCAP2L, A						; Write A to the timer 2 config register (lower byte)
