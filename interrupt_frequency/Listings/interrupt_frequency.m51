@@ -1,9 +1,9 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        01/29/2026  14:44:15  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        02/05/2026  01:27:59  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
-C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\Timer0Sound.obj TO .\Objects\interrupt_frequency PRINT (.\Listings\interrupt_frequ
->> ency.m51) RAMSIZE (256)
+C:\PROGRAM FILES\UVISION\C51\BIN\BL51.EXE .\Objects\Timer0Sound.obj TO .\Objects\interrupt_frequency PRINT (.\Listings\i
+>> nterrupt_frequency.m51) RAMSIZE (256)
 
 
 INPUT MODULES INCLUDED:
@@ -20,7 +20,7 @@ LINK MAP OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
-            CODE    0000H     006EH     ABSOLUTE     
+            CODE    0000H     00CBH     ABSOLUTE     
 
 
 
@@ -59,11 +59,14 @@ SYMBOL TABLE OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
   D:00F9H         SYMBOL        DAC0L
   D:00FCH         SYMBOL        DAC1H
   D:00FBH         SYMBOL        DAC1L
-BL51 BANKED LINKER/LOCATER V6.22                                                      01/29/2026  14:44:15  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  01:27:59  PAGE 2
 
 
   D:00FDH         SYMBOL        DACCON
   D:00E8H         SYMBOL        DCON
+  C:00C0H         SYMBOL        DELAY
+  D:0080H         SYMBOL        DISPLAY
+  C:00C2H         SYMBOL        DLY1
   B:00D8H.6       SYMBOL        DMA
   D:00D3H         SYMBOL        DMAH
   D:00D2H         SYMBOL        DMAL
@@ -81,6 +84,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
   D:00BDH         SYMBOL        EDATA2
   D:00BEH         SYMBOL        EDATA3
   D:00BFH         SYMBOL        EDATA4
+  C:00B9H         SYMBOL        END_ISR_TIMER_1
   B:00A8H.4       SYMBOL        ES
   B:00A8H.1       SYMBOL        ET0
   B:00A8H.3       SYMBOL        ET1
@@ -115,19 +119,23 @@ SYMBOL TABLE OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
   B:00B0H.3       SYMBOL        INT1
   D:00A6H         SYMBOL        INTVAL
   D:00B8H         SYMBOL        IP
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  01:27:59  PAGE 3
+
+
   B:00F8H.7       SYMBOL        ISPI
+  C:00B1H         SYMBOL        ISR_TIMER_1
+  C:00BBH         SYMBOL        ISR_TIMER_2
+  C:00A2H         SYMBOL        ISR_USER_BUTTON
   B:0088H.0       SYMBOL        IT0
   B:0088H.2       SYMBOL        IT1
-  C:0068H         SYMBOL        LOOP
-BL51 BANKED LINKER/LOCATER V6.22                                                      01/29/2026  14:44:15  PAGE 3
-
-
+  C:006FH         SYMBOL        LOOP
   C:0060H         SYMBOL        MAIN
   B:00E8H.5       SYMBOL        MCO
   B:00E8H.6       SYMBOL        MDE
   B:00E8H.4       SYMBOL        MDI
   B:00E8H.7       SYMBOL        MDO
   D:00A4H         SYMBOL        MIN
+  C:009AH         SYMBOL        ONE_HOT_DECODE_BYTE
   B:00D0H.2       SYMBOL        OV
   B:00D0H.0       SYMBOL        P
   D:0080H         SYMBOL        P0
@@ -148,6 +156,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
   B:00B8H.1       SYMBOL        PT0
   B:00B8H.3       SYMBOL        PT1
   B:00B8H.5       SYMBOL        PT2
+  B:00B0H.4       SYMBOL        PULSE
   D:00B2H         SYMBOL        PWM0H
   D:00B1H         SYMBOL        PWM0L
   D:00B4H         SYMBOL        PWM1H
@@ -160,6 +169,8 @@ SYMBOL TABLE OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
   D:00CAH         SYMBOL        RCAP2L
   B:00C8H.5       SYMBOL        RCLK
   B:00B0H.7       SYMBOL        RD
+  C:008AH         SYMBOL        RELOAD_VALUE_TABLE_H
+  C:0092H         SYMBOL        RELOAD_VALUE_TABLE_L
   B:0098H.4       SYMBOL        REN
   B:0098H.0       SYMBOL        RI
   B:00D0H.3       SYMBOL        RS0
@@ -168,6 +179,9 @@ SYMBOL TABLE OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
   D:0099H         SYMBOL        SBUF
   D:0098H         SYMBOL        SCON
   B:00D8H.4       SYMBOL        SCONV
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  01:27:59  PAGE 4
+
+
   D:00A3H         SYMBOL        SEC
   B:0098H.7       SYMBOL        SM0
   B:0098H.6       SYMBOL        SM1
@@ -179,11 +193,9 @@ SYMBOL TABLE OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
   D:00F8H         SYMBOL        SPICON
   D:00F7H         SYMBOL        SPIDAT
   B:00F8H.4       SYMBOL        SPIM
-BL51 BANKED LINKER/LOCATER V6.22                                                      01/29/2026  14:44:15  PAGE 4
-
-
   B:00F8H.0       SYMBOL        SPR0
   B:00F8H.1       SYMBOL        SPR1
+  D:00A0H         SYMBOL        SWITCHES
   B:00B0H.4       SYMBOL        T0
   B:00B0H.5       SYMBOL        T1
   B:0090H.0       SYMBOL        T2
@@ -195,7 +207,6 @@ SYMBOL TABLE OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
   B:00C8H.4       SYMBOL        TCLK
   D:0088H         SYMBOL        TCON
   B:0088H.5       SYMBOL        TF0
-  C:006BH         SYMBOL        TF0ISR
   B:0088H.7       SYMBOL        TF1
   B:00C8H.7       SYMBOL        TF2
   D:008CH         SYMBOL        TH0
@@ -218,20 +229,62 @@ SYMBOL TABLE OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
   B:00C0H.2       SYMBOL        WDS
   B:00C0H.0       SYMBOL        WDWR
   B:00B0H.6       SYMBOL        WR
-  C:0000H         LINE#         14
-  C:000BH         LINE#         17
-  C:0060H         LINE#         22
-  C:0063H         LINE#         23
-  C:0066H         LINE#         24
-  C:0068H         LINE#         27
-  C:0069H         LINE#         28
-  C:006BH         LINE#         33
-  C:006DH         LINE#         34
+  C:0000H         LINE#         19
+  C:0003H         LINE#         22
+  C:001BH         LINE#         25
+  C:002BH         LINE#         28
+  C:0060H         LINE#         36
+  C:0063H         LINE#         37
+  C:0066H         LINE#         38
+  C:0069H         LINE#         39
+  C:006CH         LINE#         40
+  C:006FH         LINE#         43
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  01:27:59  PAGE 5
+
+
+  C:0071H         LINE#         44
+  C:0073H         LINE#         45
+  C:0074H         LINE#         47
+  C:0077H         LINE#         48
+  C:0078H         LINE#         49
+  C:007AH         LINE#         51
+  C:007BH         LINE#         52
+  C:007EH         LINE#         53
+  C:007FH         LINE#         54
+  C:0081H         LINE#         56
+  C:0082H         LINE#         57
+  C:0085H         LINE#         58
+  C:0086H         LINE#         59
+  C:0088H         LINE#         61
+  C:00A2H         LINE#         79
+  C:00A4H         LINE#         82
+  C:00A6H         LINE#         83
+  C:00A8H         LINE#         86
+  C:00AAH         LINE#         89
+  C:00ACH         LINE#         90
+  C:00AEH         LINE#         92
+  C:00B0H         LINE#         95
+  C:00B1H         LINE#         98
+  C:00B3H         LINE#         99
+  C:00B4H         LINE#         100
+  C:00B5H         LINE#         101
+  C:00B7H         LINE#         102
+  C:00B9H         LINE#         104
+  C:00BAH         LINE#         105
+  C:00BBH         LINE#         108
+  C:00BDH         LINE#         109
+  C:00BFH         LINE#         110
+  C:00C0H         LINE#         117
+  C:00C2H         LINE#         118
+  C:00C4H         LINE#         119
+  C:00C6H         LINE#         120
+  C:00C8H         LINE#         121
+  C:00CAH         LINE#         122
   -------         ENDMOD        TIMER0SOUND
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0012H BYTE ( 0%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0073H BYTE ( 5%) *
 ******************************************************************************
 
-Program Size: data=8.0 xdata=0 code=110
+Program Size: data=8.0 xdata=0 code=203
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
