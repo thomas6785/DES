@@ -10,15 +10,49 @@
 % Cover page and table of contents
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \include{LaTeX/00_cover}
+% TODO maybe remove list of figures/tables if we don't have many
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Report body
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%% TODO Put the body of your report here
 ABC 123
-\lstinputlisting{interrupt_frequency/Source/Timer0Sound.asm}
+%\lstinputlisting{interrupt_frequency/Source/Timer0Sound.asm}
+\section{Introduction}
+- Lab was to create a frequency synthesiser
+- blink.asm as a precursor
+- first in software, then in hardware
 
-%%%% TODO Put the body of your report here
+\section{Software Implementation}
+- show blink.asm as a start point then our changes
+- show calculations for runtime of DELAY function (I have a spreadsheet) and calculate desired number of clock cycles to synthesise our target frequency
+- show screenshot of waveform
+- highlight unreliable timing in a software implementation which could cause frequency jitters
+
+\section{Hardware Implementation}
+\subsection{Demo Version}
+- We predicted a frequency of 675 Hz (show spreadsheet with calculations)
+- We measured XYZ? (show oscilloscope screenshot)
+
+\subsection{Our Version}
+- discuss three options suggested by the handout
+- show calculations: using timer 2 with a reload mechanism provides frequencies from 169 Hz to 11 MHz (or half that? check), with the target range of 600 Hz - 9 kHz having fine enough granularity to ensure a frequency error under 0.07\%
+- discuss decision to rely on polling vs. interrupts for:
+    - frequency synthesis
+    - heartbeat LED
+    - user button input
+    - user switches input + output
+- note that frequency synthesis ISR has priority to minimise any frequency jitter that could otherwise be caused by other interrupts
+- list general purpose registers and how they are used by this program
+- discuss use of lookup tables instead of calculations. Show how DPTR and A are used to access LUTs
+- show formula for setting values in LUTs for a given frequency
+- discuss technique for debouncing (and alternatives that were considered e.g. using TIC instead. If TIC were enabled we could also disable timer 1 and rely on the main loop for the heartbeat)
+- note steps taken to ensure the heartbeat LED updates immediately when the user presses the button
+- discuss resource utilisation (e.g. two timers, an external interrupt, etc.) and how this could be reduced if necessary
+
+- attach code
+- attach screenshot of waveforms
+- attach working video?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % References and bibliography and appendix
