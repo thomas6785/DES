@@ -1,0 +1,79 @@
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Import packages
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[a4paper, total={6in, 8in}]{geometry}
+\usepackage{graphicx} % Required for inserting images
+\usepackage{amsmath} % Gives nice maths
+\usepackage{amssymb} % extra maths symbols
+\usepackage{gensymb} % extra maths symbols
+\usepackage{enumerate} % Gives better listing options including roman numberal
+\usepackage{listings} % Used for code blocks (listings)
+\usepackage{xcolor}
+\usepackage{braket}
+\usepackage{float}
+
+\usepackage{subcaption} % used for subfigures
+
+\usepackage[symbol]{footmisc} % TODO figure out a better footnoting scheme - using numbers is confusing but I'm not sure I like this package's default either
+
+\usepackage{parskip} % Parskip means paragraphs get a gap between them instead of an indented start
+
+%%%%%%%%%%%%%%%%%%%%%%%%%
+% Aliases for common patterns
+%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\secs}{\text{ s}} % Shorthand for 'seconds' unit in maths mode
+
+\newcommand{\rr}[1]{\frac{1}{\sqrt{#1}}} % Reciprocal root e.g. \rr{2}
+\newcommand{\boxpar}[1]{\fbox{\parbox{\textwidth}{#1}}} % Boxed paragraph
+
+\newcommand{\mb}[1]{\begin{matrix}#1\end{matrix}}
+\newcommand{\m}[1]{\left[\mb{#1}\right]}
+
+\newcommand{\br}[1]{\left(#1\right)}
+
+\newcommand{\rad}{\text{ rad}}
+
+\newcommand{\questeq}{\overset{?}{=}}
+
+\newcommand{\comment}[1]{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Configuration for code listings
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Define colors for code listings
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Define a style for displaying assembly code
+\lstdefinestyle{asm}{
+  language=[x86masm]Assembler,
+  basicstyle=\ttfamily\small,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  numbersep=5pt,
+  backgroundcolor=\color{white},
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  frame=single,
+  rulecolor=\color{black},
+  tabsize=4,
+  captionpos=b,
+  breaklines=true,
+  breakatwhitespace=false,
+  keywordstyle=\color{blue},
+  commentstyle=\color{green!50!black},
+  stringstyle=\color{red},
+  morekeywords={add, addi, sub, and, or, xor, sll, srl, sra, lui, auipc, 
+          lb, lh, lw, lbu, lhu, sb, sh, sw, beq, bne, blt, bge, 
+          bltu, bgeu, jal, jalr, ecall, ebreak}, % Add RISC-V specific keywords
+    basicstyle=\ttfamily\small,
+    \singlespacing
+}
+\lstset{style=mystyle} % "mystyle" code listing set

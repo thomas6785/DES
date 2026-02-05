@@ -1,0 +1,13 @@
+\usepackage[defernumbers=true]{biblatex}
+
+% Create a 'cited' category that gets automatically applied to everything cited in the text
+\DeclareBibliographyCategory{cited}
+\AtEveryCitekey{\addtocategory{cited}{\thefield{entrykey}}}
+
+\nocite{*}
+
+% anything in the .bib file with the 'cited' category will appear in the references
+% anything in the .bib not cited in the text will appear in the bibliography
+
+% add the bib file:
+\addbibresource{bibliography.bib}

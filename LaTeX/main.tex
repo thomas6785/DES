@@ -1,0 +1,33 @@
+\documentclass[12pt]{article}
+\usepackage[a4paper, total={6.5in, 9in}]{geometry}
+
+\input{config.tex} % Import configuration (packages, styles, defaults, etc.)
+\input{bib_config.tex} % Import bibliography configuration
+
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Cover page and table of contents
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{LaTeX/00_cover}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Report body
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% TODO Put the body of your report here
+ABC 123
+%%%% TODO Put the body of your report here
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% References and bibliography and appendix
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagebreak
+\section{References}
+% A list of references formatted in a consistent manner.
+\printbibliography[category=cited,heading=none]
+
+\section{Bibliography}
+% A bibliography (distinct from the references section) should be inlcuded
+\printbibliography[notcategory=cited,heading=none]
+
+\end{document}
