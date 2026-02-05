@@ -1,10 +1,10 @@
-A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/04/2026 16:14:18 PAGE     1
+A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/05/2026 14:20:07 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.02c
 OBJECT MODULE PLACED IN .\Objects\software_frequency.obj
-ASSEMBLER INVOKED BY: C:\Program Files\uVision\C51\BIN\A51.EXE Source\software_frequency.a51 SET(SMALL) DEBUG PRINT(.\Li
-                      stings\software_frequency.lst) OBJECT(.\Objects\software_frequency.obj) EP
+ASSEMBLER INVOKED BY: C:\Keil_v5\C51\BIN\A51.EXE Source\software_frequency.a51 SET(SMALL) DEBUG PRINT(.\Listings\softwar
+                      e_frequency.lst) OBJECT(.\Objects\software_frequency.obj) EP
 
 LOC  OBJ            LINE     SOURCE
 
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
   00B2          +1    55     PWM0H    DATA  0B2H  ;PWM DATA REGISTER
   00B3          +1    56     PWM1L    DATA  0B3H  ;PWM DATA REGISTER
   00B4          +1    57     PWM1H    DATA  0B4H  ;PWM DATA REGISTER
-A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/04/2026 16:14:18 PAGE     2
+A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/05/2026 14:20:07 PAGE     2
 
   00B7          +1    58     SPH      DATA  0B7H  ;EXTENDED STACK POINTER REGISTER
   00B8          +1    59     IP       DATA  0B8H  ;INTERRUPT PRIORITY
@@ -133,7 +133,7 @@ LOC  OBJ            LINE     SOURCE
   00AB          +1   121     ET1      BIT   0ABH  ;IE.3 - TIMER 1 INTERRUPT ENABLE
   00AC          +1   122     ES       BIT   0ACH  ;IE.4 - SERIAL PORT INTERRUPT ENABLE
   00AD          +1   123     ET2      BIT   0ADH  ;IE.5 - TIMER 2 INTERRUPT ENABLE
-A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/04/2026 16:14:18 PAGE     3
+A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/05/2026 14:20:07 PAGE     3
 
   00AE          +1   124     EADC     BIT   0AEH  ;IE.6 - ENABLE ADC INTURRUPT
   00AF          +1   125     EA       BIT   0AFH  ;IE.7 - GLOBAL INTERRUPT ENABLE
@@ -201,7 +201,7 @@ LOC  OBJ            LINE     SOURCE
   00F9          +1   187     SPR1     BIT   0F9H  ;SPICON.1 - SPI BITRATE SELECT BIT1
   00FA          +1   188     CPHA     BIT   0FAH  ;SPICON.2 - SPI CLOCK PHASE SELECT
   00FB          +1   189     CPOL     BIT   0FBH  ;SPICON.3 - SPI CLOCK POLARITY SELECT
-A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/04/2026 16:14:18 PAGE     4
+A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/05/2026 14:20:07 PAGE     4
 
   00FC          +1   190     SPIM     BIT   0FCH  ;SPICON.4 - SPI MASTER/SLAVE MODE SELECT
   00FD          +1   191     SPE      BIT   0FDH  ;SPICON.5 - SPI INTERFACE ENABLE
@@ -247,7 +247,7 @@ LOC  OBJ            LINE     SOURCE
                      222     ;____________________________________________________________________
                      223     
                      224     END
-A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/04/2026 16:14:18 PAGE     5
+A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/05/2026 14:20:07 PAGE     5
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -315,7 +315,7 @@ EXEN2. . . . . . .  B ADDR   00C8H.3 A
 EXF2 . . . . . . .  B ADDR   00C8H.6 A   
 F0 . . . . . . . .  B ADDR   00D0H.5 A   
 F1 . . . . . . . .  B ADDR   00D0H.1 A   
-A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/04/2026 16:14:18 PAGE     6
+A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/05/2026 14:20:07 PAGE     6
 
 HOUR . . . . . . .  D ADDR   00A5H   A   
 HTHSEC . . . . . .  D ADDR   00A2H   A   
@@ -383,7 +383,7 @@ RCAP2H . . . . . .  D ADDR   00CBH   A
 RCAP2L . . . . . .  D ADDR   00CAH   A   
 RCLK . . . . . . .  B ADDR   00C8H.5 A   
 RD . . . . . . . .  B ADDR   00B0H.7 A   
-A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/04/2026 16:14:18 PAGE     7
+A51 MACRO ASSEMBLER  SOFTWARE_FREQUENCY                                                   02/05/2026 14:20:07 PAGE     7
 
 REN. . . . . . . .  B ADDR   0098H.4 A   
 RI . . . . . . . .  B ADDR   0098H.0 A   

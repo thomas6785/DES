@@ -1,3 +1,4 @@
 ".\Objects\Timer0Sound.obj" 
 TO ".\Objects\interrupt_frequency" 
 PRINT(".\Listings\interrupt_frequency.m51") RAMSIZE(256) 
+CODE( 0X0000-0XF7FF )

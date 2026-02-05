@@ -65,7 +65,7 @@ LOOP:
 ;--------------------------------------------------------------------
 RELOAD_VALUE_TABLE_H:	DB	0DFh,	0E5h,	0EAh,	0EFh,	0F5h,	0F7h,	0FAh,	0FBh;
 RELOAD_VALUE_TABLE_L:	DB	03Ch,	0FFh,	022h,	09Eh,	011h,	0CFh,	088h,	0E8h;
-ONE_HOT_DECODE_BYTE:	DB	01h,	02h,	04h,	08h,	10h,	20h,	40h,	80h;
+ONE_HOT_DECODE_BYTE:	DB	0FEh,	0FDh,	0FBh,	0F7h,	0EFh,	0DFh,	0BFh,	07Fh;
 ;							E5		G#5		B5		E6		B6		E7		B7		E8
 ; Values are calculated such that (11.0592 MHz) / (2*(65536 - RELOAD_VALUE)) is the target frequency
 ; Output wave is square so expect to see harmonics
@@ -81,6 +81,7 @@ ISR_USER_BUTTON: ; user pressing the button can disable the 'heartbeat' LED
 
 		; It would be best if the light immediately came on/off so the user knows the button worked
 		MOV		C, TR1		; Copy TR1 to C as an intermediate storage
+		CPL		C			; Rerverse carry to change LED state
 		MOV		PULSE, C	; Copy C to PULSE
 
 		; If the light is being switched back on, best if it doesn't immediately toggle off, so reset the counter to 0
@@ -98,7 +99,7 @@ ISR_USER_BUTTON: ; user pressing the button can disable the 'heartbeat' LED
 ISR_TIMER_1: ; increment a counter in R1 - every time that counter overflows, toggle the pulse LED
 		CLR		TF1				; Clear the overflow flag that caused the ISR
 		XCH		A, R1			; Copy R1 into accumulator (we will undo at the end of the ISR)
-		INC		A				; Increment the accumulator
+		ADD		A, #4			; Increment the accumulator
 		JNZ		END_ISR_TIMER_1	; If A is not zero, exit the ISR. We only toggle the LED each time A overflow
 		CPL		PULSE			; Flip the 'pulse' LED IF the counter has gotten to 0 (so every 256 times this ISR is called)
 END_ISR_TIMER_1: ; fall through if no jump took place
