@@ -1,0 +1,3 @@
+".\Objects\Timer0Sound.obj" 
+TO ".\Objects\brians" 
+PRINT(".\Listings\brians.m51") RAMSIZE(256) 
