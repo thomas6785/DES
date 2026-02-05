@@ -45,7 +45,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>software_frequency</OutputName>
+          <OutputName>brians</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
@@ -190,7 +190,7 @@
             <RomSize>2</RomSize>
             <DataHold>0</DataHold>
             <XDataHold>0</XDataHold>
-            <UseOnchipRom>1</UseOnchipRom>
+            <UseOnchipRom>0</UseOnchipRom>
             <UseOnchipArithmetic>0</UseOnchipArithmetic>
             <UseMultipleDPTR>0</UseMultipleDPTR>
             <UseOnchipXram>0</UseOnchipXram>
@@ -369,9 +369,9 @@
               <FilePath>.\Source\MOD841</FilePath>
             </File>
             <File>
-              <FileName>software_frequency.a51</FileName>
+              <FileName>Timer0Sound.asm</FileName>
               <FileType>2</FileType>
-              <FilePath>.\Source\software_frequency.a51</FilePath>
+              <FilePath>.\Source\Timer0Sound.asm</FilePath>
             </File>
           </Files>
         </Group>

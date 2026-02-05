@@ -1,9 +1,9 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        02/05/2026  12:12:29  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        02/05/2026  14:24:35  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
-C:\PROGRAM FILES\UVISION\C51\BIN\BL51.EXE .\Objects\Timer0Sound.obj TO .\Objects\interrupt_frequency PRINT (.\Listings\i
->> nterrupt_frequency.m51) RAMSIZE (256)
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\Timer0Sound.obj TO .\Objects\interrupt_frequency PRINT (.\Listings\interrupt_frequ
+>> ency.m51) RAMSIZE (256) CODE (0X0000-0XF7FF)
 
 
 INPUT MODULES INCLUDED:
@@ -20,7 +20,7 @@ LINK MAP OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
-            CODE    0000H     00CBH     ABSOLUTE     
+            CODE    0000H     00CDH     ABSOLUTE     
 
 
 
@@ -59,14 +59,14 @@ SYMBOL TABLE OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
   D:00F9H         SYMBOL        DAC0L
   D:00FCH         SYMBOL        DAC1H
   D:00FBH         SYMBOL        DAC1L
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  12:12:29  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  14:24:35  PAGE 2
 
 
   D:00FDH         SYMBOL        DACCON
   D:00E8H         SYMBOL        DCON
-  C:00C0H         SYMBOL        DELAY
+  C:00C2H         SYMBOL        DELAY
   D:0080H         SYMBOL        DISPLAY
-  C:00C2H         SYMBOL        DLY1
+  C:00C4H         SYMBOL        DLY1
   B:00D8H.6       SYMBOL        DMA
   D:00D3H         SYMBOL        DMAH
   D:00D2H         SYMBOL        DMAL
@@ -84,7 +84,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
   D:00BDH         SYMBOL        EDATA2
   D:00BEH         SYMBOL        EDATA3
   D:00BFH         SYMBOL        EDATA4
-  C:00B9H         SYMBOL        END_ISR_TIMER_1
+  C:00BBH         SYMBOL        END_ISR_TIMER_1
   B:00A8H.4       SYMBOL        ES
   B:00A8H.1       SYMBOL        ET0
   B:00A8H.3       SYMBOL        ET1
@@ -119,12 +119,12 @@ SYMBOL TABLE OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
   B:00B0H.3       SYMBOL        INT1
   D:00A6H         SYMBOL        INTVAL
   D:00B8H         SYMBOL        IP
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  12:12:29  PAGE 3
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  14:24:35  PAGE 3
 
 
   B:00F8H.7       SYMBOL        ISPI
-  C:00B1H         SYMBOL        ISR_TIMER_1
-  C:00BBH         SYMBOL        ISR_TIMER_2
+  C:00B2H         SYMBOL        ISR_TIMER_1
+  C:00BDH         SYMBOL        ISR_TIMER_2
   C:00A2H         SYMBOL        ISR_USER_BUTTON
   B:0088H.0       SYMBOL        IT0
   B:0088H.2       SYMBOL        IT1
@@ -179,7 +179,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
   D:0099H         SYMBOL        SBUF
   D:0098H         SYMBOL        SCON
   B:00D8H.4       SYMBOL        SCONV
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  12:12:29  PAGE 4
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  14:24:35  PAGE 4
 
 
   D:00A3H         SYMBOL        SEC
@@ -239,7 +239,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
   C:0069H         LINE#         39
   C:006CH         LINE#         40
   C:006FH         LINE#         43
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  12:12:29  PAGE 5
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  14:24:35  PAGE 5
 
 
   C:0071H         LINE#         44
@@ -259,32 +259,33 @@ SYMBOL TABLE OF MODULE:  .\Objects\interrupt_frequency (TIMER0SOUND)
   C:00A2H         LINE#         80
   C:00A4H         LINE#         83
   C:00A6H         LINE#         84
-  C:00A8H         LINE#         87
-  C:00AAH         LINE#         90
-  C:00ACH         LINE#         91
-  C:00AEH         LINE#         93
-  C:00B0H         LINE#         96
-  C:00B1H         LINE#         99
-  C:00B3H         LINE#         100
+  C:00A7H         LINE#         85
+  C:00A9H         LINE#         88
+  C:00ABH         LINE#         91
+  C:00ADH         LINE#         92
+  C:00AFH         LINE#         94
+  C:00B1H         LINE#         97
+  C:00B2H         LINE#         100
   C:00B4H         LINE#         101
   C:00B5H         LINE#         102
   C:00B7H         LINE#         103
-  C:00B9H         LINE#         105
-  C:00BAH         LINE#         106
-  C:00BBH         LINE#         109
+  C:00B9H         LINE#         104
+  C:00BBH         LINE#         106
+  C:00BCH         LINE#         107
   C:00BDH         LINE#         110
   C:00BFH         LINE#         111
-  C:00C0H         LINE#         118
+  C:00C1H         LINE#         112
   C:00C2H         LINE#         119
   C:00C4H         LINE#         120
   C:00C6H         LINE#         121
   C:00C8H         LINE#         122
   C:00CAH         LINE#         123
+  C:00CCH         LINE#         124
   -------         ENDMOD        TIMER0SOUND
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0073H BYTE ( 5%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0075H BYTE ( 5%) *
 ******************************************************************************
 
-Program Size: data=8.0 xdata=0 code=203
+Program Size: data=8.0 xdata=0 code=205
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

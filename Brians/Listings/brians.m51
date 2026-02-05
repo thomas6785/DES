@@ -1,16 +1,15 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        02/05/2026  14:20:08  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        02/05/2026  14:11:27  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
-C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\software_frequency.obj TO .\Objects\software_frequency PRINT (.\Listings\software_
->> frequency.m51) RAMSIZE (256) CODE (0X0000-0XF7FF)
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\Timer0Sound.obj TO .\Objects\brians PRINT (.\Listings\brians.m51) RAMSIZE (256)
 
 
 INPUT MODULES INCLUDED:
-  .\Objects\software_frequency.obj (SOFTWARE_FREQUENCY)
+  .\Objects\Timer0Sound.obj (TIMER0SOUND)
 
 
-LINK MAP OF MODULE:  .\Objects\software_frequency (SOFTWARE_FREQUENCY)
+LINK MAP OF MODULE:  .\Objects\brians (TIMER0SOUND)
 
 
             TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
@@ -20,16 +19,16 @@ LINK MAP OF MODULE:  .\Objects\software_frequency (SOFTWARE_FREQUENCY)
             REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
 
             * * * * * * *   C O D E   M E M O R Y   * * * * * * *
-            CODE    0000H     0011H     ABSOLUTE     
+            CODE    0000H     006EH     ABSOLUTE     
 
 
 
-SYMBOL TABLE OF MODULE:  .\Objects\software_frequency (SOFTWARE_FREQUENCY)
+SYMBOL TABLE OF MODULE:  .\Objects\brians (TIMER0SOUND)
 
   VALUE           TYPE          NAME
   ----------------------------------
 
-  -------         MODULE        SOFTWARE_FREQUENCY
+  -------         MODULE        TIMER0SOUND
   B:00D0H.6       SYMBOL        AC
   D:00E0H         SYMBOL        ACC
   D:00EFH         SYMBOL        ADCCON1
@@ -59,13 +58,11 @@ SYMBOL TABLE OF MODULE:  .\Objects\software_frequency (SOFTWARE_FREQUENCY)
   D:00F9H         SYMBOL        DAC0L
   D:00FCH         SYMBOL        DAC1H
   D:00FBH         SYMBOL        DAC1L
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  14:20:08  PAGE 2
-
-
   D:00FDH         SYMBOL        DACCON
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  14:11:27  PAGE 2
+
+
   D:00E8H         SYMBOL        DCON
-  C:0006H         SYMBOL        DELAY
-  C:0008H         SYMBOL        DLY1
   B:00D8H.6       SYMBOL        DMA
   D:00D3H         SYMBOL        DMAH
   D:00D2H         SYMBOL        DMAL
@@ -119,12 +116,12 @@ SYMBOL TABLE OF MODULE:  .\Objects\software_frequency (SOFTWARE_FREQUENCY)
   D:00B8H         SYMBOL        IP
   B:00F8H.7       SYMBOL        ISPI
   B:0088H.0       SYMBOL        IT0
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  14:20:08  PAGE 3
-
-
   B:0088H.2       SYMBOL        IT1
-  C:0000H         SYMBOL        LOOP
-  C:0000H         SYMBOL        MAIN
+  C:0068H         SYMBOL        LOOP
+  C:0060H         SYMBOL        MAIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  14:11:27  PAGE 3
+
+
   B:00E8H.5       SYMBOL        MCO
   B:00E8H.6       SYMBOL        MDE
   B:00E8H.4       SYMBOL        MDI
@@ -179,12 +176,12 @@ SYMBOL TABLE OF MODULE:  .\Objects\software_frequency (SOFTWARE_FREQUENCY)
   B:00F8H.5       SYMBOL        SPE
   D:00B7H         SYMBOL        SPH
   D:00F8H         SYMBOL        SPICON
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  14:20:08  PAGE 4
-
-
   D:00F7H         SYMBOL        SPIDAT
   B:00F8H.4       SYMBOL        SPIM
   B:00F8H.0       SYMBOL        SPR0
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/05/2026  14:11:27  PAGE 4
+
+
   B:00F8H.1       SYMBOL        SPR1
   B:00B0H.4       SYMBOL        T0
   B:00B0H.5       SYMBOL        T1
@@ -197,6 +194,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\software_frequency (SOFTWARE_FREQUENCY)
   B:00C8H.4       SYMBOL        TCLK
   D:0088H         SYMBOL        TCON
   B:0088H.5       SYMBOL        TF0
+  C:006BH         SYMBOL        TF0ISR
   B:0088H.7       SYMBOL        TF1
   B:00C8H.7       SYMBOL        TF2
   D:008CH         SYMBOL        TH0
@@ -219,21 +217,20 @@ SYMBOL TABLE OF MODULE:  .\Objects\software_frequency (SOFTWARE_FREQUENCY)
   B:00C0H.2       SYMBOL        WDS
   B:00C0H.0       SYMBOL        WDWR
   B:00B0H.6       SYMBOL        WR
-  C:0000H         LINE#         26
-  C:0002H         LINE#         27
-  C:0004H         LINE#         28
-  C:0006H         LINE#         37
-  C:0008H         LINE#         38
-  C:000AH         LINE#         39
-  C:000CH         LINE#         40
-  C:000EH         LINE#         41
-  C:000FH         LINE#         42
-  C:0010H         LINE#         43
-  -------         ENDMOD        SOFTWARE_FREQUENCY
+  C:0000H         LINE#         14
+  C:000BH         LINE#         17
+  C:0060H         LINE#         22
+  C:0063H         LINE#         23
+  C:0066H         LINE#         24
+  C:0068H         LINE#         27
+  C:0069H         LINE#         28
+  C:006BH         LINE#         33
+  C:006DH         LINE#         34
+  -------         ENDMOD        TIMER0SOUND
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0011H BYTE ( 0%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0012H BYTE ( 0%) *
 ******************************************************************************
 
-Program Size: data=8.0 xdata=0 code=17
+Program Size: data=8.0 xdata=0 code=110
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
