@@ -15,26 +15,27 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Report body
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%% TODO Put the body of your report here
-ABC 123
-%\lstinputlisting{interrupt_frequency/Source/Timer0Sound.asm}
-\section{Introduction}
+
+\section*{Introduction}
 - Lab was to create a frequency synthesiser
 - blink.asm as a precursor
 - first in software, then in hardware
 
-\section{Software Implementation}
+\section*{Task 1: Software Timing}
 - show blink.asm as a start point then our changes
 - show calculations for runtime of DELAY function (I have a spreadsheet) and calculate desired number of clock cycles to synthesise our target frequency
 - show screenshot of waveform
 - highlight unreliable timing in a software implementation which could cause frequency jitters
 
-\section{Hardware Implementation}
-\subsection{Demo Version}
+\subsection*{Program Design}
+\subsection*{Results}
+\subsection*{Code}
+
+\section*{Example Program}
 - We predicted a frequency of 675 Hz (show spreadsheet with calculations)
 - We measured XYZ? (show oscilloscope screenshot)
 
-\subsection{Our Version}
+\section*{Task 2: Hardware timing}
 - discuss three options suggested by the handout
 - show calculations: using timer 2 with a reload mechanism provides frequencies from 169 Hz to 11 MHz (or half that? check), with the target range of 600 Hz - 9 kHz having fine enough granularity to ensure a frequency error under 0.07\%
 - discuss decision to rely on polling vs. interrupts for:
@@ -54,10 +55,20 @@ ABC 123
 - attach screenshot of waveforms
 - attach working video?
 
+\subsection*{Program Design}
+\subsection*{Improvement}
+\subsection*{Results}
+
+
+\section*{Conclusion}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % References and bibliography and appendix
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \pagebreak
+
+% TODO we could remove these if we don't have any references to put
 \section{References}
 % A list of references formatted in a consistent manner.
 \printbibliography[category=cited,heading=none]
