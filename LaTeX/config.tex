@@ -2,7 +2,7 @@
 % Import packages
 %%%%%%%%%%%%%%%%%%%%%%%%
 
-\usepackage[a4paper, total={6in, 8in}]{geometry}
+%\usepackage[a4paper, total={6in, 8in}]{geometry}
 \usepackage{graphicx} % Required for inserting images
 \usepackage{amsmath} % Gives nice maths
 \usepackage{amssymb} % extra maths symbols
@@ -18,6 +18,8 @@
 \usepackage[symbol]{footmisc} % TODO figure out a better footnoting scheme - using numbers is confusing but I'm not sure I like this package's default either
 
 \usepackage{parskip} % Parskip means paragraphs get a gap between them instead of an indented start
+
+\usepackage{setspace} % Provides commands for single and double spacing
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 % Aliases for common patterns
@@ -49,9 +51,8 @@
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 
-% Define a style for displaying assembly code
-\lstdefinestyle{asm}{
-  language=[x86masm]Assembler,
+% Define a style for displaying code
+\lstdefinestyle{mystyle}{
   basicstyle=\ttfamily\small,
   numbers=left,
   numberstyle=\tiny\color{gray},
@@ -70,10 +71,24 @@
   keywordstyle=\color{blue},
   commentstyle=\color{green!50!black},
   stringstyle=\color{red},
-  morekeywords={add, addi, sub, and, or, xor, sll, srl, sra, lui, auipc, 
-          lb, lh, lw, lbu, lhu, sb, sh, sw, beq, bne, blt, bge, 
-          bltu, bgeu, jal, jalr, ecall, ebreak}, % Add RISC-V specific keywords
-    basicstyle=\ttfamily\small,
+  basicstyle=\ttfamily\small,
     \singlespacing
 }
-\lstset{style=mystyle} % "mystyle" code listing set
+
+% Define assembly keywords for 8051
+\lstdefinelanguage{8051asm}{
+  morekeywords={
+    MOV, MOVC, MOVX, INC, DEC, ADD, ADDC, SUBB, MUL, DIV,
+    ANL, ORL, XRL, CPL, CLR, SETB,
+    SJMP, AJMP, LJMP, JMP, JZ, JNZ, JC, JNC, DJNZ,
+    ACALL, LCALL, CALL, RET, RETI,
+    PUSH, POP, XCH, XCHD, SWAP, NOP
+  },
+  sensitive=true,
+  morecomment=[l]{;},
+  morestring=[b]"
+}
+
+\lstset{style=mystyle,language=8051asm}
+% use my style for listings
+% take 8051asm to be the default language
