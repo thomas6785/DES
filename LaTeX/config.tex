@@ -78,11 +78,14 @@
 % Define assembly keywords for 8051
 \lstdefinelanguage{8051asm}{
   morekeywords={
+  % Assembly keywords
     MOV, MOVC, MOVX, INC, DEC, ADD, ADDC, SUBB, MUL, DIV,
     ANL, ORL, XRL, CPL, CLR, SETB,
     SJMP, AJMP, LJMP, JMP, JZ, JNZ, JC, JNC, DJNZ,
     ACALL, LCALL, CALL, RET, RETI,
-    PUSH, POP, XCH, XCHD, SWAP, NOP
+    PUSH, POP, XCH, XCHD, SWAP, NOP,
+    % AssemblER directives
+    EQU, CSEG, ORG, DB, DW, END
   },
   sensitive=true,
   morecomment=[l]{;},
