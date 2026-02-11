@@ -17,6 +17,15 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section*{Introduction}
+
+The aim of this laboratory exercise was to design and implement a frequency synthesiser using an ADuC841 microcontroller programmed in assembly language. The lab was intended to build understanding of timing and frequency generation in embedded systems, starting with software-based methods and progressing to hardware based solutions using timers and interrupts. 
+
+As an initial step, we used the example program blink.asm as a reference, this program demonstrated the basic assembly language structure, input/output pin control and the use of delay loops.
+
+In the first part of the assignment, a square-wave was generated using software delays only, without the use of hardware timers or interrupts. The output frequency was controlled by calculating the instruction execution times and then adjusting the delay loops accordingly. 
+
+In t
+
 - Lab was to create a frequency synthesiser
 - blink.asm as a precursor
 - first in software, then in hardware
@@ -28,8 +37,119 @@
 - highlight unreliable timing in a software implementation which could cause frequency jitters
 
 \subsection*{Program Design}
+
+A sample program \texttt{blink.asm} as provided for initial demonstration of using software delays to generate a frequency. The target frequency was much lower and used to drive an LED rather than a transducer, but the software is similar.
+
+This program was modified to provide a frequency of 900 Hz using a nested for loop to delay the CPU core. The precise number of clock cycles to generate a 900 Hz square wave was calculated and the delay function tweaked accordingly. Only two levels of 'for loop' nesting was necessary for this faster period, rather than three levels in the original \texttt{blink.asm}.
+
+The main program loop has only three operations:\begin{itemize}
+    \item Call a 'delay' to stall the CPU for a time
+    \item Complement (flip) the output bit labelled 'SOUND' which is tied to the transducer on the physical board
+    \item Return to the start of the loop
+\end{itemize}
+
+The ADuC841 runs with a clock speed of 11.0592 MHz. To accomplish a 900 Hz wave, the precise duration of this loop had to be precisely 6144 Hz, as given by equation \ref{eq:sw-timing-1}. Note the output bit must flip twice per wave period.
+
+\begin{equation}
+    \label{eq:sw-timing-1}
+    11.0592 \times 10^6 \frac{\text{clock cycles}}{\text{s}}=6144 \frac{\text{clock cycles}}{\text{bit complement}}\times (2\times900) \frac{\text{bit complements}}{\text{s}}
+\end{equation}
+
+A delay function was designed to generate this precise period, accounting for the overhead in each loop. A table calculating the precise duration of the loop is shown in table \ref{tab:sw-timing-loop-duration}. Two \texttt{NOP} operations were included to artificially increase the loop duration.
+
+
+\begin{table}
+    \centering
+    \begin{tabular}{lllllll}
+        & Instruction & Clock Cycles & Occurences per loop\\
+        \hline
+        MAIN: & & &\\
+        LOOP: & CALL DELAY    & 3+delay & 1\\
+        &CPL SOUND            & 2 & 1\\
+        &JMP LOOP             & 3 & 1\\
+        \hline
+        DELAY: &MOV R5, \#16  & 2 & 1\\
+        DLY1: & MOV R7, \#126 & 2 & 16\\
+              &DJNZ R7, \$    & 3 & $2016 = 16\times 126$\\
+              &DJNZ R5, DLY1  & 3 & 16\\
+              &NOP            & 1 & 1\\
+              &NOP            & 1 & 1\\
+              &RET            & 4 & 1\\
+        \hline
+        \textbf{Total} && 6144
+    \end{tabular}
+    \caption{Calculation of main loop duration in clock cycles. See the actual Assembly in listing \ref{lst:software-timing}.}
+    \label{tab:sw-timing-loop-duration}
+\end{table}
+
+\begin{table}
+    \centering
+    \begin{tabular}{lllllll}
+        & Instruction & Clock Cycles & Total occurences per loop\\
+        \hline
+        LOOP: & CALL DELAY    & 3 & 1\\
+        DELAY: &MOV R5, \#16   & 2 & 1\\
+        DLY1: & MOV R7, \#126 & 2 & 16\\
+        &DJNZ R7, \$          & 3 & $2016 = 16\times 126$\\
+        &DJNZ R5, DLY1        & 3 & 16\\
+        &NOP                  & 1 & 1\\
+        &NOP                  & 1 & 1\\
+        &RET                  & 4 & 1\\
+        &CPL SOUND            & 2 & 1\\
+        &JMP LOOP             & 3 & 1\\
+        \hline
+        \textbf{Total} && 6144
+    \end{tabular}
+    \caption{Calculation of main loop duration in clock cycles. Note some code has been inlined for readability - compare with the actual Assembly in listing \ref{lst:software-timing}.}
+    \label{tab:sw-timing-loop-duration}
+\end{table}
+
 \subsection*{Results}
+TODO:
+
+- Show simulation waveform with precise period as expected
+
+- Show oscilloscope measurements, both time domain and FFT
+
+- Show photograph of board setup
+
+\subsubsection*{Simulation}
+The code was first simulated in Keil uVision to verify performance. The number of clock cycles was calculated as follows:\begin{itemize}
+    \item Place a breakpoint on the command "CPL SOUND"
+    \item Run the program to this point
+    \item Note the "states" count for the simulation, indicating how many clock cycles have run so far
+    \item Run the program until the breakpoint arrives again
+    \item Note the "state" counts again and subtract the previous count, giving the total clock cycles from one bit flip to the next
+\end{itemize}
+
+The period was also measured using the logic analyser which gave a result in simulation time rather than clock cycles. This is shown in figure \ref{TODO}. All measurements were consistent with expectations.
+
+TODO screenshot of uVision simulation(s)
+
+\subsubsection*{Physical Measurement}
+
+The appropriate port on the ADuC841 was disconnected from the transducer and instead connected to the oscilloscope for measuring the square wave output. Figure \ref{fig:sw-timing-oscilloscope-measurements} shows both a time-domain and frequency-domain measurements.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.49\linewidth]{photos/900Hz.PNG}
+    \includegraphics[width=0.49\linewidth]{photos/software_fft.PNG}
+    \caption{Oscilloscope measurements of the 900 Hz square wave synthesised with software in both time domain (left) and frequency domain (right).}
+    \label{fig:sw-timing-oscilloscope-measurements}
+\end{figure}
+
+The oscilloscope measurement in time domain shows a frequency of 900.22 Hz, an error of only 244 parts-per-million. This error may arise from imperfections in the frequency of the 11.0592 MHz clock, or from the oscilloscope measurement itself.
+
+The FFT view shows a fundamental frequency of 895.18 Hz. This is simply due to the granularity of the FFT jumping 20 Hz at a time. The expected series of harmonics for a square wave is clearly present at odd multiples of the fundamental frequencies - the first such harmonic is highlighted with a cursor at a frequency of 2.71 kHz and an amplitude one-third of the fundamental's. Small spurs are present around each of the harmonics due to imperfections in the square wave.
+
 \subsection*{Code}
+
+The full program is shown in listing \ref{lst:software-timing}.
+
+\lstinputlisting[caption=Source code for generating 900 Hz wave purely in software,label=lst:software-timing]{software_frequency/Source/software_frequency.a51}
+% TODO template says to include code but it's very long and bulky. We can slim down the comment and reduce font size but still. Could move to an appendix
+
+
 
 \section*{Example Program}
 - We predicted a frequency of 675 Hz (show spreadsheet with calculations)
