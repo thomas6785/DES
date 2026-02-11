@@ -15,7 +15,7 @@
 $NOMOD51			; for Keil uVision - do not pre-define 8051 SFRs
 $INCLUDE (MOD841)	; load this definition file instead
 
-SOUND		EQU	P3.6		; P3.4 is red LED on eval board 
+SOUND		EQU	P3.6		; P3.6 is transducer on eval board
 ;____________________________________________________________________
 		; MAIN PROGRAM
 CSEG		; working in code segment - program memory
