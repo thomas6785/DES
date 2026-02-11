@@ -1,15 +1,6 @@
 ;********************************************************************
-; Example program for Analog Devices EVAL-ADuC841 board.
-; Based on example code from Analog Devices, 
-; author        : ADI - Apps            www.analog.com/MicroConverter
-; Date          : October 2003
-;
-; File          : software_frequency.asm
-;
+; 900 Hz Frequency Synthesiser
 ; Hardware      : ADuC841 with clock frequency 11.0592 MHz
-;
-; Description   : 
-;
 ;********************************************************************
 
 $NOMOD51			; for Keil uVision - do not pre-define 8051 SFRs
