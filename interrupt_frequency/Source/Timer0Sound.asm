@@ -1,6 +1,9 @@
-; Demo Program - using timer interrupts.
 ; Written for ADuC841 evaluation board, with UCD extras.
-; Generates a square wave on P3.6.
+; Generates a square wave on P3.6
+; Frequency is selected using three switches
+; A panel of 8 LED's displays the selected frequency
+; Another LED flashes at slow intervals
+; A pushbutton (INT0) can disable this flashing LED
 
 ; Include the ADuC841 SFR definitions
 $NOMOD51
@@ -89,7 +92,7 @@ ISR_USER_BUTTON: ; user pressing the button can disable the 'heartbeat' LED
 
 		; Before re-enabling the IRQ, call a delay to avoid bounces (other interrupts can still happen)
 		MOV		R5, #5		; load 5 as a duration argument for "DELAY" to give a ~50 ms delay. Can be interrupted but this is fine
-		CALL	DELAY		; call a ~20 ms delay to avoid another ISR due to bouncing
+		CALL	DELAY		; call a ~50 ms delay to avoid another ISR due to bouncing
 
 		CLR		IE0			; ignore any subsequent interrupts that took place while this one was being handled (caused by bounces)
 							; note this only works because ADuC841 will not let an ISR interrupt another ISR of equal priority
@@ -102,7 +105,7 @@ ISR_TIMER_1: ; increment a counter in R1 - every time that counter overflows, to
 		XCH		A, R1			; Copy R1 into accumulator (we will undo at the end of the ISR)
 		ADD		A, #4			; Increment the accumulator
 		JNZ		END_ISR_TIMER_1	; If A is not zero, exit the ISR. We only toggle the LED each time A overflow
-		CPL		PULSE			; Flip the 'pulse' LED IF the counter has gotten to 0 (so every 256 times this ISR is called)
+		CPL		PULSE			; Flip the 'pulse' LED IF the counter has gotten to 0 (so every 64 times this ISR is called)
 END_ISR_TIMER_1: ; fall through if no jump took place
 		XCH		A, R1		; Return A and R1 to their original positions
 		RETI				; Return from ISR
