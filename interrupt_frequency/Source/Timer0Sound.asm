@@ -90,8 +90,8 @@ ISR_USER_BUTTON: ; user pressing the button can disable the 'heartbeat' LED
 		; If the light is being switched back on, best if it doesn't immediately toggle off, so reset the counter to 0
 		MOV		R1, #0		; reset the counter that toggles the light (just in case it was at 255, we don't want the light to immediately switch off leaving the user wondering if they pressed the button properly)
 
-		; Before re-enabling the IRQ, call a delay to avoid bounces (other interrupts can still happen)
-		MOV		R5, #5		; load 5 as a duration argument for "DELAY" to give a ~50 ms delay. Can be interrupted but this is fine
+		; Before exiting the ISR, call a delay to avoid bounces (other interrupts can still happen)
+		MOV		R5, #5		; load 5 as a duration argument for "DELAY" to give a ~50 ms delay. Could be interrupted by timer 2 but this is fine
 		CALL	DELAY		; call a ~50 ms delay to avoid another ISR due to bouncing
 
 		CLR		IE0			; ignore any subsequent interrupts that took place while this one was being handled (caused by bounces)
