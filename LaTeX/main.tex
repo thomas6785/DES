@@ -84,7 +84,7 @@ A delay function was designed to generate this precise period, accounting for th
 \begin{itemize}
     \item In an embedded program which responds to interrupts, the interrupts could cause unpredictable delay between software loops, causing frequency jitter
     \item Software development is more difficult and timing will need to be recalculated whenever a functional change is made
-    \item Some instructions on some MCUs have nondeterministic latency so software cannot be precise
+    \item Some instructions on some MCUs have nondeterministic latency so software timing cannot be precise
     \item Keeping the CPU constantly busy could be considered a waste of power
 \end{itemize}
 
@@ -107,11 +107,11 @@ The period was also measured using the logic analyser which gave a result in sim
     \label{fig:sw-timing-logic-analyser}
 \end{figure}
 
-Measurements were also taken using the `stopwatch' functionality in the bottom-right-hand corner of uVision's interface.
+Measurements were also taken using the `stopwatch' functionality in the bottom-right-hand corner of uVision's interface. Results were identical.
 
 \subsection{Measured Results}
 
-The appropriate port on the ADuC841 was disconnected from the transducer and instead connected to the oscilloscope for measuring the square wave output. Figure \ref{fig:sw-timing-oscilloscope-measurements} shows both a time-domain and frequency-domain measurements.
+The appropriate port on the ADuC841 was disconnected from the transducer and instead connected to an oscilloscope for measuring the square wave output. Figure \ref{fig:sw-timing-oscilloscope-measurements} shows both a time-domain and frequency-domain measurements.
 
 \begin{figure}
     \centering
@@ -223,13 +223,13 @@ This allows frequencies in the range 84.375 Hz to 5.5296 MHz, with significantly
 Frequencies of an E major triad were selected ranging from E5 (659.3 Hz) up to E8 (5.274 kHz). Appropriate reload values were calculated for each one by solving equation \ref{eq:hw-frequency-1}. These values were hardcoded into a lookup table in the software, allowing them to be reprogrammed easily.
 
 %TODO what was this meant to say?
-A mechanism for calculating frequencies used in Western music by multiplying by a fixed values of $2^\frac{1}{12}$ but it was decided the software complications in this arithmetic were not justified.
+An algorithm for calculating frequencies used in Western music by multiplying by a fixed values of $2^\frac{1}{12}$ was considered to allow more flexible control over frequency, but it was decided the software complications in this arithmetic were not justified.
 
 \textbf{Heartbeat LED Mechanism}
 
 While the timing for the heartbeat LED could have been implemented in software, it was preferred to avoid software delay functions and so another timer and interrupt was used. Timer 1 was configured in 16-bit timer mode to generate interrupts at the maximum period of $\frac{2^{16}}{1.0592 \text{MHz}}=\sim 5.9 \text{ ms}$. When this interrupt was generated, it was used to increment register R1. When register R1 overflowed after 256 such interrupts, the LED would complement. This gave an LED flashing period of 3 seconds (1.5 seconds on, 1.5 seconds off). After physical testing this it was judged to be unnaturally slow, so the ISR was modified to increment R1 by 4, giving a period of 0.76 seconds.
 
-Dedicating a second timer for the simple task of generating a flashing LED could be considered overkill if resources are constrained and the MCU has other tasks it also needs to accomplish. It is also possible to rely on the output of timer 2 and dividing with two registers appropriately to generate a sufficiently slow LED, with the consequence that the LED's blink rate will vary with the frequency being synthesised. If the time interval counter (TIC) is being used for other purposes, it is possible for the software to regularly poll the TIC and rely on sufficient time passing to blink the LED. For this project timer 1 was used as there was no constraint not to do so.
+Dedicating a second timer for the simple task of generating a flashing LED could be considered overkill if resources are constrained and the MCU has other tasks it also needs to accomplish. It is also possible to rely on the output of timer 2 and dividing with two registers appropriately to generate a sufficiently slow LED, with the consequence that the LED's blink rate will vary with the frequency being synthesised. Alternatively, if the time interval counter (TIC) is being used for other purposes, it is possible for the software to regularly poll the TIC and rely on sufficient time passing to blink the LED. For this project, timer 1 was used as there was no constraint not to do so.
 
 \textbf{Switchable Frequencies Mechanism}
 
@@ -258,13 +258,13 @@ A possible improvement to this main loop would be to detect changes in the switc
 
 A display panel of LED's had to show the frequency being generated. An active-low one-hot code had to be generated from the state of the switches. For example, switch 3 should generate the byte 0x11110111 to be written to the LED display.
 
-Originally a bit-shifting mechanism was considered but this was found to require several clock cycles and a `for' loop. Instead, a simple lookup table was used, which is looked up in the main software loop at the same time as the frequency lookup occurs.
+Originally a bit-shifting mechanism was considered for generating the one-hot code, but this was found to require several clock cycles and a `for' loop. Instead, a simple lookup table was used, which is looked up in the main software loop at the same time as the frequency lookup occurs.
 
 \textbf{Heartbeat LED Disable Button}
 
 A pushbutton was expected to disable the heartbeat LED mechanism when pressed, or re-enable when pressed again. The physical button experienced bouncing, so debouncing was necessary.
 
-Initially debouncing was to be implemented by comparing the timestamp of an interrupt with the timestamp of the previous successful interrupt, and ignoring rapidly successive interrupts. However, no appropriate timestamp was available as the TIC was not in use in the MCU. If the TIC were configured for other purposes regardless, its use would be appropriate here to avoid relying on software delays.
+Initially, debouncing was to be implemented by comparing the timestamp of an interrupt with the timestamp of the previous successful interrupt, and ignoring rapidly successive interrupts. However, no appropriate timestamp was available as the TIC was not in use in the MCU. If the TIC were configured for other purposes regardless, its use would be appropriate here to avoid relying on software delays.
 
 Instead debouncing was accomplished in software using software delays with the following method:
 \begin{itemize}
