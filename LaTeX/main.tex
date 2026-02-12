@@ -1,8 +1,13 @@
-\documentclass[12pt]{article}
+\documentclass[11pt]{article}
 \usepackage[a4paper, total={6.5in, 9in}]{geometry}
 
 \input{config.tex} % Import configuration (packages, styles, defaults, etc.)
 \input{bib_config.tex} % Import bibliography configuration
+
+\setcounter{secnumdepth}{0} % this removes numbering from sections
+
+\usepackage{subcaption}
+\usepackage{lscape}
 
 \begin{document}
 
@@ -10,71 +15,379 @@
 % Cover page and table of contents
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \include{LaTeX/00_cover}
-% TODO maybe remove list of figures/tables if we don't have many
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Report body
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section*{Introduction}
-- Lab was to create a frequency synthesiser
-- blink.asm as a precursor
-- first in software, then in hardware
+\section{Introduction}
 
-\section*{Task 1: Software Timing}
-- show blink.asm as a start point then our changes
-- show calculations for runtime of DELAY function (I have a spreadsheet) and calculate desired number of clock cycles to synthesise our target frequency
-- show screenshot of waveform
-- highlight unreliable timing in a software implementation which could cause frequency jitters
+The aim of this laboratory exercise was to design and implement a frequency synthesiser using an ADuC841 microcontroller programmed in Assembly. The lab was intended to build understanding of timing and frequency generation in embedded systems, starting with software-based methods and progressing to hardware-based solutions using timers and interrupts. 
 
-\subsection*{Program Design}
-\subsection*{Results}
-\subsection*{Code}
+As an initial step, we used the example program \texttt{blink.asm} as a reference. This program demonstrated basic Assembly, input/output pin control and the use of long loops to create delays in software.
 
-\section*{Example Program}
-- We predicted a frequency of 675 Hz (show spreadsheet with calculations)
-- We measured XYZ? (show oscilloscope screenshot)
+In the first part of the assignment, a square-wave was generated using software delays only, without the use of hardware timers or interrupts. The output frequency was controlled by calculating the instruction execution times and adjusting the delay loops accordingly.
 
-\section*{Task 2: Hardware timing}
-- discuss three options suggested by the handout
-- show calculations: using timer 2 with a reload mechanism provides frequencies from 169 Hz to 11 MHz (or half that? check), with the target range of 600 Hz - 9 kHz having fine enough granularity to ensure a frequency error under 0.07\%
-- discuss decision to rely on polling vs. interrupts for:
-    - frequency synthesis
-    - heartbeat LED
-    - user button input
-    - user switches input + output
-- note that frequency synthesis ISR has priority to minimise any frequency jitter that could otherwise be caused by other interrupts
+In the second part of the assignment, a square wave was generated using hardware timers which generated interrupts at regular intervals. First an example program was studied and run, then our own program was written which accommodated adjustable frequencies and several user-focused features.
+
+Relying on dedicated timer hardware rather than software delays has the benefit of allowing the CPU core to perform other tasks, as well as providing a more precise frequency, as software delays can be unpredictable for reasons discussed below.
+
+\section{Task 1: Software Timing}
+
+\subsection{Program Design}
+
+A sample program \texttt{blink.asm} was provided for initial demonstration of using software delays to generate a frequency. The target frequency was much lower and used to drive an LED rather than a transducer, but the software is similar.
+
+This program was modified to provide a frequency of 900 Hz using a nested `for' loop to delay the CPU core. The precise number of clock cycles to generate a 900 Hz square wave was calculated and the delay function tweaked accordingly. Only two levels of `for' loop nesting were necessary for this faster period, rather than three levels in the original \texttt{blink.asm}.
+
+The main program loop has only three instructions:\begin{itemize}
+    \item Call a `delay' to stall the CPU for a time
+    \item Complement (flip) the output bit labelled `SOUND' which is tied to the transducer on the physical board
+    \item Return to the start of the loop
+\end{itemize}
+
+The ADuC841 runs with a clock speed of 11.0592 MHz. To accomplish a 900 Hz wave, the precise duration of this loop had to be precisely 6144 clock cycles, as given by equation \ref{eq:sw-timing-1}. Note the output bit must flip twice per square wave period.
+
+\begin{equation}
+    \label{eq:sw-timing-1}
+    11.0592 \times 10^6 \frac{\text{clock cycles}}{\text{s}}=6144 \frac{\text{clock cycles}}{\text{bit complement}}\times (2\times900) \frac{\text{bit complements}}{\text{s}}
+\end{equation}
+
+A delay function was designed to generate this precise period, accounting for the overhead in each loop. A table calculating the precise duration of the loop is shown in Table~\ref{tab:sw-timing-loop-duration}. Two \texttt{NOP} operations were included to artificially increase the loop duration.
+
+
+\begin{table}
+    \centering
+    \begin{tabular}{lllllll}
+        & Instruction & Clock Cycles & Occurences per loop\\
+        \hline
+        MAIN: & & &\\
+        LOOP: & CALL DELAY    & 3+delay & 1\\
+        &CPL SOUND            & 2 & 1\\
+        &JMP LOOP             & 3 & 1\\
+        \hline
+        DELAY: &MOV R5, \#16  & 2 & 1\\
+        DLY1: & MOV R7, \#126 & 2 & 16\\
+              &DJNZ R7, \$    & 3 & $2016 = 16\times 126$\\
+              &DJNZ R5, DLY1  & 3 & 16\\
+              &NOP            & 1 & 1\\
+              &NOP            & 1 & 1\\
+              &RET            & 4 & 1\\
+        \hline
+        \textbf{Total} && 6144
+    \end{tabular}
+    \caption{Calculation of main loop duration in clock cycles. See the actual Assembly in listing \ref{lst:software-timing}.}
+    \label{tab:sw-timing-loop-duration}
+\end{table}
+
+\textbf{Limitations of this design:} Generally, software-based designs are not to be considered reliable for precisely timed applications for several reasons:
+\begin{itemize}
+    \item In an embedded program which responds to interrupts, the interrupts could cause unpredictable delay between software loops, causing frequency jitter
+    \item Software development is more difficult and timing will need to be recalculated whenever a functional change is made
+    \item Some instructions on some MCUs have nondeterministic latency so software timing cannot be precise
+    \item Keeping the CPU constantly busy could be considered a waste of power
+\end{itemize}
+
+\subsection{Simulation Results}
+The code was first simulated in Keil uVision to verify performance. The number of clock cycles per loop was calculated as follows:\begin{itemize}
+    \item Enter debug simulation mode
+    \item Place a breakpoint on the command ``CPL SOUND"
+    \item Run the program to this point
+    \item Note the ``states" count for the simulation, indicating how many clock cycles have run so far
+    \item Run the program until the breakpoint arrives again
+    \item Note the ``state" counts again and subtract the previous count, giving the total clock cycles from one bit flip to the next
+\end{itemize}
+
+The period was also measured using the logic analyser which gave a result in simulation time rather than clock cycles. This is shown in figure \ref{fig:sw-timing-logic-analyser}. All measurements were consistent with expectations.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.5\linewidth]{photos/simulations/software-frequency-logic-analyser.png}
+    \caption{Logic Analyser waveform from a Keil uVision simulation showing exactly 18 periods in 20 ms}
+    \label{fig:sw-timing-logic-analyser}
+\end{figure}
+
+Measurements were also taken using the `stopwatch' functionality in the bottom-right-hand corner of uVision's interface. Results were identical.
+
+\subsection{Measured Results}
+
+The appropriate port on the ADuC841 was disconnected from the transducer and instead connected to an oscilloscope for measuring the square wave output. Figure \ref{fig:sw-timing-oscilloscope-measurements} shows both a time-domain and frequency-domain measurements.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.49\linewidth]{photos/900Hz.PNG}
+    \includegraphics[width=0.49\linewidth]{photos/software_fft.PNG}
+    \caption{Oscilloscope measurements of the 900 Hz square wave synthesised with software in both time domain (left) and frequency domain (right).}
+    \label{fig:sw-timing-oscilloscope-measurements}
+\end{figure}
+% TODO Are these too small? could go full-width instead
+
+The oscilloscope measurement in time domain shows a frequency of 900.22 Hz, an error of only 244 parts-per-million. This error may arise from imperfections in the frequency of the 11.0592 MHz clock, or from the oscilloscope measurement itself.
+
+The FFT view shows a fundamental frequency of 895.18 Hz. This is simply due to the granularity of the FFT jumping over the precise 900 Hz value. The expected series of harmonics for a square wave is present at odd multiples of the fundamental frequencies - the first such harmonic is highlighted with a cursor at a frequency of 2.71 kHz and an amplitude one-third of the fundamental's. Small spurs are present around each of the harmonics due to imperfections in the square wave.
+
+\subsection{Code}
+
+The full program is shown in listing \ref{lst:software-timing}.
+
+\lstinputlisting[caption=Source code for generating 900 Hz wave purely in software,label=lst:software-timing]{software_frequency/Source/software_frequency.a51}
+% TODO template says to include code but it's very long and bulky. We can slim down the comment and reduce font size but still. Could move to an appendix
+
+\section{Example Hardware Program}
+An example program was provided to demonstrate the use of hardware timing. Full code is omitted for readability, but amounts to:\begin{itemize}
+    \item An ISR is defined for overflows of timer 0\begin{itemize}
+        \item The ISR causes the output pin ``SOUND" to complement
+    \end{itemize}
+    \item The main program sets timer 0 to ungated timer mode and enables the interrupt
+    \item There is then an indefinite ``NOP" loop which is regularly interrupted by the timer
+\end{itemize}
+
+This approach relies on a dedicated hardware timer to cause the interrupts, meaning unpredictable delays in software cannot cause the output waveform to jitter.
+
+\subsection{Expected Frequency}
+Timer 0 is configured as a 13-bit counter with no pre-scaler. This will overflow every $2^{13}=8192$ clock cycles. At a frequency of 11.0592 MHz, this gives an interrupt every 740.74 microseconds. Each interrupt complements the output, so the period corresponds to two such interrupts, or 1.48148 milliseconds. This gives a frequency of precisely \textbf{675 Hz}.
+
+\subsection{Simulation Result}
+The program was simulated in Keil uVision and the period measured to be 674.794 Hz. A screenshot of the logic analyser is shown in figure \ref{fig:brians-version-logic-analyser}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{photos//simulations/brians-version-logic-analyser.png}
+    \caption{Measurement of the frequency of the output waveform on the logic analyser for the example program}
+    \label{fig:brians-version-logic-analyser}
+\end{figure}
+
+Measurements were also taken in Keil using the stopwatch in the bottom-right-hand corner of the debug view. Strangely, the measured frequency varied slightly for each cycle, always between 674.9 and 675.1. Two causes for this variation may be:\begin{itemize}
+    \item The uVision simulator has a bug or imprecision arising from floating-point errors
+    \item The uVision simulator is modelling some non-idealities in the MCU itself
+\end{itemize}
+
+In any case, this variation is inconsequential.
+
+\subsection{Measured Result}
+The program was then executed on the physical board. Measurements on the oscilloscope are shown in figure \ref{fig:example-hw-program-oscilloscope-measurements}.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.49\linewidth]{photos/Brians.PNG}
+    \includegraphics[width=0.49\linewidth]{photos/Brians_fft.PNG}
+    \caption{Oscilloscope measurements of the example program's output in both time domain (left) and frequency domain (right).}
+    \label{fig:example-hw-program-oscilloscope-measurements}
+\end{figure}
+
+The time-domain measurements shows a frequency of 675.12 Hz, which constitutes an error of 178 parts-per-million.
+
+The frequency domain measurement shows the same harmonics as the previous exercise, again as expected for a square wave. The fundamental is measured at 667.57 Hz, again slightly off due to the granularity of the FFT measured frequencies.
+
+\section{Task 2: Hardware timing}
+
+\comment{
 - list general purpose registers and how they are used by this program
-- discuss use of lookup tables instead of calculations. Show how DPTR and A are used to access LUTs
-- show formula for setting values in LUTs for a given frequency
-- discuss technique for debouncing (and alternatives that were considered e.g. using TIC instead. If TIC were enabled we could also disable timer 1 and rely on the main loop for the heartbeat)
-- note steps taken to ensure the heartbeat LED updates immediately when the user presses the button
-- discuss resource utilisation (e.g. two timers, an external interrupt, etc.) and how this could be reduced if necessary
 
-- attach code
-- attach screenshot of waveforms
 - attach working video?
+TODO review and remove comment
+}
 
-\subsection*{Program Design}
-\subsection*{Improvement}
-\subsection*{Results}
+\subsection{Program Design}
 
+\subsubsection{Requirements}
+This task was the most substantial, having the following requirements:
+\begin{enumerate}
+    \item Generate a square wave at an adjustable frequency using a hardware timer.
+    \item Allow the user to select the one of 8 frequencies using a set of 3 switches.
+    \item A panel of 8 LED's should indicate the selected frequency in one-hot code.
+    \item Another LED should flash at a rate visible to humans to give an indication the program is running (a ``heartbeat"). Exact timing is not important.
+\end{enumerate}
 
-\section*{Conclusion}
+Additionally, an optional feature was also implemented to have a pushbutton on the board toggle the heartbeat LED on an off. The physical button generates some bouncing when pressed, and no debouncing hardware is provide, so a software solution was developed.
 
+\subsubsection{Design Decisions}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% References and bibliography and appendix
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\pagebreak
+\textbf{Choice of Frequency Synthesis Mechanism}
 
-% TODO we could remove these if we don't have any references to put
-\section{References}
-% A list of references formatted in a consistent manner.
-\printbibliography[category=cited,heading=none]
+In order to provide more precise frequency synthesis, this design relied on hardware interrupt rather than software delays or polling to generate the appropriate bit flips at the output.
 
-\section{Bibliography}
-% A bibliography (distinct from the references section) should be inlcuded
-\printbibliography[notcategory=cited,heading=none]
+Three philosophies for generating the adjustable frequency were proposed which variously used a timer generating interrupts with a fixed frequency, and software responding to those interrupts to control a divided frequency, or a timer which simply provides an adjustable frequency.
+
+Timer 2 on the ADuC841 provides adjustable frequency via the autoreload mechanism. To investigate the viability of generating precise frequencies with this mechanism, the range and granularity of frequencies was studied. The frequencies which can be generated are given by:
+
+\begin{equation}
+    f=\frac{11.0592 \text{ MHz}}{2\times(2^{16}-n)} \quad \forall \quad n \in \{ 0,...,65535 \}
+    \label{eq:hw-frequency-1}
+\end{equation}
+
+This allows frequencies in the range 84.375 Hz to 5.5296 MHz, with significantly finer granularity at the lower end. However, only frequencies in the range 600 Hz to 9 kHz were of interest for this project. At the top end of this range, consecutive possible frequencies differ by 0.16\%. Consecutive musical notes in the standard temperament differ by $2^\frac{1}{12}=1+\sim 5.9\%$, meaning this quantisation error should be inaudible to a human. Using overflow interrupts from timer 2 with an autoreload mechanism is therefore suitable for synthesising the frequencies of interest.
+
+\textbf{Choice of Frequencies}
+
+Frequencies of an E major triad were selected ranging from E5 (659.3 Hz) up to E8 (5.274 kHz). Appropriate reload values were calculated for each one by solving equation \ref{eq:hw-frequency-1}. These values were hardcoded into a lookup table in the software, allowing them to be reprogrammed easily.
+
+%TODO what was this meant to say?
+An algorithm for calculating frequencies used in Western music by multiplying by a fixed values of $2^\frac{1}{12}$ was considered to allow more flexible control over frequency, but it was decided the software complications in this arithmetic were not justified.
+
+\textbf{Heartbeat LED Mechanism}
+
+While the timing for the heartbeat LED could have been implemented in software, it was preferred to avoid software delay functions and so another timer and interrupt was used. Timer 1 was configured in 16-bit timer mode to generate interrupts at the maximum period of $\frac{2^{16}}{1.0592 \text{MHz}}=\sim 5.9 \text{ ms}$. When this interrupt was generated, it was used to increment register R1. When register R1 overflowed after 256 such interrupts, the LED would complement. This gave an LED flashing period of 3 seconds (1.5 seconds on, 1.5 seconds off). After physical testing this it was judged to be unnaturally slow, so the ISR was modified to increment R1 by 4, giving a period of 0.76 seconds.
+
+Dedicating a second timer for the simple task of generating a flashing LED could be considered overkill if resources are constrained and the MCU has other tasks it also needs to accomplish. It is also possible to rely on the output of timer 2 and dividing with two registers appropriately to generate a sufficiently slow LED, with the consequence that the LED's blink rate will vary with the frequency being synthesised. Alternatively, if the time interval counter (TIC) is being used for other purposes, it is possible for the software to regularly poll the TIC and rely on sufficient time passing to blink the LED. For this project, timer 1 was used as there was no constraint not to do so.
+
+\textbf{Switchable Frequencies Mechanism}
+
+The panel of switches did not generate any interrupt when changed, so it was necessary to rely on software polling to respond to the switch positions. Assuming the main loop is fast enough to be imperceptible to humans, this is not an issue.
+
+At each loop, the state of the 8 switches was read, and put through a bitwise AND with 0x07 to ignore all but the final three bits.
+
+A lookup table was then used to determine the appropriate reload value for timer 2 to generate the appropriate frequency. The lookup table data was included into the program memory using the \texttt{DB} assembler directive, which allows the developer to explicitly include bytes program memory. The data pointer \texttt{DPTR} would be pointed at the head of this lookup table, and the command \texttt{MOVC A,@A+DPTR} used to read the item at an \textit{index equal} to the accumulator \textit{into} the accumulator. This was repeated for the low byte and the high byte and (described later) the one-hot code for the display. A relevant code excerpt is shown in listing \ref{lst:lookup-table-example}.
+
+\begin{lstlisting}[label=lst:lookup-table-example,caption=Minimal example of a lookup table in Assembly]
+MOV A, SWITCHES		; Load the switch info into A
+ANL A, #07h			; Mask away all but the last three bits
+MOV DPTR, #RELOAD_VALUE_TABLE_L
+; Prepare the data pointer with the table of lower bytes for the reload values
+MOVC A, @A+DPTR		; Read from the table into A
+MOV RCAP2L, A		; Write A to the timer 2 config register (lower byte)
+
+RELOAD_VALUE_TABLE_L:
+    DB	03Ch,	0FFh,	022h,	09Eh,	011h,	0CFh,	088h,	0E8h;
+
+\end{lstlisting}
+
+A possible improvement to this main loop would be to detect changes in the switch state and skip the frequency lookup if there has been no change, which avoids an unnecessary write to the timer 2 autoreload register that could have unintended hardware consequence. In practice this does not seem to be an issue.
+
+\textbf{Display Panel Mechanism}
+
+A display panel of LED's had to show the frequency being generated. An active-low one-hot code had to be generated from the state of the switches. For example, switch 3 should generate the byte 0x11110111 to be written to the LED display.
+
+Originally a bit-shifting mechanism was considered for generating the one-hot code, but this was found to require several clock cycles and a `for' loop. Instead, a simple lookup table was used, which is looked up in the main software loop at the same time as the frequency lookup occurs.
+
+\textbf{Heartbeat LED Disable Button}
+
+A pushbutton was expected to disable the heartbeat LED mechanism when pressed, or re-enable when pressed again. The physical button experienced bouncing, so debouncing was necessary.
+
+Initially, debouncing was to be implemented by comparing the timestamp of an interrupt with the timestamp of the previous successful interrupt, and ignoring rapidly successive interrupts. However, no appropriate timestamp was available as the TIC was not in use in the MCU. If the TIC were configured for other purposes regardless, its use would be appropriate here to avoid relying on software delays.
+
+Instead debouncing was accomplished in software using software delays with the following method:
+\begin{itemize}
+    \item The initial button press (edge-triggered) would create an interrupt request
+    \item The ISR would respond immediately, disabling the heartbeat
+    \item The ISR would delay for $\sim$50 ms for any further interrupts to arrive
+    \item Any further pushbutton interrupts which arrived in that time were cleared before exiting the ISR
+\end{itemize}
+
+The ADuC841 does not allow an ISR to interrupt itself with another interrupt request, so it is sufficient to clear the interrupt flag at the end of one ISR to ignore any more that took place.
+
+The software delay was implemented using a similar `for' loop to that in task 1.
+
+To disable the heartbeat LED, timer 1 would be disabled, and the LED explicitly turned off immediately. Switching off immediately, rather than waiting for the next natural off, allows the user to observe immediately that the button press was recognised. Similarly, when switching the heartbeat LED on, the LED is switched on immediately, and R1 is reset to ensure it does not switch off to soon, giving the user assurance that the button press worked. These improvements could be removed if program memory was constrained.
+
+\textbf{Program Summary}
+
+The initial setup to accommodate the program described above had the following steps:
+\begin{itemize}
+    \item Configure T2CON to put timer 2 in timer mode with autoreload (done as a single full-register transaction).
+    \item Configure TCON and TMOD to put timer 1 in 16-bit timer mode and disable timer 0, as well as ensuring INT0 (the pushbutton interrupt) is an edge-sensitive interrupt.
+    \item Configure IE and IP to recognise the appropriate interrupts.
+\end{itemize}
+
+Three interrupt sources were allowed:
+\begin{itemize}
+    \item Timer 2 overflow, used for frequency synthesis
+    \item Timer 1 overflow, used for the heartbeat LED
+    \item External interrupt INT0, used for the pushbutton
+\end{itemize}
+
+Timer 2 overflow was given \textbf{priority} to ensure the frequency did not jitter if another interrupt was already taking place when timer 2 overflowed.
+
+This setup stage then fell through to a main loop which iteratively:
+\begin{itemize}
+    \item Read the state of the switches
+    \item Looked up the appropriate reload values for that frequency (low byte and high byte) and wrote to RCAP2L and RCAP2H
+    \item Looked up the one-hot code for the LED display and wrote to "DISPLAY" (P0)
+\end{itemize}
+
+\subsection{Code}
+The full program written is shown in listing \ref{lst:hardware-timing}.
+
+\lstinputlisting[label=lst:hardware-timing,caption=Assembly program to accomplish task 2. Users can select frequencies using a panel of switches on port 2. An LED display on port 0 shows the current selection. An LED pulses at regular intervals to show it is enabled. This LED can be disabled by a pushbutton.]{interrupt_frequency/Source/Timer0Sound.asm}
+
+\subsection{Results}
+
+As before, the frequencies synthesised were measured on an oscilloscope in both the time and frequency domains. Figure \ref{fig:hw-timing-time-domain-measurements} shows measurements of each frequency in the time domain, with the measured frequency visible in each one.
+
+Figure \ref{fig:hw-timing-ffts} shows the FFT of the minimum frequency (E5, 692.3 Hz) and maximum frequency (E8, 5274.0 Hz).
+
+Musical coherence of the E major triad was confirmed aurally in the lab.
+
+\begin{landscape}
+\begin{figure*}[t!]
+    \centering
+    \begin{subfigure}[t]{0.25\linewidth}
+        \includegraphics[width=\textwidth]{photos/E5.PNG}
+        \caption{E5 (659.3 Hz)}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.25\linewidth}
+        \includegraphics[width=\textwidth]{photos/Gsharp5.PNG}
+        \caption{G\#5 (830.6 Hz)}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.25\linewidth}
+        \includegraphics[width=\textwidth]{photos/B6.PNG}
+        \caption{B6 (987.8 Hz)}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.25\linewidth}
+        \includegraphics[width=\textwidth]{photos/E6.PNG}
+        \caption{E6 (1318.5 Hz)}
+    \end{subfigure}
+    \\[15pt]
+    \begin{subfigure}[t]{0.25\linewidth}
+        \includegraphics[width=\textwidth]{photos/B7.PNG}
+        \caption{B7 (1975.5 Hz)}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.25\linewidth}
+        \includegraphics[width=\textwidth]{photos/E7.PNG}
+        \caption{E7 (2637.0 Hz)}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.25\linewidth}
+        \includegraphics[width=\textwidth]{photos/B8.PNG}
+        \caption{B8 (3951.0 Hz)}
+    \end{subfigure}%
+    ~
+    \begin{subfigure}[t]{0.25\linewidth}
+        \includegraphics[width=\textwidth]{photos/E8.PNG}
+        \caption{E8 (5274.0 Hz)}
+    \end{subfigure}
+    
+    \caption{Time-domain measurements of all 8 frequencies synthesised}
+    \label{fig:hw-timing-time-domain-measurements}
+\end{figure*}
+\end{landscape}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}[t]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{photos/E5_fft.PNG}
+        \caption{E5 (659.3 Hz)}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.49\textwidth}
+        \includegraphics[width=\textwidth]{photos/E8_fft.PNG}
+        \caption{E8 (5274.0 Hz)}
+    \end{subfigure}
+    \caption{Frequency domain view of the minimum and maximum frequencies}
+    \label{fig:hw-timing-ffts}
+\end{figure}
+
+As expected there is a series of harmonics at odd multiples of the fundamental, which as before appears at the expected frequencies.
+
+\section{Conclusion}
+
+% TODO what the hell goes in a conclusion
+
+This lab has demonstrated the synthesis of frequencies using both pure software and mixed software/hardware approaches. An understanding of basic embedded programming in Assembly has been demonstrated, including the use of internal and external interrupts. Additional user-friendly features were included which required software-based debouncing of a physical pushbutton.
+
+In all cases, the results expected from the design of the program are consistent with simulation results and with the measurements taken on the oscilloscope.
 
 \end{document}
