@@ -36,13 +36,13 @@ Relying on dedicated timer hardware rather than software delays has the benefit 
 
 \subsection{Program Design}
 
-A sample program \texttt{blink.asm} as provided for initial demonstration of using software delays to generate a frequency. The target frequency was much lower and used to drive an LED rather than a transducer, but the software is similar.
+A sample program \texttt{blink.asm} was provided for initial demonstration of using software delays to generate a frequency. The target frequency was much lower and used to drive an LED rather than a transducer, but the software is similar.
 
-This program was modified to provide a frequency of 900 Hz using a nested 'for' loop to delay the CPU core. The precise number of clock cycles to generate a 900 Hz square wave was calculated and the delay function tweaked accordingly. Only two levels of 'for' loop nesting was necessary for this faster period, rather than three levels in the original \texttt{blink.asm}.
+This program was modified to provide a frequency of 900 Hz using a nested `for' loop to delay the CPU core. The precise number of clock cycles to generate a 900 Hz square wave was calculated and the delay function tweaked accordingly. Only two levels of `for' loop nesting were necessary for this faster period, rather than three levels in the original \texttt{blink.asm}.
 
 The main program loop has only three instructions:\begin{itemize}
-    \item Call a 'delay' to stall the CPU for a time
-    \item Complement (flip) the output bit labelled 'SOUND' which is tied to the transducer on the physical board
+    \item Call a `delay' to stall the CPU for a time
+    \item Complement (flip) the output bit labelled `SOUND' which is tied to the transducer on the physical board
     \item Return to the start of the loop
 \end{itemize}
 
@@ -53,7 +53,7 @@ The ADuC841 runs with a clock speed of 11.0592 MHz. To accomplish a 900 Hz wave,
     11.0592 \times 10^6 \frac{\text{clock cycles}}{\text{s}}=6144 \frac{\text{clock cycles}}{\text{bit complement}}\times (2\times900) \frac{\text{bit complements}}{\text{s}}
 \end{equation}
 
-A delay function was designed to generate this precise period, accounting for the overhead in each loop. A table calculating the precise duration of the loop is shown in table \ref{tab:sw-timing-loop-duration}. Two \texttt{NOP} operations were included to artificially increase the loop duration.
+A delay function was designed to generate this precise period, accounting for the overhead in each loop. A table calculating the precise duration of the loop is shown in Table~\ref{tab:sw-timing-loop-duration}. Two \texttt{NOP} operations were included to artificially increase the loop duration.
 
 
 \begin{table}
@@ -91,11 +91,11 @@ A delay function was designed to generate this precise period, accounting for th
 \subsection{Simulation Results}
 The code was first simulated in Keil uVision to verify performance. The number of clock cycles per loop was calculated as follows:\begin{itemize}
     \item Enter debug simulation mode
-    \item Place a breakpoint on the command "CPL SOUND"
+    \item Place a breakpoint on the command ``CPL SOUND"
     \item Run the program to this point
-    \item Note the "states" count for the simulation, indicating how many clock cycles have run so far
+    \item Note the ``states" count for the simulation, indicating how many clock cycles have run so far
     \item Run the program until the breakpoint arrives again
-    \item Note the "state" counts again and subtract the previous count, giving the total clock cycles from one bit flip to the next
+    \item Note the ``state" counts again and subtract the previous count, giving the total clock cycles from one bit flip to the next
 \end{itemize}
 
 The period was also measured using the logic analyser which gave a result in simulation time rather than clock cycles. This is shown in figure \ref{fig:sw-timing-logic-analyser}. All measurements were consistent with expectations.
@@ -107,7 +107,7 @@ The period was also measured using the logic analyser which gave a result in sim
     \label{fig:sw-timing-logic-analyser}
 \end{figure}
 
-Measurements were also taken using the 'stopwatch' functionality in the bottom-right-hand corner of uVision's interface.
+Measurements were also taken using the `stopwatch' functionality in the bottom-right-hand corner of uVision's interface.
 
 \subsection{Measured Results}
 
@@ -136,10 +136,10 @@ The full program is shown in listing \ref{lst:software-timing}.
 \section{Example Hardware Program}
 An example program was provided to demonstrate the use of hardware timing. Full code is omitted for readability, but amounts to:\begin{itemize}
     \item An ISR is defined for overflows of timer 0\begin{itemize}
-        \item The ISR causes the output pin "SOUND" to complement
+        \item The ISR causes the output pin ``SOUND" to complement
     \end{itemize}
     \item The main program sets timer 0 to ungated timer mode and enables the interrupt
-    \item There is then an indefinite "NOP" loop which is regularly interrupted by the timer
+    \item There is then an indefinite ``NOP" loop which is regularly interrupted by the timer
 \end{itemize}
 
 This approach relies on a dedicated hardware timer to cause the interrupts, meaning unpredictable delays in software cannot cause the output waveform to jitter.
@@ -159,7 +159,7 @@ The program was simulated in Keil uVision and the period measured to be 674.794 
 
 Measurements were also taken in Keil using the stopwatch in the bottom-right-hand corner of the debug view. Strangely, the measured frequency varied slightly for each cycle, always between 674.9 and 675.1. Two causes for this variation may be:\begin{itemize}
     \item The uVision simulator has a bug or imprecision arising from floating-point errors
-    \item The uVision simulator is modelling some unidealities in the MCU itself
+    \item The uVision simulator is modelling some non-idealities in the MCU itself
 \end{itemize}
 
 In any case, this variation is inconsequential.
@@ -196,7 +196,7 @@ This task was the most substantial, having the following requirements:
     \item Generate a square wave at an adjustable frequency using a hardware timer.
     \item Allow the user to select the one of 8 frequencies using a set of 3 switches.
     \item A panel of 8 LED's should indicate the selected frequency in one-hot code.
-    \item Another LED should flash at a rate visible to humans to give an indication the program is running (a "heartbeat"). Exact timing is not important.
+    \item Another LED should flash at a rate visible to humans to give an indication the program is running (a ``heartbeat"). Exact timing is not important.
 \end{enumerate}
 
 Additionally, an optional feature was also implemented to have a pushbutton on the board toggle the heartbeat LED on an off. The physical button generates some bouncing when pressed, and no debouncing hardware is provide, so a software solution was developed.
@@ -222,6 +222,7 @@ This allows frequencies in the range 84.375 Hz to 5.5296 MHz, with significantly
 
 Frequencies of an E major triad were selected ranging from E5 (659.3 Hz) up to E8 (5.274 kHz). Appropriate reload values were calculated for each one by solving equation \ref{eq:hw-frequency-1}. These values were hardcoded into a lookup table in the software, allowing them to be reprogrammed easily.
 
+%TODO what was this meant to say?
 A mechanism for calculating frequencies used in Western music by multiplying by a fixed values of $2^\frac{1}{12}$ but it was decided the software complications in this arithmetic were not justified.
 
 \textbf{Heartbeat LED Mechanism}
@@ -257,7 +258,7 @@ A possible improvement to this main loop would be to detect changes in the switc
 
 A display panel of LED's had to show the frequency being generated. An active-low one-hot code had to be generated from the state of the switches. For example, switch 3 should generate the byte 0x11110111 to be written to the LED display.
 
-Originally a bit-shifting mechanism was considered but this was found to require several clock cycles and a 'for' loop. Instead, a simple lookup table was used, which is looked up in the main software loop at the same time as the frequency lookup occurs.
+Originally a bit-shifting mechanism was considered but this was found to require several clock cycles and a `for' loop. Instead, a simple lookup table was used, which is looked up in the main software loop at the same time as the frequency lookup occurs.
 
 \textbf{Heartbeat LED Disable Button}
 
@@ -275,7 +276,7 @@ Instead debouncing was accomplished in software using software delays with the f
 
 The ADuC841 does not allow an ISR to interrupt itself with another interrupt request, so it is sufficient to clear the interrupt flag at the end of one ISR to ignore any more that took place.
 
-The software delay was implemented using a similar 'for' loop to that in task 1.
+The software delay was implemented using a similar `for' loop to that in task 1.
 
 To disable the heartbeat LED, timer 1 would be disabled, and the LED explicitly turned off immediately. Switching off immediately, rather than waiting for the next natural off, allows the user to observe immediately that the button press was recognised. Similarly, when switching the heartbeat LED on, the LED is switched on immediately, and R1 is reset to ensure it does not switch off to soon, giving the user assurance that the button press worked. These improvements could be removed if program memory was constrained.
 
