@@ -1,0 +1,113 @@
+C51 COMPILER V9.54   MAIN                                                                  02/12/2026 14:55:25 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Source\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          #include <ADUC841.H>  // special function register definitions
+   2          #include "typedef.h"  // variable type definitions
+   3          
+   4          #define TF2_pos   (7)
+   5          #define EXF2_pos  (6)
+   6          #define RCLK_pos  (5)
+   7          #define TCLK_pos  (4)
+   8          #define EXEN2_pos (3)
+   9          #define TR2_pos   (2)
+  10          #define CNT2_pos  (1)
+  11          #define CAP2_pos  (0)
+  12          
+  13          #define MD1_pos     (7)
+  14          #define EXT_REF_pos (6)
+  15          #define CK1_pos     (5)
+  16          #define CK0_pos     (4)
+  17          #define AQ_pos    (2)
+  18          #define T2C_pos     (1)
+  19          #define EXC_pos     (0)
+  20          
+  21          #define ADCI_pos      (7)
+  22          #define DMA_pos       (6)
+  23          #define CCONV_pos     (5)
+  24          #define SCONV_pos     (4)
+  25          #define CS_pos        (0)
+  26          
+  27          static uint16 iir_output;
+  28          /*------------------------------------------------
+  29          Interrupt service routine for timer 2 interrupt.
+  30          Called by the hardware when the interrupt occurs.
+  31          ------------------------------------------------*/
+  32          void timer2 (void) interrupt 5   // interrupt vector at 002BH
+  33          {
+  34   1        
+  35   1      } // end timer2 interrupt service routine
+  36          
+  37          
+  38          void adc_isr (void) interrupt 6
+  39          {
+  40   1        // Needs to take current sample, update the average
+  41   1        // Be carefult this operation is atomic
+  42   1        
+  43   1        // IIR Filter
+  44   1        uint16 sample_value = ADCDATAL;
+  45   1        sample_value = sample_value & 0x0FFF;
+  46   1        iir_output = ((7*sample_value) >> 3) + (iir_output >>3);
+  47   1      }
+  48          
+  49          void main (void) {
+  50   1        
+  51   1        // Enable timer 2
+  52   1        T2CON = (0 << TF2_pos)    | //Overflow flag
+  53   1                (0 << EXF2_pos) | //External flag
+  54   1                (0 << RCLK_pos) | // receive flag enable
+C51 COMPILER V9.54   MAIN                                                                  02/12/2026 14:55:25 PAGE 2   
+
+  55   1                (0 << TCLK_pos) | // transmist clock enable
+  56   1                (0 << EXEN2_pos)  | // external enable flag
+  57   1                (1 << TR2_pos)    | // start/stop bit
+  58   1                (0 << CNT2_pos) | // Timer/counter mode
+  59   1                (0 << CAP2_pos);  // Capture/reload mode
+  60   1        
+  61   1        // Configure ADC for DC
+  62   1        ADCCON1 = (1 << MD1_pos)    | //Operating mode of ADC
+  63   1                  (0 << EXT_REF_pos)  | //External reference
+  64   1                  (0 << CK1_pos)  | // ADC clock divide bits
+  65   1                  (0 << CK0_pos)  | // ADC clock divide bits
+  66   1                  (3 << AQ_pos) | // number of ADC clock cycles
+  67   1                  (1 << T2C_pos)  | // Which timer to use
+  68   1                  (0 << EXC_pos);   // external trigger
+  69   1        
+  70   1        ADCCON2 = (0 << ADCI_pos)   | 
+  71   1                  (0 << DMA_pos)  | 
+  72   1                  (0 << CCONV_pos)  | 
+  73   1                  (0 << SCONV_pos)  | 
+  74   1                  (0 << CS_pos); 
+  75   1            // Enable the ADC interrupt 
+  76   1        EA = 1;
+  77   1        EADC = 1;
+  78   1        
+  79   1        
+  80   1          while(1)
+  81   1          {
+  82   2            // Read switches
+  83   2            
+  84   2            // Update display
+  85   2          }
+  86   1        
+  87   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     96    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      2    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
