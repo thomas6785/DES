@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        02/18/2026  15:36:44  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        02/19/2026  13:21:19  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
@@ -36,11 +36,11 @@ LINK MAP OF MODULE:  .\Objects\measure_instrument (?C_STARTUP)
                     0036H     07CAH                  *** GAP ***
             CODE    0800H     007CH     UNIT         ?PR?TIMER2?MAIN
             CODE    087CH     0050H     UNIT         ?PR?ADC_ISR?MAIN
-            CODE    08CCH     0025H     UNIT         ?PR?MAIN?MAIN
-            CODE    08F1H     0019H     UNIT         ?PR?FREQUENCY_MEASURE?MAIN
-            CODE    090AH     0014H     UNIT         ?PR?DC_MEASURE?MAIN
-            CODE    091EH     0012H     UNIT         ?C?LIB_CODE
-            CODE    0930H     000FH     UNIT         ?C_C51STARTUP
+            CODE    08CCH     002BH     UNIT         ?PR?MAIN?MAIN
+            CODE    08F7H     0014H     UNIT         ?PR?FREQUENCY_MEASURE?MAIN
+            CODE    090BH     0012H     UNIT         ?C?LIB_CODE
+            CODE    091DH     000FH     UNIT         ?C_C51STARTUP
+            CODE    092CH     000EH     UNIT         ?PR?DC_MEASURE?MAIN
 
 
 
@@ -54,12 +54,12 @@ SEGMENT                              DATA_GROUP
   +--> ?PR?MAIN?MAIN
 
 ?PR?MAIN?MAIN                      0010H    0001H
-  +--> ?PR?DC_MEASURE?MAIN
   +--> ?PR?FREQUENCY_MEASURE?MAIN
+  +--> ?PR?DC_MEASURE?MAIN
 
 
 
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/18/2026  15:36:44  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/19/2026  13:21:19  PAGE 2
 
 
 SYMBOL TABLE OF MODULE:  .\Objects\measure_instrument (?C_STARTUP)
@@ -68,7 +68,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\measure_instrument (?C_STARTUP)
   ----------------------------------
 
   -------         MODULE        ?C_STARTUP
-  C:0930H         SEGMENT       ?C_C51STARTUP
+  C:091DH         SEGMENT       ?C_C51STARTUP
   I:0011H         SEGMENT       ?STACK
   C:0000H         PUBLIC        ?C_STARTUP
   D:00AFH         SYMBOL        CFG8XX
@@ -76,7 +76,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\measure_instrument (?C_STARTUP)
   N:0000H         SYMBOL        IBPSTACK
   N:0100H         SYMBOL        IBPSTACKTOP
   N:0080H         SYMBOL        IDATALEN
-  C:0933H         SYMBOL        IDATALOOP
+  C:0920H         SYMBOL        IDATALOOP
   D:00A0H         SYMBOL        P2
   N:0000H         SYMBOL        PBPSTACK
   N:0000H         SYMBOL        PBPSTACKTOP
@@ -87,7 +87,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\measure_instrument (?C_STARTUP)
   D:0081H         SYMBOL        SP
   D:00B7H         SYMBOL        SPH
   N:0200H         SYMBOL        STACKSIZE
-  C:0930H         SYMBOL        STARTUP1
+  C:091DH         SYMBOL        STARTUP1
   N:0000H         SYMBOL        XBPSTACK
   N:0000H         SYMBOL        XBPSTACKTOP
   N:0000H         SYMBOL        XDATALEN
@@ -96,13 +96,13 @@ SYMBOL TABLE OF MODULE:  .\Objects\measure_instrument (?C_STARTUP)
   N:0600H         SYMBOL        XSTACKSTART
   N:0000H         SYMBOL        _CFG8XX
   C:0000H         LINE#         167
-  C:0930H         LINE#         180
-  C:0932H         LINE#         181
-  C:0933H         LINE#         182
-  C:0934H         LINE#         183
-  C:0936H         LINE#         202
-  C:0939H         LINE#         236
-  C:093CH         LINE#         248
+  C:091DH         LINE#         180
+  C:091FH         LINE#         181
+  C:0920H         LINE#         182
+  C:0921H         LINE#         183
+  C:0923H         LINE#         202
+  C:0926H         LINE#         236
+  C:0929H         LINE#         248
   -------         ENDMOD        ?C_STARTUP
 
   -------         MODULE        MAIN
@@ -111,15 +111,15 @@ SYMBOL TABLE OF MODULE:  .\Objects\measure_instrument (?C_STARTUP)
   B:00A8H.7       PUBLIC        EA
   B:00A8H.6       PUBLIC        EADC
   D:0008H         SYMBOL        frequency_iir_output
-  C:090AH         PUBLIC        dc_measure
+  C:092CH         PUBLIC        dc_measure
   D:00CBH         PUBLIC        RCAP2H
   D:00CAH         PUBLIC        RCAP2L
   C:08CCH         PUBLIC        main
-  C:08F1H         PUBLIC        frequency_measure
+  C:08F7H         PUBLIC        frequency_measure
   D:00D9H         PUBLIC        ADCDATAL
   D:0089H         PUBLIC        TMOD
   D:0088H         PUBLIC        TCON
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/18/2026  15:36:44  PAGE 3
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/19/2026  13:21:19  PAGE 3
 
 
   D:000AH         SYMBOL        frequency_counter
@@ -156,59 +156,62 @@ SYMBOL TABLE OF MODULE:  .\Objects\measure_instrument (?C_STARTUP)
   C:08BBH         LINE#         79
   -------         ENDPROC       ADC_ISR
   -------         PROC          DC_MEASURE
-  C:090AH         LINE#         83
-  C:090AH         LINE#         84
-  C:090DH         LINE#         94
-  C:0910H         LINE#         103
-  C:0913H         LINE#         108
-  C:0915H         LINE#         109
-  C:0917H         LINE#         110
-  C:091DH         LINE#         113
-  C:091DH         LINE#         114
+  C:092CH         LINE#         83
+  C:092CH         LINE#         84
+  C:092FH         LINE#         94
+  C:0932H         LINE#         103
+  C:0935H         LINE#         108
+  C:0937H         LINE#         109
+  C:0939H         LINE#         110
   -------         ENDPROC       DC_MEASURE
   -------         PROC          FREQUENCY_MEASURE
-  C:08F1H         LINE#         117
-  C:08F1H         LINE#         119
-  C:08F4H         LINE#         129
-  C:08F6H         LINE#         130
-  C:08F8H         LINE#         133
-  C:08FBH         LINE#         134
-  C:08FEH         LINE#         137
-  C:0901H         LINE#         142
-  C:0904H         LINE#         150
-  C:0909H         LINE#         152
-  C:0909H         LINE#         153
+  C:08F7H         LINE#         113
+  C:08F7H         LINE#         115
+  C:08FAH         LINE#         125
+  C:08FCH         LINE#         126
+  C:08FEH         LINE#         129
+  C:0901H         LINE#         130
+  C:0904H         LINE#         133
+  C:0907H         LINE#         138
+  C:090AH         LINE#         146
   -------         ENDPROC       FREQUENCY_MEASURE
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/18/2026  15:36:44  PAGE 4
-
-
   -------         PROC          MAIN
   -------         DO            
+  D:0007H         SYMBOL        prev_switch_value
+  -------         DO            
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/19/2026  13:21:19  PAGE 4
+
+
   D:0010H         SYMBOL        switch_value
   -------         ENDDO         
-  C:08CCH         LINE#         156
-  C:08CCH         LINE#         157
-  C:08CFH         LINE#         159
-  C:08CFH         LINE#         161
-  C:08D5H         LINE#         163
-  C:08D7H         LINE#         165
-  C:08DAH         LINE#         166
-  C:08E1H         LINE#         168
-  C:08E4H         LINE#         169
-  C:08ECH         LINE#         172
-  C:08ECH         LINE#         174
-  C:08EFH         LINE#         175
-  C:08EFH         LINE#         176
+  -------         ENDDO         
+  C:08CCH         LINE#         149
+  C:08CCH         LINE#         151
+  C:08CFH         LINE#         152
+  C:08D1H         LINE#         154
+  C:08D1H         LINE#         156
+  C:08D7H         LINE#         157
+  C:08DAH         LINE#         159
+  C:08DEH         LINE#         161
+  C:08DEH         LINE#         162
+  C:08E5H         LINE#         164
+  C:08E8H         LINE#         165
+  C:08F0H         LINE#         168
+  C:08F0H         LINE#         170
+  C:08F3H         LINE#         171
+  C:08F3H         LINE#         172
+  C:08F3H         LINE#         173
+  C:08F5H         LINE#         176
   -------         ENDPROC       MAIN
   -------         ENDMOD        MAIN
 
   -------         MODULE        ?C?IMUL
-  C:091EH         PUBLIC        ?C?IMUL
+  C:090BH         PUBLIC        ?C?IMUL
   -------         ENDMOD        ?C?IMUL
 
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0136H BYTE (15%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0131H BYTE (14%) *
 ******************************************************************************
 
-Program Size: data=18.0 xdata=0 code=328
+Program Size: data=18.0 xdata=0 code=323
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

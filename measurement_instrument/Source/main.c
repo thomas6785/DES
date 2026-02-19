@@ -107,10 +107,6 @@ void dc_measure(void) {
 	          (0 << CS_pos);      // ADC channel select bits
 	EA = 1;    // Enable global interrupts
 	EADC = 1;  // Enable ADC interrupt
-	while ((SWITCHES&0x03) == 0x00) {
-		// Stay in this mode until user switches
-		// ADC samples and IIR filtering are handled by the interrupt service routine
-	}
 }
 
 
@@ -146,33 +142,37 @@ void frequency_measure(void) {
 	       (0 << IE0_pos) | // External interrupt 0 flag
 	       (0 << IT0_pos);   // External interrupt 0 type
 
-	// Stay in this mode until user switches
-	while ((SWITCHES&0x03) & 0x01) {
-		// Interrupt handlers take care of frequency counting
-	}
+
 }
 
 
 void main(void) {
+	uint8 prev_switch_value;
 	SWITCHES = 0xFF;  // Make switch pins inputs
+	prev_switch_value = 0x8;
 
 	while(1) {
 		// Read switches and enter appropriate mode
-		uint8 switch_value = SWITCHES & 0x03;
-
-		if (switch_value == 0x00) {
-			// DC measurement mode
-			dc_measure();
-		} else if (switch_value == 0x01) {
-			// Frequency measurement mode
-			frequency_measure();
-		} else if (switch_value == 0x02) {
-			// IIR filter test mode
-			// TODO: Implement IIR filter test mode
-		} else {
-			// Default to DC measurement mode (switch_value == 0x03)
-			dc_measure();
+		uint8 switch_value = SWITCHES & 0x03;		
+		if (prev_switch_value != switch_value){
+			
+			if (switch_value == 0x00) {
+				// DC measurement mode
+				dc_measure();
+			} else if (switch_value == 0x01) {
+				// Frequency measurement mode
+				frequency_measure();
+			} else if (switch_value == 0x02) {
+				// IIR filter test mode
+				// TODO: Implement IIR filter test mode
+			} else {
+				// Default to DC measurement mode (switch_value == 0x03)
+				dc_measure();
+			}
 		}
+		prev_switch_value = switch_value;
+		
+		
 	}
 }  // end main
 	
