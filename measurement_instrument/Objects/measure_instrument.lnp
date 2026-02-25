@@ -1,4 +1,5 @@
 ".\Objects\START_AD.obj",
-".\Objects\main.obj" 
+".\Objects\main.obj",
+".\Objects\bin2bcd.obj" 
 TO ".\Objects\measure_instrument" 
 PRINT(".\Listings\measure_instrument.m51") RAMSIZE(256) 

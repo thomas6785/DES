@@ -383,6 +383,11 @@
               <FileType>5</FileType>
               <FilePath>.\Source\typedef.h</FilePath>
             </File>
+            <File>
+              <FileName>bin2bcd.asm</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\Source\bin2bcd.asm</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

@@ -1,10 +1,10 @@
-C51 COMPILER V9.54   MAIN                                                                  02/19/2026 13:21:18 PAGE 1   
+C51 COMPILER V9.54   MAIN                                                                  02/19/2026 13:42:04 PAGE 1   
 
 
 C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
 OBJECT MODULE PLACED IN .\Objects\main.obj
-COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE Source\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
-                    -gs\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
+COMPILER INVOKED BY: C:\Program Files\uVision\C51\BIN\C51.EXE Source\main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND 
+                    -PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   52          ------------------------------------------------*/
   53          void timer2(void) interrupt 5   // interrupt vector at 002BH
   54          {
-C51 COMPILER V9.54   MAIN                                                                  02/19/2026 13:21:18 PAGE 2   
+C51 COMPILER V9.54   MAIN                                                                  02/19/2026 13:42:04 PAGE 2   
 
   55   1        // Check what mode we are in:
   56   1        if ((SWITCHES&0x03) == 0x01) {
@@ -78,127 +78,128 @@ line level    source
   64   3            frequency_value = ((7*frequency_value) >> 3) + (frequency_iir_output >> 3);
   65   3          }
   66   2        }
-  67   1      }  // end timer2 interrupt service routine
-  68          
+  67   1        TF2 = 0;
+  68   1      }  // end timer2 interrupt service routine
   69          
-  70          void adc_isr(void) interrupt 6
-  71          {
-  72   1        // Needs to take current sample, update the average
-  73   1        // Be careful this operation is atomic
-  74   1      
-  75   1        // IIR Filter
-  76   1        uint16 sample_value = ADCDATAL;
-  77   1        sample_value = sample_value & 0x0FFF;
-  78   1        adc_iir_output = ((7*sample_value) >> 3) + (adc_iir_output >> 3);
-  79   1      }
-  80          
+  70          
+  71          void adc_isr(void) interrupt 6
+  72          {
+  73   1        // Needs to take current sample, update the average
+  74   1        // Be careful this operation is atomic
+  75   1      
+  76   1        // IIR Filter
+  77   1        uint16 sample_value = ADCDATAL;
+  78   1        sample_value = sample_value & 0x0FFF;
+  79   1        adc_iir_output = ((7*sample_value) >> 3) + (adc_iir_output >> 3);
+  80   1      }
   81          
   82          
-  83          void dc_measure(void) {
-  84   1        T2CON = (0 << TF2_pos)     | // Overflow flag
-  85   1                (0 << EXF2_pos)    | // External flag
-  86   1                (0 << RCLK_pos)    | // receive flag enable
-  87   1                (0 << TCLK_pos)    | // transmit clock enable
-  88   1                (0 << EXEN2_pos)   | // external enable flag
-  89   1                (1 << TR2_pos)     | // start/stop bit
-  90   1                (0 << CNT2_pos)    | // Timer/counter mode
-  91   1                (0 << CAP2_pos);     // Capture/reload mode
-  92   1      
-  93   1        // Configure ADC for DC
-  94   1        ADCCON1 = (1 << MD1_pos)    | // Operating mode of ADC
-  95   1                  (0 << EXT_REF_pos)| // External reference
-  96   1                  (0 << CK1_pos)    | // ADC clock divide bits
-  97   1                  (0 << CK0_pos)    | // ADC clock divide bits
-  98   1                  (3 << AQ_pos)     | // number of ADC clock cycles
-  99   1                  (1 << T2C_pos)    | // Which timer to use
- 100   1                  (0 << EXC_pos);     // external trigger
- 101   1      
- 102   1        // Enable ADC interrupt
- 103   1        ADCCON2 = (1 << ADCI_pos)   | // ADC interrupt flag
- 104   1                  (0 << DMA_pos)    | // ADC DMA flag
- 105   1                  (0 << CCONV_pos)  | // ADC conversion complete flag
- 106   1                  (0 << SCONV_pos)  | // ADC sequence complete flag
- 107   1                  (0 << CS_pos);      // ADC channel select bits
- 108   1        EA = 1;    // Enable global interrupts
- 109   1        EADC = 1;  // Enable ADC interrupt
- 110   1      }
- 111          
+  83          
+  84          void dc_measure(void) {
+  85   1        T2CON = (0 << TF2_pos)     | // Overflow flag
+  86   1                (0 << EXF2_pos)    | // External flag
+  87   1                (0 << RCLK_pos)    | // receive flag enable
+  88   1                (0 << TCLK_pos)    | // transmit clock enable
+  89   1                (0 << EXEN2_pos)   | // external enable flag
+  90   1                (1 << TR2_pos)     | // start/stop bit
+  91   1                (0 << CNT2_pos)    | // Timer/counter mode
+  92   1                (0 << CAP2_pos);     // Capture/reload mode
+  93   1      
+  94   1        // Configure ADC for DC
+  95   1        ADCCON1 = (1 << MD1_pos)    | // Operating mode of ADC
+  96   1                  (0 << EXT_REF_pos)| // External reference
+  97   1                  (0 << CK1_pos)    | // ADC clock divide bits
+  98   1                  (0 << CK0_pos)    | // ADC clock divide bits
+  99   1                  (3 << AQ_pos)     | // number of ADC clock cycles
+ 100   1                  (1 << T2C_pos)    | // Which timer to use
+ 101   1                  (0 << EXC_pos);     // external trigger
+ 102   1      
+ 103   1        // Enable ADC interrupt
+ 104   1        ADCCON2 = (1 << ADCI_pos)   | // ADC interrupt flag
+ 105   1                  (0 << DMA_pos)    | // ADC DMA flag
+ 106   1                  (0 << CCONV_pos)  | // ADC conversion complete flag
+ 107   1                  (0 << SCONV_pos)  | // ADC sequence complete flag
+ 108   1                  (0 << CS_pos);      // ADC channel select bits
+ 109   1        EA = 1;    // Enable global interrupts
+ 110   1        EADC = 1;  // Enable ADC interrupt
+ 111   1      }
  112          
- 113          void frequency_measure(void) {
- 114   1        // Configure timer 2 to generate a pulse every 0.1s (needs a reload value of 10240, and a register counti
-C51 COMPILER V9.54   MAIN                                                                  02/19/2026 13:21:18 PAGE 3   
+ 113          
+ 114          void frequency_measure(void) {
+C51 COMPILER V9.54   MAIN                                                                  02/19/2026 13:42:04 PAGE 3   
 
+ 115   1        // Configure timer 2 to generate a pulse every 0.1s (needs a reload value of 10240, and a register counti
              -ng to 25)
- 115   1        T2CON = (0 << TF2_pos)     | // Overflow flag
- 116   1                (0 << EXF2_pos)    | // External flag
- 117   1                (0 << RCLK_pos)    | // receive flag enable
- 118   1                (0 << TCLK_pos)    | // transmit clock enable
- 119   1                (0 << EXEN2_pos)   | // external enable flag
- 120   1                (1 << TR2_pos)     | // start/stop bit
- 121   1                (0 << CNT2_pos)    | // Timer/counter mode
- 122   1                (0 << CAP2_pos);     // Capture/reload mode
- 123   1      
- 124   1        // Enable Timer 2 interrupt
- 125   1        ET2 = 1;
- 126   1        EA = 1;    // Enable global interrupts
- 127   1      
- 128   1        // Set reload value to 10240
- 129   1        RCAP2L = 0x00;
- 130   1        RCAP2H = 0x28;
- 131   1      
- 132   1        // Configure timer 0 to count the input frequency. Use in mode 1.
- 133   1        TMOD = (0 << GATE_pos) | // Timer 0 gate control
- 134   1               (1 << CT_pos)   | // Timer/counter mode
- 135   1               (0 << M1_pos)   | // Mode bit 1
- 136   1               (1 << M0_pos);    // Mode bit 0
- 137   1      
- 138   1        TCON = (0 << TF0_pos) | // Timer 0 overflow flag
- 139   1               (1 << TR0_pos) | // Timer 0 run control
- 140   1               (0 << IE1_pos) | // External interrupt 1 flag
- 141   1               (0 << IT1_pos) | // External interrupt 1 type
- 142   1               (0 << IE0_pos) | // External interrupt 0 flag
- 143   1               (0 << IT0_pos);   // External interrupt 0 type
- 144   1      
+ 116   1        T2CON = (0 << TF2_pos)     | // Overflow flag
+ 117   1                (0 << EXF2_pos)    | // External flag
+ 118   1                (0 << RCLK_pos)    | // receive flag enable
+ 119   1                (0 << TCLK_pos)    | // transmit clock enable
+ 120   1                (0 << EXEN2_pos)   | // external enable flag
+ 121   1                (1 << TR2_pos)     | // start/stop bit
+ 122   1                (0 << CNT2_pos)    | // Timer/counter mode
+ 123   1                (0 << CAP2_pos);     // Capture/reload mode
+ 124   1      
+ 125   1        // Enable Timer 2 interrupt
+ 126   1        ET2 = 1;
+ 127   1        EA = 1;    // Enable global interrupts
+ 128   1      
+ 129   1        // Set reload value to 10240
+ 130   1        RCAP2L = 0x00;
+ 131   1        RCAP2H = 0x28;
+ 132   1      
+ 133   1        // Configure timer 0 to count the input frequency. Use in mode 1.
+ 134   1        TMOD = (0 << GATE_pos) | // Timer 0 gate control
+ 135   1               (1 << CT_pos)   | // Timer/counter mode
+ 136   1               (0 << M1_pos)   | // Mode bit 1
+ 137   1               (1 << M0_pos);    // Mode bit 0
+ 138   1      
+ 139   1        TCON = (0 << TF0_pos) | // Timer 0 overflow flag
+ 140   1               (1 << TR0_pos) | // Timer 0 run control
+ 141   1               (0 << IE1_pos) | // External interrupt 1 flag
+ 142   1               (0 << IT1_pos) | // External interrupt 1 type
+ 143   1               (0 << IE0_pos) | // External interrupt 0 flag
+ 144   1               (0 << IT0_pos);   // External interrupt 0 type
  145   1      
- 146   1      }
- 147          
+ 146   1      
+ 147   1      }
  148          
- 149          void main(void) {
- 150   1        uint8 prev_switch_value;
- 151   1        SWITCHES = 0xFF;  // Make switch pins inputs
- 152   1        prev_switch_value = 0x8;
- 153   1      
- 154   1        while(1) {
- 155   2          // Read switches and enter appropriate mode
- 156   2          uint8 switch_value = SWITCHES & 0x03;   
- 157   2          if (prev_switch_value != switch_value){
- 158   3            
- 159   3            if (switch_value == 0x00) {
- 160   4              // DC measurement mode
- 161   4              dc_measure();
- 162   4            } else if (switch_value == 0x01) {
- 163   4              // Frequency measurement mode
- 164   4              frequency_measure();
- 165   4            } else if (switch_value == 0x02) {
- 166   4              // IIR filter test mode
- 167   4              // TODO: Implement IIR filter test mode
- 168   4            } else {
- 169   4              // Default to DC measurement mode (switch_value == 0x03)
- 170   4              dc_measure();
- 171   4            }
- 172   3          }
- 173   2          prev_switch_value = switch_value;
- 174   2          
+ 149          
+ 150          void main(void) {
+ 151   1        uint8 prev_switch_value;
+ 152   1        SWITCHES = 0xFF;  // Make switch pins inputs
+ 153   1        prev_switch_value = 0x8;
+ 154   1      
+ 155   1        while(1) {
+ 156   2          // Read switches and enter appropriate mode
+ 157   2          uint8 switch_value = SWITCHES & 0x03;   
+ 158   2          if (prev_switch_value != switch_value){
+ 159   3            
+ 160   3            if (switch_value == 0x00) {
+ 161   4              // DC measurement mode
+ 162   4              dc_measure();
+ 163   4            } else if (switch_value == 0x01) {
+ 164   4              // Frequency measurement mode
+ 165   4              frequency_measure();
+ 166   4            } else if (switch_value == 0x02) {
+ 167   4              // IIR filter test mode
+ 168   4              // TODO: Implement IIR filter test mode
+ 169   4            } else {
+ 170   4              // Default to DC measurement mode (switch_value == 0x03)
+ 171   4              dc_measure();
+ 172   4            }
+ 173   3          }
+ 174   2          prev_switch_value = switch_value;
  175   2          
-C51 COMPILER V9.54   MAIN                                                                  02/19/2026 13:21:18 PAGE 4   
+C51 COMPILER V9.54   MAIN                                                                  02/19/2026 13:42:04 PAGE 4   
 
- 176   2        }
- 177   1      }  // end main
- 178            
+ 176   2          
+ 177   2        }
+ 178   1      }  // end main
+ 179            
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    281    ----
+   CODE SIZE        =    283    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----

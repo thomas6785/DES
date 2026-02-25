@@ -64,6 +64,7 @@ void timer2(void) interrupt 5   // interrupt vector at 002BH
 			frequency_value = ((7*frequency_value) >> 3) + (frequency_iir_output >> 3);
 		}
 	}
+	TF2 = 0;
 }  // end timer2 interrupt service routine
 
 
