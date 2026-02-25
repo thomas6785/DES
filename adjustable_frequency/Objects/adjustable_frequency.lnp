@@ -1,0 +1,4 @@
+".\Objects\adjustable_freqeuncies.obj" 
+TO ".\Objects\adjustable_frequency" 
+PRINT(".\Listings\adjustable_frequency.m51") RAMSIZE(256) 
+CODE( 0X0000-0XF7FF )

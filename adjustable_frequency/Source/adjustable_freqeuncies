@@ -1,0 +1,168 @@
+; Demo Program - using timer interrupts.
+; Written for ADuC841 evaluation board, with UCD extras.
+; Generates a square wave on P3.6.
+; Brian Mulkeen, September 2016
+
+; Include the ADuC841 SFR definitions
+$NOMOD51
+$INCLUDE (MOD841)
+	
+SOUND		EQU  	P3.6	; P3.6 will drive a transducer
+SWITCHES 	EQU P2			;Switches
+LEDS 		EQU P0			;
+
+CSEG
+		ORG		0000h		; set origin at start of code segment
+		JMP		MAIN		; jump to start of main program
+		
+		ORG		000Bh		; Timer 0 overflow interrupt address
+		JMP		TF0ISR		; jump to interrupt service routine
+
+		ORG		0060h		; set origin above interrupt addresses	
+MAIN:	
+; ------ Setup part - happens once only ----------------------------
+		MOV		TMOD, #01h	; Timer 0 as a timer, mode 0, not gated
+		MOV		IE, #82h	; enable Timer 0 overflow interrupt
+		SETB	TR0			; start Timer 0
+
+		
+		
+
+; ------ Loop forever (in this example, doing nothing) -------------
+LOOP:	
+		MOV 	R1, SWITCHES; Read the status of the switches in register
+		
+		MOV A, #1h
+		; Call delay maybe?
+		CALL SET_INCREMENT 	; Set increment amount based on R1
+		CALL DISPLAY_ONEHOT ; 
+		JMP		LOOP		; repeat - waiting for interrupt
+
+		
+; ------ Interrupt service routine ---------------------------------	
+TF0ISR:		; Timer 0 overflow interrupt service routine
+		CALL INCREMENT16; Add the value from R2 to the count
+
+		RETI				; return from interrupt
+;____________________________________________________________________
+		; SUBROUTINES
+DELAY:	; delay for time A x 10 ms.  A is not changed. 
+		MOV	R5, A		; set number of repetitions for outer loop
+DLY2:	MOV	R6, #144		; middle loop repeats 144 times         
+DLY1:	MOV	R7, #255		; inner loop repeats 255 times      
+		DJNZ	R7, $		; inner loop 255 x 3 cycles = 765 cycles            
+		DJNZ	R6, DLY1		; + 5 to reload, x 144 = 110880 cycles
+		DJNZ	R5, DLY2		; + 5 to reload = 110885 cycles = 10.0264 ms
+		RET				; return from subroutine
+		
+		
+		
+SET_INCREMENT:          ; reads SWITCHES, loads 16-bit increment into R3:R2 (hi:lo)
+        MOV     A, SWITCHES
+		ANL 	A, #00000111b;
+        CJNE    A, #00h, CASE_01
+        MOV     R2, #07Eh       ; 18830 = 0x498E  -> lo=8Eh hi=49h (example below corrected)
+        MOV     R3, #049h
+        RET
+
+CASE_01:
+        CJNE    A, #01h, CASE_02
+        MOV     R2, #017h       ; 12567 = 0x3117 -> lo=17h hi=31h
+        MOV     R3, #031h
+        RET
+
+CASE_02:
+        CJNE    A, #02h, CASE_03
+        MOV     R2, #0F7h       ; 9975  = 0x26F7 -> lo=F7h hi=26h
+        MOV     R3, #026h
+        RET
+
+CASE_03:
+        CJNE    A, #03h, CASE_04
+        MOV     R2, #035h       ; 7477  = 0x1D35 -> lo=35h hi=1Dh
+        MOV     R3, #01Dh
+        RET
+
+CASE_04:
+        CJNE    A, #04h, CASE_05
+        MOV     R2, #08Ch       ; 6284  = 0x188C -> lo=8Ch hi=18h
+        MOV     R3, #018h
+        RET
+
+CASE_05:
+        CJNE    A, #05h, CASE_06
+        MOV     R2, #064h       ; 4708  = 0x1264 -> lo=64h hi=12h
+        MOV     R3, #012h
+        RET
+
+CASE_06:
+        CJNE    A, #06h, CASE_07
+        MOV     R2, #046h       ; 3142  = 0x0C46 -> lo=46h hi=0Ch
+        MOV     R3, #00Ch
+        RET
+
+CASE_07:
+        ; default / #07h
+        MOV     R2, #032h       ; 2354  = 0x0932 -> lo=32h hi=09h
+        MOV     R3, #009h
+        RET
+
+	
+INCREMENT16:
+        MOV     A, R4          ; A = counter low
+        ADD     A, R2          ; + inc low
+        MOV     R4, A          ; store low result
+
+        MOV     A, R5          ; A = counter high
+        ADDC    A, R3          ; + inc high + carry from low add
+        MOV     R5, A          ; store high result
+
+        JNC     NO_OVF         ; if no carry after high byte, no 16-bit overflow
+        CPL     SOUND          ; overflow happened -> flip output
+
+NO_OVF:
+        RET
+		
+DISPLAY_ONEHOT:
+        MOV     A, SWITCHES
+        ANL     A, #07h        ; keep 0..7
+
+        CJNE    A, #00h, OH_1
+        MOV     LEDS, #01h
+        RET
+
+OH_1:
+        CJNE    A, #01h, OH_2
+        MOV     LEDS, #02h
+        RET
+
+OH_2:
+        CJNE    A, #02h, OH_3
+        MOV     LEDS, #04h
+        RET
+
+OH_3:
+        CJNE    A, #03h, OH_4
+        MOV     LEDS, #08h
+        RET
+
+OH_4:
+        CJNE    A, #04h, OH_5
+        MOV     LEDS, #10h
+        RET
+
+OH_5:
+        CJNE    A, #05h, OH_6
+        MOV     LEDS, #20h
+        RET
+
+OH_6:
+        CJNE    A, #06h, OH_7
+        MOV     LEDS, #40h
+        RET
+
+OH_7:
+        MOV     LEDS, #00h     ; switch = 7 ? all LEDs off
+        RET
+		
+END
