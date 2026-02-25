@@ -2,6 +2,7 @@
 #include "typedef.h"	// variable type definitions
 
 #define SWITCHES  	P2		// switches are connected to Port 2
+#define LOAD 				RXD
 
 #define TF2_pos 			(7)
 #define EXF2_pos 			(6)
@@ -42,6 +43,15 @@
 #define M1_pos 				(1)
 #define M0_pos 				(0)
 
+// SPI Con
+#define ISPI_pos				(7) // Interrupt bit
+#define WCOL_pos				(6) // Write collision bit
+#define SPE_pos					(5) // SPI interface enable
+#define SPIM_pos				(4) // set for master, clear for slave mode
+#define CPOL_pos				(3) // set for clock to idle high, clear for idle low
+#define CPHA_pos				(2) // clock polarity. Set for leading edge to transmti, clear for trailing edge to transmit
+#define SPR_pos					(0) // select SCLCK rate - see data sheet
+
 static uint16 adc_iir_output;          // IIR filter for ADC samples
 static uint16 frequency_iir_output;    // IIR filter for frequency measurements
 static uint16 frequency_counter;
@@ -64,6 +74,8 @@ void timer2(void) interrupt 5   // interrupt vector at 002BH
 			frequency_value = ((7*frequency_value) >> 3) + (frequency_iir_output >> 3);
 		}
 	}
+	TF2 = 0; // Clear the interrupt
+	
 }  // end timer2 interrupt service routine
 
 
@@ -107,10 +119,6 @@ void dc_measure(void) {
 	          (0 << CS_pos);      // ADC channel select bits
 	EA = 1;    // Enable global interrupts
 	EADC = 1;  // Enable ADC interrupt
-	while ((SWITCHES&0x03) == 0x00) {
-		// Stay in this mode until user switches
-		// ADC samples and IIR filtering are handled by the interrupt service routine
-	}
 }
 
 
@@ -146,33 +154,71 @@ void frequency_measure(void) {
 	       (0 << IE0_pos) | // External interrupt 0 flag
 	       (0 << IT0_pos);   // External interrupt 0 type
 
-	// Stay in this mode until user switches
-	while ((SWITCHES&0x03) & 0x01) {
-		// Interrupt handlers take care of frequency counting
-	}
+
+}
+
+void setRegister (uint8 address, uint8 data_value)
+{
+	int i;
+	LOAD = 0; // load goes low at start
+	SPIDAT = address; // send address byte
+	// code to wait until ISPI is 1
+	while(~ISPI){}
+	ISPI = 0; // reset ISPI
+	// need a small delay here
+	for(i=0; i <=1000; i++){}
+	SPIDAT = data_value; // send data byte
+	// code to wait until ISPI is 1
+	while(~ISPI){}
+	ISPI = 0; // reset ISPI
+	LOAD = 1; // load goes high at end
 }
 
 
+
 void main(void) {
+	int i;
+	uint8 prev_switch_value;
+	
+	SPICON =	(0 << ISPI_pos)	|
+						(0 << WCOL_pos)	|
+						(1 << SPE_pos)	|
+						(1 << SPIM_pos)	|
+						(0 << CPOL_pos)	|
+						(1 << CPHA_pos)	|
+						(3 << SPR_pos);
+	setRegister(15,1); //Display test
+	for(i=0; i <=1000000; i++){} //Delay
+	setRegister(15, 0); //Turn off the display test
+	setRegister(10, 15); // Set brightness
+	setRegister(9, 1); //Decode mode
+	setRegister(1, 1); // Write 1 to register 1
+	
 	SWITCHES = 0xFF;  // Make switch pins inputs
+	prev_switch_value = 0x8;
 
 	while(1) {
 		// Read switches and enter appropriate mode
-		uint8 switch_value = SWITCHES & 0x03;
-
-		if (switch_value == 0x00) {
-			// DC measurement mode
-			dc_measure();
-		} else if (switch_value == 0x01) {
-			// Frequency measurement mode
-			frequency_measure();
-		} else if (switch_value == 0x02) {
-			// IIR filter test mode
-			// TODO: Implement IIR filter test mode
-		} else {
-			// Default to DC measurement mode (switch_value == 0x03)
-			dc_measure();
+		uint8 switch_value = SWITCHES & 0x03;		
+		if (prev_switch_value != switch_value){
+			
+			if (switch_value == 0x00) {
+				// DC measurement mode
+				dc_measure();
+			} else if (switch_value == 0x01) {
+				// Frequency measurement mode
+				frequency_measure();
+			} else if (switch_value == 0x02) {
+				// IIR filter test mode
+				// TODO: Implement IIR filter test mode
+			} else {
+				// Default to DC measurement mode (switch_value == 0x03)
+				dc_measure();
+			}
 		}
+		prev_switch_value = switch_value;
+		
+		
 	}
 }  // end main
 	

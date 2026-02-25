@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22                                                        02/18/2026  15:36:44  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22                                                        02/19/2026  14:56:55  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
@@ -13,6 +13,7 @@ INPUT MODULES INCLUDED:
   .\Objects\START_AD.obj (?C_STARTUP)
   .\Objects\main.obj (MAIN)
   C:\KEIL_V5\C51\LIB\C51S.LIB (?C?IMUL)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?SLCMP)
 
 
 LINK MAP OF MODULE:  .\Objects\measure_instrument (?C_STARTUP)
@@ -34,13 +35,14 @@ LINK MAP OF MODULE:  .\Objects\measure_instrument (?C_STARTUP)
                     002EH     0005H                  *** GAP ***
             CODE    0033H     0003H     ABSOLUTE     
                     0036H     07CAH                  *** GAP ***
-            CODE    0800H     007CH     UNIT         ?PR?TIMER2?MAIN
-            CODE    087CH     0050H     UNIT         ?PR?ADC_ISR?MAIN
-            CODE    08CCH     0025H     UNIT         ?PR?MAIN?MAIN
-            CODE    08F1H     0019H     UNIT         ?PR?FREQUENCY_MEASURE?MAIN
-            CODE    090AH     0014H     UNIT         ?PR?DC_MEASURE?MAIN
-            CODE    091EH     0012H     UNIT         ?C?LIB_CODE
-            CODE    0930H     000FH     UNIT         ?C_C51STARTUP
+            CODE    0800H     007EH     UNIT         ?PR?TIMER2?MAIN
+            CODE    087EH     006DH     UNIT         ?PR?MAIN?MAIN
+            CODE    08EBH     0050H     UNIT         ?PR?ADC_ISR?MAIN
+            CODE    093BH     0028H     UNIT         ?C?LIB_CODE
+            CODE    0963H     0025H     UNIT         ?PR?_SETREGISTER?MAIN
+            CODE    0988H     0014H     UNIT         ?PR?FREQUENCY_MEASURE?MAIN
+            CODE    099CH     000FH     UNIT         ?C_C51STARTUP
+            CODE    09ABH     000EH     UNIT         ?PR?DC_MEASURE?MAIN
 
 
 
@@ -54,12 +56,13 @@ SEGMENT                              DATA_GROUP
   +--> ?PR?MAIN?MAIN
 
 ?PR?MAIN?MAIN                      0010H    0001H
-  +--> ?PR?DC_MEASURE?MAIN
+  +--> ?PR?_SETREGISTER?MAIN
   +--> ?PR?FREQUENCY_MEASURE?MAIN
+  +--> ?PR?DC_MEASURE?MAIN
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/19/2026  14:56:55  PAGE 2
 
 
 
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/18/2026  15:36:44  PAGE 2
 
 
 SYMBOL TABLE OF MODULE:  .\Objects\measure_instrument (?C_STARTUP)
@@ -68,7 +71,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\measure_instrument (?C_STARTUP)
   ----------------------------------
 
   -------         MODULE        ?C_STARTUP
-  C:0930H         SEGMENT       ?C_C51STARTUP
+  C:099CH         SEGMENT       ?C_C51STARTUP
   I:0011H         SEGMENT       ?STACK
   C:0000H         PUBLIC        ?C_STARTUP
   D:00AFH         SYMBOL        CFG8XX
@@ -76,7 +79,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\measure_instrument (?C_STARTUP)
   N:0000H         SYMBOL        IBPSTACK
   N:0100H         SYMBOL        IBPSTACKTOP
   N:0080H         SYMBOL        IDATALEN
-  C:0933H         SYMBOL        IDATALOOP
+  C:099FH         SYMBOL        IDATALOOP
   D:00A0H         SYMBOL        P2
   N:0000H         SYMBOL        PBPSTACK
   N:0000H         SYMBOL        PBPSTACKTOP
@@ -87,7 +90,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\measure_instrument (?C_STARTUP)
   D:0081H         SYMBOL        SP
   D:00B7H         SYMBOL        SPH
   N:0200H         SYMBOL        STACKSIZE
-  C:0930H         SYMBOL        STARTUP1
+  C:099CH         SYMBOL        STARTUP1
   N:0000H         SYMBOL        XBPSTACK
   N:0000H         SYMBOL        XBPSTACKTOP
   N:0000H         SYMBOL        XDATALEN
@@ -96,13 +99,13 @@ SYMBOL TABLE OF MODULE:  .\Objects\measure_instrument (?C_STARTUP)
   N:0600H         SYMBOL        XSTACKSTART
   N:0000H         SYMBOL        _CFG8XX
   C:0000H         LINE#         167
-  C:0930H         LINE#         180
-  C:0932H         LINE#         181
-  C:0933H         LINE#         182
-  C:0934H         LINE#         183
-  C:0936H         LINE#         202
-  C:0939H         LINE#         236
-  C:093CH         LINE#         248
+  C:099CH         LINE#         180
+  C:099EH         LINE#         181
+  C:099FH         LINE#         182
+  C:09A0H         LINE#         183
+  C:09A2H         LINE#         202
+  C:09A5H         LINE#         236
+  C:09A8H         LINE#         248
   -------         ENDMOD        ?C_STARTUP
 
   -------         MODULE        MAIN
@@ -111,104 +114,148 @@ SYMBOL TABLE OF MODULE:  .\Objects\measure_instrument (?C_STARTUP)
   B:00A8H.7       PUBLIC        EA
   B:00A8H.6       PUBLIC        EADC
   D:0008H         SYMBOL        frequency_iir_output
-  C:090AH         PUBLIC        dc_measure
+  C:0963H         PUBLIC        _setRegister
+  C:09ABH         PUBLIC        dc_measure
   D:00CBH         PUBLIC        RCAP2H
   D:00CAH         PUBLIC        RCAP2L
-  C:08CCH         PUBLIC        main
-  C:08F1H         PUBLIC        frequency_measure
+  C:087EH         PUBLIC        main
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/19/2026  14:56:55  PAGE 3
+
+
+  C:0988H         PUBLIC        frequency_measure
   D:00D9H         PUBLIC        ADCDATAL
   D:0089H         PUBLIC        TMOD
   D:0088H         PUBLIC        TCON
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/18/2026  15:36:44  PAGE 3
-
-
+  B:00F8H.7       PUBLIC        ISPI
   D:000AH         SYMBOL        frequency_counter
+  D:00F7H         PUBLIC        SPIDAT
   B:00A8H.5       PUBLIC        ET2
+  B:00C8H.7       PUBLIC        TF2
   D:008CH         PUBLIC        TH0
+  D:00F8H         PUBLIC        SPICON
   D:008AH         PUBLIC        TL0
   C:0800H         PUBLIC        timer2
-  C:087CH         PUBLIC        adc_isr
+  C:08EBH         PUBLIC        adc_isr
   D:000CH         SYMBOL        frequency_value
   D:00EFH         PUBLIC        ADCCON1
   D:00D8H         PUBLIC        ADCCON2
   D:000EH         SYMBOL        adc_iir_output
   D:00C8H         PUBLIC        T2CON
+  B:00B0H.0       PUBLIC        RXD
   -------         PROC          TIMER2
-  C:0800H         LINE#         53
-  C:0813H         LINE#         56
-  C:081BH         LINE#         58
-  C:0823H         LINE#         59
-  C:082CH         LINE#         60
-  C:0832H         LINE#         63
-  C:0842H         LINE#         64
-  C:086BH         LINE#         65
-  C:086BH         LINE#         66
-  C:086BH         LINE#         67
+  C:0800H         LINE#         63
+  C:0813H         LINE#         66
+  C:081BH         LINE#         68
+  C:0823H         LINE#         69
+  C:082CH         LINE#         70
+  C:0832H         LINE#         73
+  C:0842H         LINE#         74
+  C:086BH         LINE#         75
+  C:086BH         LINE#         76
+  C:086BH         LINE#         77
+  C:086DH         LINE#         79
   -------         ENDPROC       TIMER2
   -------         PROC          ADC_ISR
   -------         DO            
   D:0006H         SYMBOL        sample_value
   -------         ENDDO         
-  C:087CH         LINE#         70
-  C:088FH         LINE#         76
-  C:0893H         LINE#         77
-  C:0893H         LINE#         78
-  C:08BBH         LINE#         79
+  C:08EBH         LINE#         82
+  C:08FEH         LINE#         88
+  C:0902H         LINE#         89
+  C:0902H         LINE#         90
+  C:092AH         LINE#         91
   -------         ENDPROC       ADC_ISR
   -------         PROC          DC_MEASURE
-  C:090AH         LINE#         83
-  C:090AH         LINE#         84
-  C:090DH         LINE#         94
-  C:0910H         LINE#         103
-  C:0913H         LINE#         108
-  C:0915H         LINE#         109
-  C:0917H         LINE#         110
-  C:091DH         LINE#         113
-  C:091DH         LINE#         114
+  C:09ABH         LINE#         95
+  C:09ABH         LINE#         96
+  C:09AEH         LINE#         106
+  C:09B1H         LINE#         115
+  C:09B4H         LINE#         120
+  C:09B6H         LINE#         121
+  C:09B8H         LINE#         122
   -------         ENDPROC       DC_MEASURE
   -------         PROC          FREQUENCY_MEASURE
-  C:08F1H         LINE#         117
-  C:08F1H         LINE#         119
-  C:08F4H         LINE#         129
-  C:08F6H         LINE#         130
-  C:08F8H         LINE#         133
-  C:08FBH         LINE#         134
-  C:08FEH         LINE#         137
-  C:0901H         LINE#         142
-  C:0904H         LINE#         150
-  C:0909H         LINE#         152
-  C:0909H         LINE#         153
+  C:0988H         LINE#         125
+  C:0988H         LINE#         127
+  C:098BH         LINE#         137
+  C:098DH         LINE#         138
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/19/2026  14:56:55  PAGE 4
+
+
+  C:098FH         LINE#         141
+  C:0992H         LINE#         142
+  C:0995H         LINE#         145
+  C:0998H         LINE#         150
+  C:099BH         LINE#         158
   -------         ENDPROC       FREQUENCY_MEASURE
-BL51 BANKED LINKER/LOCATER V6.22                                                      02/18/2026  15:36:44  PAGE 4
-
-
+  -------         PROC          _SETREGISTER
+  D:0007H         SYMBOL        address
+  D:0005H         SYMBOL        data_value
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:0963H         LINE#         160
+  C:0963H         LINE#         161
+  C:0963H         LINE#         163
+  C:0965H         LINE#         164
+  C:0967H         LINE#         166
+  C:096CH         LINE#         167
+  C:096EH         LINE#         169
+  C:097CH         LINE#         170
+  C:097EH         LINE#         172
+  C:0983H         LINE#         173
+  C:0985H         LINE#         174
+  C:0987H         LINE#         175
+  -------         ENDPROC       _SETREGISTER
   -------         PROC          MAIN
+  -------         DO            
+  D:0082H         SYMBOL        i
+  D:0007H         SYMBOL        prev_switch_value
   -------         DO            
   D:0010H         SYMBOL        switch_value
   -------         ENDDO         
-  C:08CCH         LINE#         156
-  C:08CCH         LINE#         157
-  C:08CFH         LINE#         159
-  C:08CFH         LINE#         161
-  C:08D5H         LINE#         163
-  C:08D7H         LINE#         165
-  C:08DAH         LINE#         166
-  C:08E1H         LINE#         168
-  C:08E4H         LINE#         169
-  C:08ECH         LINE#         172
-  C:08ECH         LINE#         174
-  C:08EFH         LINE#         175
-  C:08EFH         LINE#         176
+  -------         ENDDO         
+  C:087EH         LINE#         179
+  C:087EH         LINE#         183
+  C:0881H         LINE#         190
+  C:0888H         LINE#         191
+  C:08A6H         LINE#         192
+  C:08ADH         LINE#         193
+  C:08B4H         LINE#         194
+  C:08BBH         LINE#         195
+  C:08C0H         LINE#         197
+  C:08C3H         LINE#         198
+  C:08C5H         LINE#         200
+  C:08C5H         LINE#         202
+  C:08CBH         LINE#         203
+  C:08CEH         LINE#         205
+  C:08D2H         LINE#         207
+  C:08D2H         LINE#         208
+  C:08D9H         LINE#         210
+  C:08DCH         LINE#         211
+  C:08E4H         LINE#         214
+  C:08E4H         LINE#         216
+  C:08E7H         LINE#         217
+  C:08E7H         LINE#         218
+  C:08E7H         LINE#         219
+  C:08E9H         LINE#         222
+BL51 BANKED LINKER/LOCATER V6.22                                                      02/19/2026  14:56:55  PAGE 5
+
+
   -------         ENDPROC       MAIN
   -------         ENDMOD        MAIN
 
   -------         MODULE        ?C?IMUL
-  C:091EH         PUBLIC        ?C?IMUL
+  C:093BH         PUBLIC        ?C?IMUL
   -------         ENDMOD        ?C?IMUL
 
+  -------         MODULE        ?C?SLCMP
+  C:094DH         PUBLIC        ?C?SLCMP
+  -------         ENDMOD        ?C?SLCMP
+
 ******************************************************************************
-* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 0136H BYTE (15%) *
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 019AH BYTE (20%) *
 ******************************************************************************
 
-Program Size: data=18.0 xdata=0 code=328
+Program Size: data=18.0 xdata=0 code=450
 LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)
