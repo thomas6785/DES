@@ -8,13 +8,13 @@
 #define EXF2_pos 			(6)
 #define RCLK_pos 			(5)
 #define TCLK_pos			(4)
-#define EXEN2_pos 			(3)
+#define EXEN2_pos 		(3)
 #define TR2_pos				(2)
 #define CNT2_pos 			(1)
 #define CAP2_pos 			(0)
 
 #define MD1_pos 			(7)
-#define EXT_REF_pos 		(6)
+#define EXT_REF_pos 	(6)
 #define CK1_pos 			(5)
 #define CK0_pos				(4)
 #define AQ_pos 				(2)
@@ -23,7 +23,7 @@
 
 #define ADCI_pos 			(7)
 #define DMA_pos 			(6)
-#define CCONV_pos 			(5)
+#define CCONV_pos 		(5)
 #define SCONV_pos			(4)
 #define CS_pos 				(0)
 
@@ -52,6 +52,16 @@
 #define CPHA_pos				(2) // clock polarity. Set for leading edge to transmti, clear for trailing edge to transmit
 #define SPR_pos					(0) // select SCLCK rate - see data sheet
 
+// Interrupt enable register bit positions
+#define EA_pos					(7) // Global interrupt enable bit
+#define EADC_pos				(6) // ADC interrupt enable bit
+#define ET2_pos					(5) // Timer 2 interrupt enable bit
+#define ES_pos					(4) // Serial interrupt enable bit
+#define ET1_pos					(3) // Timer 1 interrupt enable bit
+#define EX1_pos					(2) // External interrupt 1 enable bit
+#define ET0_pos					(1) // Timer 0 interrupt enable bit
+#define EX0_pos					(0) // External interrupt 0 enable bit
+
 // Register addresses on the MAX7219 display
 #define MAX7219_DIGIT1_ADDR				(1)
 #define MAX7219_DIGIT2_ADDR				(2)
@@ -68,6 +78,8 @@
 #define MAX7219_DISPLAY_TEST_ADDR	(15)
 
 
+
+// TODO there are WAY too many global variables here, move them into the appropriate functions
 static uint16 adc_iir_output;          // IIR filter for ADC samples
 static uint16 frequency_iir_output;    // IIR filter for frequency measurements
 static uint16 frequency_counter;
@@ -91,8 +103,7 @@ sfr16 ADCDATA = 0xD9;
 Interrupt service routine for timer 2 interrupt.
 Called by the hardware when the interrupt occurs.
 ------------------------------------------------*/
-void timer2(void) interrupt 5   // interrupt vector at 002BH
-{
+void timer2(void) interrupt 5 { // interrupt vector at 002BH
 	// Check what mode we are in:
 	if ((SWITCHES&0x03) == 0x01) {
 		// Frequency measurement mode. Increment the register, if it is 25, reset it and record the value on the counter
@@ -106,7 +117,6 @@ void timer2(void) interrupt 5   // interrupt vector at 002BH
 		}
 	}
 	TF2 = 0; // Clear the interrupt
-	
 }  // end timer2 interrupt service routine
 
 void timer0(void) interrupt 1 {
@@ -141,9 +151,7 @@ void timer0(void) interrupt 1 {
 	TF0 = 0; // Clear the interrupt
 }
 
-
-void adc_isr(void) interrupt 6
-{
+void adc_isr(void) interrupt 6 {
 	if ((SWITCHES&0x03) == 0x00) {
 		// DC measurement mode. Take the sample and update the IIR filter output
 		// IIR Filter
@@ -183,9 +191,7 @@ void adc_isr(void) interrupt 6
 	// Be careful this operation is atomic
 }
 
-
-
-void dc_measure(void) {
+void setup_dc_measure(void) {
 	T2CON = (0 << TF2_pos)     | // Overflow flag
 	        (0 << EXF2_pos)    | // External flag
 	        (0 << RCLK_pos)    | // receive flag enable
@@ -214,9 +220,14 @@ void dc_measure(void) {
 	EADC = 1;  // Enable ADC interrupt
 }
 
+void setup_frequency_measure(void) {
+	// Frequency measurement mode.
+	// Uses timer 2 to generate an ISR every 0.1 seconds
+	// and timer 0 to count positive edges on the input signal
+	// every 0.1 s, the value in timer 0 is read and displayed (via the IIR filter),
+	// then timer 0 is reset
 
-void frequency_measure(void) {
-	// Configure timer 2 to generate a pulse every 0.1s (needs a reload value of 10240, and a register counting to 25)
+	// Configure timer 2 to generate an interrupt every 0.1s (needs a reload value of 10240, and a register counting to 25)
 	T2CON = (0 << TF2_pos)     | // Overflow flag
 	        (0 << EXF2_pos)    | // External flag
 	        (0 << RCLK_pos)    | // receive flag enable
@@ -227,6 +238,7 @@ void frequency_measure(void) {
 	        (0 << CAP2_pos);     // Capture/reload mode
 
 	// Enable Timer 2 interrupt
+	IE = 
 	ET2 = 1;
 	EA = 1;    // Enable global interrupts
 
@@ -246,11 +258,9 @@ void frequency_measure(void) {
 	       (0 << IT1_pos) | // External interrupt 1 type
 	       (0 << IE0_pos) | // External interrupt 0 flag
 	       (0 << IT0_pos);   // External interrupt 0 type
-
-
 }
 
-void amplitude_measure(void){
+void setup_amplitude_measure(void) {
 	// Configure time 2 to generate a pulse with frequency 5.5296MHz. Need a reload value of 65534, and to be in timer mode
 	T2CON = (0 << TF2_pos)     | // Overflow flag
 	        (0 << EXF2_pos)    | // External flag
@@ -323,6 +333,8 @@ void spiWrite(uint8 address, uint8 data_value) {
 }
 
 void display_value(uint16 value) {// TODO should be int not uint
+	// Take in a 16-bit binary value and convert to decimal, then
+	// display on the 7-segment display
 	int i;
 	uint8 bcd[3]; // Array to hold the BCD digits. bcd[0] is the ones and tens, bcd[1] is the hundreds and thousands, etc.
 	char sign; // Assume input is always positive for now, so sign bit is 0 TODO use something smaller than a char
@@ -367,6 +379,17 @@ void display_value(uint16 value) {// TODO should be int not uint
 	spiWrite(MAX7219_DIGIT4_ADDR,		(bcd[1] & 0xF0) >> 4);	// Thousands
 	spiWrite(MAX7219_DIGIT5_ADDR,		bcd[2] & 0x0F);	// Ten thousands
 	// TODO also write a sign bit to the display
+	// TODO and maybe write to the more significant digits
+}
+
+void update_display_wrap(uint16 value) {
+	// Wrapper function which updates an IIR filter and then calls display_value to update the display.
+	static uint16 display_iir_output = 0; // IIR filter for display value. Initialise to zero. STATIC VARIABLE so it will persist across function calls
+
+	// Update IIR filter
+	display_iir_output = ((7*value) >> 3) + (display_iir_output >> 3);
+
+	display_value(display_iir_output);
 }
 
 void main(void) {
@@ -387,16 +410,10 @@ void main(void) {
 
 	spiWrite(MAX7219_SHUTDOWN_ADDR,			1);		// Switch on the display
 	spiWrite(MAX7219_DIGIT1_ADDR,				1);		// Some digits to display
-	//spiWrite(MAX7219_DIGIT2_ADDR,				2);		//
-	//spiWrite(MAX7219_DIGIT3_ADDR,				3);		//
-	//spiWrite(MAX7219_DIGIT4_ADDR,				4);		//
-	//spiWrite(MAX7219_DIGIT5_ADDR,				5);		//
-	//spiWrite(MAX7219_DIGIT6_ADDR,				6);		//
-	//spiWrite(MAX7219_DIGIT7_ADDR,				7);		//
-	//spiWrite(MAX7219_DIGIT8_ADDR,				8);		//
 	spiWrite(MAX7219_DECODE_MODE_ADDR,	1);		// Set to '1' to use a LUT to display digits using the 7 segment display
 	spiWrite(MAX7219_INTENSITY_ADDR,		15);	// Set to 15 for max brightness (for now TODO)
 	spiWrite(MAX7219_SCAN_LIMIT_ADDR,		7);		// Set to 7 for 8 digits
+	display_value(12345); // Display a test value to make sure everything is working
 
 	// Configure switches for user input and begin reading their values
 	SWITCHES = 0xFF;  // Make switch pins inputs
@@ -408,16 +425,16 @@ void main(void) {
 		if (prev_switch_value != switch_value) {
 			if (switch_value == 0x00) { // TODO enumerate these hardcoded values
 				// DC measurement mode
-				dc_measure();
+				setup_dc_measure();
 			} else if (switch_value == 0x01) {
 				// Frequency measurement mode
-				frequency_measure();
+				setup_frequency_measure();
 			} else if (switch_value == 0x02) {
 				// Amplitude measurement mode
-				amplitude_measure();
+				setup_amplitude_measure();
 			} else {
 				// Default to DC measurement mode (switch_value == 0x03)
-				dc_measure();
+				setup_dc_measure();
 			}
 		}
 		prev_switch_value = switch_value;
