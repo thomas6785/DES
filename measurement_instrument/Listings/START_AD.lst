@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  START_AD                                                             02/19/2026 14:29:50 PAGE     1
+A51 MACRO ASSEMBLER  START_AD                                                             02/25/2026 15:44:59 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.02c
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
                       55     ;  With the following EQU statements the initialization of memory
                       56     ;  at processor reset can be defined:
                       57     ;
-A51 MACRO ASSEMBLER  START_AD                                                             02/19/2026 14:29:50 PAGE     2
+A51 MACRO ASSEMBLER  START_AD                                                             02/25/2026 15:44:59 PAGE     2
 
                       58     ; <o> IDATALEN: IDATA memory size <0x0-0x100>
                       59     ;     <i> Note: The absolute start address of IDATA memory is always 0
@@ -133,7 +133,7 @@ LOC  OBJ            LINE     SOURCE
                      121     ;
                      122     ;  The following EQU statements define the xdata page used for pdata
                      123     ;  variables. The EQU PPAGE must conform with the PPAGE control used
-A51 MACRO ASSEMBLER  START_AD                                                             02/19/2026 14:29:50 PAGE     3
+A51 MACRO ASSEMBLER  START_AD                                                             02/25/2026 15:44:59 PAGE     3
 
                      124     ;  in the linker invocation.
                      125     ;
@@ -201,7 +201,7 @@ LOC  OBJ            LINE     SOURCE
                                              MOV     DPTR,#XDATASTART
                                              MOV     R7,#LOW (XDATALEN)
                                IF (LOW (XDATALEN)) <> 0
-A51 MACRO ASSEMBLER  START_AD                                                             02/19/2026 14:29:50 PAGE     4
+A51 MACRO ASSEMBLER  START_AD                                                             02/25/2026 15:44:59 PAGE     4
 
                                              MOV     R6,#(HIGH (XDATALEN)) +1
                                ELSE
@@ -264,7 +264,7 @@ LOC  OBJ            LINE     SOURCE
 000C 020000   F      248                     LJMP    ?C_START
                      249     
                      250                     END
-A51 MACRO ASSEMBLER  START_AD                                                             02/19/2026 14:29:50 PAGE     5
+A51 MACRO ASSEMBLER  START_AD                                                             02/25/2026 15:44:59 PAGE     5
 
 SYMBOL TABLE LISTING
 ------ ----- -------

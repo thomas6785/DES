@@ -1,4 +1,4 @@
-C51 COMPILER V9.54   MAIN                                                                  02/19/2026 14:56:54 PAGE 1   
+C51 COMPILER V9.54   MAIN                                                                  02/26/2026 11:08:20 PAGE 1   
 
 
 C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
@@ -62,197 +62,343 @@ line level    source
   52          #define CPHA_pos        (2) // clock polarity. Set for leading edge to transmti, clear for trailing edge to tr
              -ansmit
   53          #define SPR_pos         (0) // select SCLCK rate - see data sheet
-C51 COMPILER V9.54   MAIN                                                                  02/19/2026 14:56:54 PAGE 2   
+C51 COMPILER V9.54   MAIN                                                                  02/26/2026 11:08:20 PAGE 2   
 
   54          
   55          static uint16 adc_iir_output;          // IIR filter for ADC samples
   56          static uint16 frequency_iir_output;    // IIR filter for frequency measurements
   57          static uint16 frequency_counter;
   58          static uint16 frequency_value;
-  59          /*------------------------------------------------
-  60          Interrupt service routine for timer 2 interrupt.
-  61          Called by the hardware when the interrupt occurs.
-  62          ------------------------------------------------*/
-  63          void timer2(void) interrupt 5   // interrupt vector at 002BH
-  64          {
-  65   1        // Check what mode we are in:
-  66   1        if ((SWITCHES&0x03) == 0x01) {
-  67   2          // Frequency measurement mode. Increment the register, if it is 25, reset it and record the value on the
+  59          
+  60          static uint16 y_max; // For amplitude measurement, we need to keep track of the maximum value in the sampl
+             -ing window
+  61          static uint16 y_max_minus_1; // We need to keep track of the sample before the maximum value to implement 
+             -the peak detection algorithm for amplitude measurement
+  62          static uint16 y_max_plus_1; // We need to keep track of the sample after the maximum value to implement th
+             -e peak detection algorithm for amplitude measurement
+  63          static uint16 y_store; // We need to store the current sample 
+  64          static uint16 amplitude_value; // This is the final amplitude value after polynomial interpolation
+  65          static uint8 prev_was_highest; // This is a flag to indicate whether the previous sample was the highest v
+             -alue in the sampling window, used for peak detection in amplitude measurement mode
+  66          static uint16 y_min = 0xFFFF; // For amplitude measurement, we also need to keep track of the minimum valu
+             -e in the sampling window
+  67          static uint16 y_min_minus_1;
+  68          static uint16 y_min_plus_1;
+  69          static uint8 prev_was_lowest; 
+  70          static uint16 amplitude_t1_interrupt_counter;
+  71          
+  72          sfr16 ADCDATA = 0xD9;
+  73          
+  74          /*------------------------------------------------
+  75          Interrupt service routine for timer 2 interrupt.
+  76          Called by the hardware when the interrupt occurs.
+  77          ------------------------------------------------*/
+  78          void timer2(void) interrupt 5   // interrupt vector at 002BH
+  79          {
+  80   1        // Check what mode we are in:
+  81   1        if ((SWITCHES&0x03) == 0x01) {
+  82   2          // Frequency measurement mode. Increment the register, if it is 25, reset it and record the value on the
              - counter
-  68   2          frequency_counter++;
-  69   2          if (frequency_counter >= 25) {
-  70   3            frequency_counter = 0;
-  71   3            // Now record how many pulses T0 has counted in the last 0.125s. Can simply be bit shifted to get the f
+  83   2          frequency_counter++;
+  84   2          if (frequency_counter >= 25) {
+  85   3            frequency_counter = 0;
+  86   3            // Now record how many pulses T0 has counted in the last 0.125s. Can simply be bit shifted to get the f
              -requency in Hz.
-  72   3            // Pass frequency through IIR filter to smooth it out
-  73   3            frequency_value = TL0 + (TH0 << 8);
-  74   3            frequency_value = ((7*frequency_value) >> 3) + (frequency_iir_output >> 3);
-  75   3          }
-  76   2        }
-  77   1        TF2 = 0; // Clear the interrupt
-  78   1        
-  79   1      }  // end timer2 interrupt service routine
-  80          
-  81          
-  82          void adc_isr(void) interrupt 6
-  83          {
-  84   1        // Needs to take current sample, update the average
-  85   1        // Be careful this operation is atomic
-  86   1      
-  87   1        // IIR Filter
-  88   1        uint16 sample_value = ADCDATAL;
-  89   1        sample_value = sample_value & 0x0FFF;
-  90   1        adc_iir_output = ((7*sample_value) >> 3) + (adc_iir_output >> 3);
-  91   1      }
-  92          
-  93          
-  94          
-  95          void dc_measure(void) {
-  96   1        T2CON = (0 << TF2_pos)     | // Overflow flag
-  97   1                (0 << EXF2_pos)    | // External flag
-  98   1                (0 << RCLK_pos)    | // receive flag enable
-  99   1                (0 << TCLK_pos)    | // transmit clock enable
- 100   1                (0 << EXEN2_pos)   | // external enable flag
- 101   1                (1 << TR2_pos)     | // start/stop bit
- 102   1                (0 << CNT2_pos)    | // Timer/counter mode
- 103   1                (0 << CAP2_pos);     // Capture/reload mode
- 104   1      
- 105   1        // Configure ADC for DC
- 106   1        ADCCON1 = (1 << MD1_pos)    | // Operating mode of ADC
- 107   1                  (0 << EXT_REF_pos)| // External reference
- 108   1                  (0 << CK1_pos)    | // ADC clock divide bits
- 109   1                  (0 << CK0_pos)    | // ADC clock divide bits
- 110   1                  (3 << AQ_pos)     | // number of ADC clock cycles
- 111   1                  (1 << T2C_pos)    | // Which timer to use
- 112   1                  (0 << EXC_pos);     // external trigger
- 113   1      
-C51 COMPILER V9.54   MAIN                                                                  02/19/2026 14:56:54 PAGE 3   
+  87   3            // Pass frequency through IIR filter to smooth it out
+  88   3            frequency_value = TL0 + (TH0 << 8);
+  89   3            frequency_value = ((7*frequency_value) >> 3) + (frequency_iir_output >> 3);
+  90   3          }
+  91   2        }
+  92   1        TF2 = 0; // Clear the interrupt
+  93   1        
+  94   1      }  // end timer2 interrupt service routine
+  95          
+  96          void timer0(void) interrupt 1 {
+  97   1        // This is the sampling window timer for amplitude measurement mode. We need to reset the peak detection 
+             -algorithm at the end of each sampling window.
+  98   1        // and use the polynomial interpolation algorithm to calculate the actual maximum value based on y_max, y
+             -_max_minus_1, and y_max_plus_1
+  99   1        if ((SWITCHES&0x03) == 0x02) {
+ 100   2          if (amplitude_t1_interrupt_counter >= 17){
+ 101   3            //TODO check if this could be smaller
+ 102   3            int32 amplitude_max;
+ 103   3            int32 amplitude_min;
+ 104   3            // Amplitude measurement mode. Reset the peak detection algorithm and calculate the actual maximum valu
+             -e using polynomial interpolation
+ 105   3            // TODO check denom not zero?
+C51 COMPILER V9.54   MAIN                                                                  02/26/2026 11:08:20 PAGE 3   
 
- 114   1        // Enable ADC interrupt
- 115   1        ADCCON2 = (1 << ADCI_pos)   | // ADC interrupt flag
- 116   1                  (0 << DMA_pos)    | // ADC DMA flag
- 117   1                  (0 << CCONV_pos)  | // ADC conversion complete flag
- 118   1                  (0 << SCONV_pos)  | // ADC sequence complete flag
- 119   1                  (0 << CS_pos);      // ADC channel select bits
- 120   1        EA = 1;    // Enable global interrupts
- 121   1        EADC = 1;  // Enable ADC interrupt
- 122   1      }
- 123          
- 124          
- 125          void frequency_measure(void) {
- 126   1        // Configure timer 2 to generate a pulse every 0.1s (needs a reload value of 10240, and a register counti
+ 106   3            amplitude_max = (int32)y_max - ((int32)y_max_minus_1 - (int32)y_max_plus_1) * (((int32)y_max_minus_1 - 
+             -(int32)y_max_plus_1) / ((int32)(y_max_minus_1 - 2*(int32)y_max + (int32)y_max_plus_1)) >> 2);
+ 107   3            amplitude_min = (int32)y_min - ((int32)y_min_minus_1 - (int32)y_min_plus_1) * (((int32)y_min_minus_1 - 
+             -(int32)y_min_plus_1) / ((int32)(y_min_minus_1 - 2*(int32)y_min + (int32)y_min_plus_1)) >> 2);
+ 108   3      
+ 109   3            // Reset peak detection
+ 110   3            y_max = 0;
+ 111   3            y_max_minus_1 = 0;
+ 112   3            y_max_plus_1 = 0;
+ 113   3            y_store = 0;
+ 114   3            y_min = 0xFFFF;
+ 115   3            y_min_minus_1 = 0;
+ 116   3            y_min_plus_1 = 0;
+ 117   3            prev_was_highest = 0;
+ 118   3            prev_was_lowest = 0;
+ 119   3            amplitude_t1_interrupt_counter = 0;
+ 120   3            amplitude_value = amplitude_max - amplitude_min;
+ 121   3          } else{
+ 122   3            amplitude_t1_interrupt_counter++;
+ 123   3          }
+ 124   2        }
+ 125   1        TF0 = 0; // Clear the interrupt
+ 126   1      }
+ 127          
+ 128          
+ 129          void adc_isr(void) interrupt 6
+ 130          {
+ 131   1        if ((SWITCHES&0x03) == 0x00) {
+ 132   2          // DC measurement mode. Take the sample and update the IIR filter output
+ 133   2          // IIR Filter
+ 134   2          uint16 sample_value = ADCDATA & 0x0FFF; //TODO is this correct?
+ 135   2          sample_value = sample_value & 0x0FFF;
+ 136   2          adc_iir_output = ((7*sample_value) >> 3) + (adc_iir_output >> 3);
+ 137   2      
+ 138   2        } else if ((SWITCHES&0x03) == 0x02) {
+ 139   2          // Amplitude measurement mode. 
+ 140   2          uint16 prev_sample_value = y_store;
+ 141   2          uint16 sample_value = ADCDATA & 0x0FFF;
+ 142   2      
+ 143   2          // Update the peak detection algorithm
+ 144   2          if (sample_value > y_max) {
+ 145   3            y_max = sample_value;
+ 146   3            prev_was_highest = 1;
+ 147   3            y_max_minus_1 = prev_sample_value;
+ 148   3          }
+ 149   2          else if (prev_was_highest) {
+ 150   3            y_max_plus_1 = sample_value;
+ 151   3            prev_was_highest = 0;
+ 152   3          } 
+ 153   2      
+ 154   2          if (sample_value < y_min) {
+ 155   3            y_min = sample_value;
+ 156   3            prev_was_lowest = 1;
+ 157   3            y_min_minus_1 = prev_sample_value;
+ 158   3          }
+ 159   2          else if (prev_was_lowest) {
+ 160   3            y_min_plus_1 = sample_value;
+ 161   3            prev_was_lowest = 0;
+ 162   3          } 
+ 163   2      
+ 164   2          y_store = sample_value;
+ 165   2        }
+C51 COMPILER V9.54   MAIN                                                                  02/26/2026 11:08:20 PAGE 4   
+
+ 166   1        // Needs to take current sample, update the average
+ 167   1        // Be careful this operation is atomic
+ 168   1      }
+ 169          
+ 170          
+ 171          
+ 172          void dc_measure(void) {
+ 173   1        T2CON = (0 << TF2_pos)     | // Overflow flag
+ 174   1                (0 << EXF2_pos)    | // External flag
+ 175   1                (0 << RCLK_pos)    | // receive flag enable
+ 176   1                (0 << TCLK_pos)    | // transmit clock enable
+ 177   1                (0 << EXEN2_pos)   | // external enable flag
+ 178   1                (1 << TR2_pos)     | // start/stop bit
+ 179   1                (0 << CNT2_pos)    | // Timer/counter mode
+ 180   1                (0 << CAP2_pos);     // Capture/reload mode
+ 181   1      
+ 182   1        // Configure ADC for DC
+ 183   1        ADCCON1 = (1 << MD1_pos)    | // Operating mode of ADC
+ 184   1                  (0 << EXT_REF_pos)| // External reference
+ 185   1                  (0 << CK1_pos)    | // ADC clock divide bits
+ 186   1                  (0 << CK0_pos)    | // ADC clock divide bits
+ 187   1                  (3 << AQ_pos)     | // number of ADC clock cycles
+ 188   1                  (1 << T2C_pos)    | // Which timer to use
+ 189   1                  (0 << EXC_pos);     // external trigger
+ 190   1      
+ 191   1        // Enable ADC interrupt
+ 192   1        ADCCON2 = (1 << ADCI_pos)   | // ADC interrupt flag
+ 193   1                  (0 << DMA_pos)    | // ADC DMA flag
+ 194   1                  (0 << CCONV_pos)  | // ADC conversion complete flag
+ 195   1                  (0 << SCONV_pos)  | // ADC sequence complete flag
+ 196   1                  (0 << CS_pos);      // ADC channel select bits
+ 197   1        EA = 1;    // Enable global interrupts
+ 198   1        EADC = 1;  // Enable ADC interrupt
+ 199   1      }
+ 200          
+ 201          
+ 202          void frequency_measure(void) {
+ 203   1        // Configure timer 2 to generate a pulse every 0.1s (needs a reload value of 10240, and a register counti
              -ng to 25)
- 127   1        T2CON = (0 << TF2_pos)     | // Overflow flag
- 128   1                (0 << EXF2_pos)    | // External flag
- 129   1                (0 << RCLK_pos)    | // receive flag enable
- 130   1                (0 << TCLK_pos)    | // transmit clock enable
- 131   1                (0 << EXEN2_pos)   | // external enable flag
- 132   1                (1 << TR2_pos)     | // start/stop bit
- 133   1                (0 << CNT2_pos)    | // Timer/counter mode
- 134   1                (0 << CAP2_pos);     // Capture/reload mode
- 135   1      
- 136   1        // Enable Timer 2 interrupt
- 137   1        ET2 = 1;
- 138   1        EA = 1;    // Enable global interrupts
- 139   1      
- 140   1        // Set reload value to 10240
- 141   1        RCAP2L = 0x00;
- 142   1        RCAP2H = 0x28;
- 143   1      
- 144   1        // Configure timer 0 to count the input frequency. Use in mode 1.
- 145   1        TMOD = (0 << GATE_pos) | // Timer 0 gate control
- 146   1               (1 << CT_pos)   | // Timer/counter mode
- 147   1               (0 << M1_pos)   | // Mode bit 1
- 148   1               (1 << M0_pos);    // Mode bit 0
- 149   1      
- 150   1        TCON = (0 << TF0_pos) | // Timer 0 overflow flag
- 151   1               (1 << TR0_pos) | // Timer 0 run control
- 152   1               (0 << IE1_pos) | // External interrupt 1 flag
- 153   1               (0 << IT1_pos) | // External interrupt 1 type
- 154   1               (0 << IE0_pos) | // External interrupt 0 flag
- 155   1               (0 << IT0_pos);   // External interrupt 0 type
- 156   1      
- 157   1      
- 158   1      }
- 159          
- 160          void setRegister (uint8 address, uint8 data_value)
- 161          {
- 162   1        int i;
- 163   1        LOAD = 0; // load goes low at start
- 164   1        SPIDAT = address; // send address byte
- 165   1        // code to wait until ISPI is 1
- 166   1        while(~ISPI){}
- 167   1        ISPI = 0; // reset ISPI
- 168   1        // need a small delay here
- 169   1        for(i=0; i <=1000; i++){}
- 170   1        SPIDAT = data_value; // send data byte
- 171   1        // code to wait until ISPI is 1
- 172   1        while(~ISPI){}
- 173   1        ISPI = 0; // reset ISPI
- 174   1        LOAD = 1; // load goes high at end
-C51 COMPILER V9.54   MAIN                                                                  02/19/2026 14:56:54 PAGE 4   
+ 204   1        T2CON = (0 << TF2_pos)     | // Overflow flag
+ 205   1                (0 << EXF2_pos)    | // External flag
+ 206   1                (0 << RCLK_pos)    | // receive flag enable
+ 207   1                (0 << TCLK_pos)    | // transmit clock enable
+ 208   1                (0 << EXEN2_pos)   | // external enable flag
+ 209   1                (1 << TR2_pos)     | // start/stop bit
+ 210   1                (0 << CNT2_pos)    | // Timer/counter mode
+ 211   1                (0 << CAP2_pos);     // Capture/reload mode
+ 212   1      
+ 213   1        // Enable Timer 2 interrupt
+ 214   1        ET2 = 1;
+ 215   1        EA = 1;    // Enable global interrupts
+ 216   1      
+ 217   1        // Set reload value to 10240
+ 218   1        RCAP2L = 0x00;
+ 219   1        RCAP2H = 0x28;
+ 220   1      
+ 221   1        // Configure timer 0 to count the input frequency. Use in mode 1.
+ 222   1        TMOD = (0 << GATE_pos) | // Timer 0 gate control
+ 223   1               (1 << CT_pos)   | // Timer/counter mode
+ 224   1               (0 << M1_pos)   | // Mode bit 1
+ 225   1               (1 << M0_pos);    // Mode bit 0
+ 226   1      
+C51 COMPILER V9.54   MAIN                                                                  02/26/2026 11:08:20 PAGE 5   
 
- 175   1      }
- 176          
- 177          
- 178          
- 179          void main(void) {
- 180   1        int i;
- 181   1        uint8 prev_switch_value;
- 182   1        
- 183   1        SPICON =  (0 << ISPI_pos) |
- 184   1                  (0 << WCOL_pos) |
- 185   1                  (1 << SPE_pos)  |
- 186   1                  (1 << SPIM_pos) |
- 187   1                  (0 << CPOL_pos) |
- 188   1                  (1 << CPHA_pos) |
- 189   1                  (3 << SPR_pos);
- 190   1        setRegister(15,1); //Display test
- 191   1        for(i=0; i <=1000000; i++){} //Delay
- 192   1        setRegister(15, 0); //Turn off the display test
- 193   1        setRegister(10, 15); // Set brightness
- 194   1        setRegister(9, 1); //Decode mode
- 195   1        setRegister(1, 1); // Write 1 to register 1
- 196   1        
- 197   1        SWITCHES = 0xFF;  // Make switch pins inputs
- 198   1        prev_switch_value = 0x8;
- 199   1      
- 200   1        while(1) {
- 201   2          // Read switches and enter appropriate mode
- 202   2          uint8 switch_value = SWITCHES & 0x03;   
- 203   2          if (prev_switch_value != switch_value){
- 204   3            
- 205   3            if (switch_value == 0x00) {
- 206   4              // DC measurement mode
- 207   4              dc_measure();
- 208   4            } else if (switch_value == 0x01) {
- 209   4              // Frequency measurement mode
- 210   4              frequency_measure();
- 211   4            } else if (switch_value == 0x02) {
- 212   4              // IIR filter test mode
- 213   4              // TODO: Implement IIR filter test mode
- 214   4            } else {
- 215   4              // Default to DC measurement mode (switch_value == 0x03)
- 216   4              dc_measure();
- 217   4            }
- 218   3          }
- 219   2          prev_switch_value = switch_value;
- 220   2          
- 221   2          
- 222   2        }
- 223   1      }  // end main
- 224            
+ 227   1        TCON = (0 << TF0_pos) | // Timer 0 overflow flag
+ 228   1               (1 << TR0_pos) | // Timer 0 run control
+ 229   1               (0 << IE1_pos) | // External interrupt 1 flag
+ 230   1               (0 << IT1_pos) | // External interrupt 1 type
+ 231   1               (0 << IE0_pos) | // External interrupt 0 flag
+ 232   1               (0 << IT0_pos);   // External interrupt 0 type
+ 233   1      
+ 234   1      
+ 235   1      }
+ 236          
+ 237          void amplitude_measure(void){
+ 238   1        // Configure time 2 to generate a pulse with frequency 5.5296MHz. Need a reload value of 65534, and to be
+             - in timer mode
+ 239   1        T2CON = (0 << TF2_pos)     | // Overflow flag
+ 240   1                (0 << EXF2_pos)    | // External flag
+ 241   1                (0 << RCLK_pos)    | // receive flag enable
+ 242   1                (0 << TCLK_pos)    | // transmit clock enable
+ 243   1                (0 << EXEN2_pos)   | // external enable flag
+ 244   1                (1 << TR2_pos)     | // start/stop bit
+ 245   1                (0 << CNT2_pos)    | // Timer/counter mode
+ 246   1                (0 << CAP2_pos);     // Capture/reload mode
+ 247   1      
+ 248   1        // Set reload value to 65534
+ 249   1        RCAP2L = 0xFF;
+ 250   1        RCAP2H = 0xFE;
+ 251   1      
+ 252   1        // Configure ADC to measure with frequency 150kHz
+ 253   1        ADCCON1 = (1 << MD1_pos)    | // Operating mode of ADC
+ 254   1                  (0 << EXT_REF_pos)| // External reference
+ 255   1                  (0 << CK1_pos)    | // ADC clock divide bits
+ 256   1                  (0 << CK0_pos)    | // ADC clock divide bits
+ 257   1                  (0 << AQ_pos)     | // number of ADC clock cycles
+ 258   1                  (1 << T2C_pos)    | // Which timer to use
+ 259   1                  (0 << EXC_pos);     // external trigger
+ 260   1      
+ 261   1        ADCCON2 = (1 << ADCI_pos)   | // ADC interrupt flag
+ 262   1                  (0 << DMA_pos)    | // ADC DMA flag
+ 263   1                  (0 << CCONV_pos)  | // ADC conversion complete flag
+ 264   1                  (0 << SCONV_pos)  | // ADC sequence complete flag
+ 265   1                  (0 << CS_pos);      // ADC channel select bits
+ 266   1      
+ 267   1        // We need to configure the sampling window using Timer 0. Set it to generate a pulse every 0.1s (using a
+             - register).
+ 268   1        TMOD = (0 << GATE_pos) | // Timer 0 gate control
+ 269   1               (0 << CT_pos)   | // Timer/counter mode
+ 270   1               (0 << M1_pos)   | // Mode bit 1
+ 271   1               (0 << M0_pos);    // Mode bit 0
+ 272   1        
+ 273   1        TCON = (0 << TF1_pos) | // Timer 1 overflow flag
+ 274   1               (0 << TR1_pos) | // Timer 1 run control
+ 275   1               (0 << TF0_pos) | // Timer 0 overflow flag
+ 276   1               (1 << TR0_pos) | // Timer 0 run control
+ 277   1               (0 << IE1_pos) | // External interrupt 1 flag
+ 278   1               (0 << IT1_pos) | // External interrupt 1 type
+ 279   1               (0 << IE0_pos) | // External interrupt 0 flag
+ 280   1               (0 << IT0_pos);   // External interrupt 0 type
+ 281   1        
+ 282   1        EADC =1; // Enable ADC interrupt
+ 283   1        EA = 1;    // Enable global interrupts
+ 284   1        ET0 = 1;   // Enable Timer 0 interrupt
+ 285   1      }
+ 286          
+C51 COMPILER V9.54   MAIN                                                                  02/26/2026 11:08:20 PAGE 6   
+
+ 287          void setRegister (uint8 address, uint8 data_value)
+ 288          {
+ 289   1        int i;
+ 290   1        LOAD = 0; // load goes low at start
+ 291   1        SPIDAT = address; // send address byte
+ 292   1        // code to wait until ISPI is 1
+ 293   1        while(~ISPI){}
+ 294   1        ISPI = 0; // reset ISPI
+ 295   1        // need a small delay here
+ 296   1        for(i=0; i <=1000; i++){}
+ 297   1        SPIDAT = data_value; // send data byte
+ 298   1        // code to wait until ISPI is 1
+ 299   1        while(~ISPI){}
+ 300   1        ISPI = 0; // reset ISPI
+ 301   1        LOAD = 1; // load goes high at end
+ 302   1      }
+ 303          
+ 304          
+ 305          
+ 306          void main(void) {
+ 307   1        int i;
+ 308   1        uint8 prev_switch_value;
+ 309   1        
+ 310   1        // SPICON = (0 << ISPI_pos) |
+ 311   1        //          (0 << WCOL_pos) |
+ 312   1        //          (1 << SPE_pos)  |
+ 313   1        //          (1 << SPIM_pos) |
+ 314   1        //          (0 << CPOL_pos) |
+ 315   1        //          (1 << CPHA_pos) |
+ 316   1        //          (3 << SPR_pos);
+ 317   1        // setRegister(15,1); //Display test
+ 318   1        // for(i=0; i <=1000000; i++){} //Delay
+ 319   1        // setRegister(15, 0); //Turn off the display test
+ 320   1        // setRegister(10, 15); // Set brightness
+ 321   1        // setRegister(9, 1); //Decode mode
+ 322   1        // setRegister(1, 1); // Write 1 to register 1
+ 323   1        
+ 324   1        SWITCHES = 0xFF;  // Make switch pins inputs
+ 325   1        prev_switch_value = 0x8;
+ 326   1      
+ 327   1        while(1) {
+ 328   2          // Read switches and enter appropriate mode
+ 329   2          uint8 switch_value = SWITCHES & 0x03;   
+ 330   2          if (prev_switch_value != switch_value){
+ 331   3            
+ 332   3            if (switch_value == 0x00) {
+ 333   4              // DC measurement mode
+ 334   4              dc_measure();
+ 335   4            } else if (switch_value == 0x01) {
+ 336   4              // Frequency measurement mode
+ 337   4              frequency_measure();
+ 338   4            } else if (switch_value == 0x02) {
+ 339   4              // Amplitude measurement mode
+ 340   4              amplitude_measure();
+ 341   4            } else {
+ 342   4              // Default to DC measurement mode (switch_value == 0x03)
+ 343   4              dc_measure();
+ 344   4            }
+ 345   3          }
+ 346   2          prev_switch_value = switch_value;
+ 347   2          
+ 348   2          
+C51 COMPILER V9.54   MAIN                                                                  02/26/2026 11:08:20 PAGE 7   
+
+ 349   2        }
+ 350   1      }  // end main
+*** WARNING C280 IN LINE 307 OF Source\main.c: 'i': unreferenced local variable
+ 351            
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    386    ----
+   CODE SIZE        =    977    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      8       1
+   DATA SIZE        =     28      15
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
