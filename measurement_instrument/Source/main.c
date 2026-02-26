@@ -248,12 +248,7 @@ void main(void) {
 	int i;
 	uint8 prev_switch_value;
 
-	display_value(65244);
-	display_value(999);
-	display_value(-999);
-	display_value(32767);
-	display_value(-32768);
-	
+
 	SPICON =	(0 << ISPI_pos)	|
 						(0 << WCOL_pos)	|
 						(1 << SPE_pos)	|
@@ -262,6 +257,12 @@ void main(void) {
 						(1 << CPHA_pos)	|
 						(3 << SPR_pos);
 
+	display_value(65244);
+	display_value(999);
+	display_value(-999);
+	display_value(32767);
+	display_value(-32768);
+	
 	spiWrite(MAX7219_DISPLAY_TEST_ADDR,	1);		// Run display test
 	for(i=0; i <=1000000; i++); //Delay for the display test to be visible to humans
 	spiWrite(MAX7219_DISPLAY_TEST_ADDR,	0);		// Disable display test
