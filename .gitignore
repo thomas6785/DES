@@ -1,0 +1,7 @@
+*.lst
+*.obj
+*.m51
+*/Listings/*
+*/Objects/*
+*build_log.html
+*.map
