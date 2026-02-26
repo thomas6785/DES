@@ -79,6 +79,10 @@
 
 
 
+
+void update_display_wrap(uint16 value);
+
+
 // TODO there are WAY too many global variables here, move them into the appropriate functions
 static uint16 adc_iir_output;          // IIR filter for ADC samples
 static uint16 frequency_iir_output;    // IIR filter for frequency measurements
@@ -108,12 +112,12 @@ void timer2(void) interrupt 5 { // interrupt vector at 002BH
 	if ((SWITCHES&0x03) == 0x01) {
 		// Frequency measurement mode. Increment the register, if it is 25, reset it and record the value on the counter
 		frequency_counter++;
-		if (frequency_counter >= 25) {
+		if (frequency_counter >= 25) { // TODO make this == not >=
 			frequency_counter = 0;
-			// Now record how many pulses T0 has counted in the last 0.125s. Can simply be bit shifted to get the frequency in Hz.
+			// Now record how many pulses T0 has counted in the last 0.1s. Can simply be bit shifted to get the frequency in Hz.
 			// Pass frequency through IIR filter to smooth it out
-			frequency_value = TL0 + (TH0 << 8);
-			frequency_value = ((7*frequency_value) >> 3) + (frequency_iir_output >> 3);
+			frequency_value = (TH0 << 8) | TL0;
+			update_display_wrap(frequency_value);
 		}
 	}
 	TF2 = 0; // Clear the interrupt
@@ -144,6 +148,7 @@ void timer0(void) interrupt 1 {
 			prev_was_lowest = 0;
 			amplitude_t1_interrupt_counter = 0;
 			amplitude_value = amplitude_max - amplitude_min;
+			update_display_wrap(amplitude_value);
 		} else{
 			amplitude_t1_interrupt_counter++;
 		}
@@ -157,7 +162,7 @@ void adc_isr(void) interrupt 6 {
 		// IIR Filter
 		uint16 sample_value = ADCDATA & 0x0FFF; //TODO is this correct?
 		sample_value = sample_value & 0x0FFF;
-		adc_iir_output = ((7*sample_value) >> 3) + (adc_iir_output >> 3);
+		update_display_wrap(sample_value); // TODO find a systematic way to reset IIR filter after mode switch
 
 	} else if ((SWITCHES&0x03) == 0x02) {
 		// Amplitude measurement mode. 
@@ -238,19 +243,21 @@ void setup_frequency_measure(void) {
 	        (0 << CAP2_pos);     // Capture/reload mode
 
 	// Enable Timer 2 interrupt
-	IE = 
+	//IE = // TODO write entire IE register appropriately and do the same for amplitude measure mode
 	ET2 = 1;
 	EA = 1;    // Enable global interrupts
+	EADC = 0;  // Disable ADC interrupt
 
 	// Set reload value to 10240
 	RCAP2L = 0x00;
 	RCAP2H = 0x28;
 
 	// Configure timer 0 to count the input frequency. Use in mode 1.
-	TMOD = (0 << GATE_pos) | // Timer 0 gate control
-	       (1 << CT_pos)   | // Timer/counter mode
-	       (0 << M1_pos)   | // Mode bit 1
-	       (1 << M0_pos);    // Mode bit 0
+	//TMOD = (0 << GATE_pos) | // Timer 0 gate control
+	//       (1 << CT_pos)   | // Timer/counter mode
+	//       (0 << M1_pos)   | // Mode bit 1
+	//       (1 << M0_pos);    // Mode bit 0
+	TMOD = 0x05; //0b00000101; // look at diagram on page 70 for mode 1. Gate is LOW so that we are always counting, and timer is connected to P3.4
 
 	TCON = (0 << TF0_pos) | // Timer 0 overflow flag
 	       (1 << TR0_pos) | // Timer 0 run control
@@ -315,7 +322,7 @@ void spiWrite(uint8 address, uint8 data_value) {
 
 	// Write the address byte
 	SPIDAT = address;		// send address byte (writing to SPIdat will trigger the SPI transmission too)
-	while(~ISPI){}			// wait until ISPI is 1 indicating the SPI write is done
+	while(~ISPI);				// wait until ISPI is 1 indicating the SPI write is done
 	ISPI = 0;						// reset ISPI
 
 	// Need a small delay between SPI transactions
@@ -323,7 +330,7 @@ void spiWrite(uint8 address, uint8 data_value) {
 
 	// Write the data byte
 	SPIDAT = data_value;	// send data byte
-	while(~ISPI){}				// wait until ISPI is 1 indicating the SPI write is done
+	while(~ISPI);					// wait until ISPI is 1 indicating the SPI write is done
 	ISPI = 0;							// reset ISPI
 
 	LOAD = 1;							// load goes high at end to tell the peripheral to update
@@ -401,22 +408,35 @@ void main(void) {
 	 					(1 << SPE_pos)	|
 	 					(1 << SPIM_pos)	|
 	 					(0 << CPOL_pos)	|
-	 					(1 << CPHA_pos)	|
+	 					(0 << CPHA_pos)	|
 	 					(3 << SPR_pos);
 	
-	spiWrite(MAX7219_DISPLAY_TEST_ADDR,	1);		// Run display test
-	for(i=0; i <=1000000; i++); //Delay for the display test to be visible to humans
-	spiWrite(MAX7219_DISPLAY_TEST_ADDR,	0);		// Disable display test
+	//spiWrite(MAX7219_DISPLAY_TEST_ADDR,	1);		// Run display test
+	//for(i=0; i <=1000000; i++); //Delay for the display test to be visible to humans
+	//spiWrite(MAX7219_DISPLAY_TEST_ADDR,	0);		// Disable display test
 
-	spiWrite(MAX7219_SHUTDOWN_ADDR,			1);		// Switch on the display
-	spiWrite(MAX7219_DIGIT1_ADDR,				1);		// Some digits to display
-	spiWrite(MAX7219_DECODE_MODE_ADDR,	1);		// Set to '1' to use a LUT to display digits using the 7 segment display
-	spiWrite(MAX7219_INTENSITY_ADDR,		15);	// Set to 15 for max brightness (for now TODO)
-	spiWrite(MAX7219_SCAN_LIMIT_ADDR,		7);		// Set to 7 for 8 digits
-	display_value(12345); // Display a test value to make sure everything is working
+	spiWrite(MAX7219_SHUTDOWN_ADDR,			1);			// Switch on the display
+	spiWrite(MAX7219_DIGIT1_ADDR,				0);			// Some digits to display
+	spiWrite(MAX7219_DIGIT2_ADDR,				0);			// Some digits to display
+	spiWrite(MAX7219_DIGIT3_ADDR,				0);			// Some digits to display
+	spiWrite(MAX7219_DIGIT4_ADDR,				0);			// Some digits to display
+	spiWrite(MAX7219_DIGIT5_ADDR,				0);			// Some digits to display
+	spiWrite(MAX7219_DIGIT6_ADDR,				0);			// Some digits to display
+	spiWrite(MAX7219_DIGIT7_ADDR,				0);			// Some digits to display
+	spiWrite(MAX7219_DIGIT8_ADDR,				0);			// Some digits to display
+	spiWrite(MAX7219_DECODE_MODE_ADDR,	0xFF);	// Set to '1' to use a LUT to display digits using the 7 segment display
+	spiWrite(MAX7219_INTENSITY_ADDR,		15);		// Set to 15 for max brightness (for now TODO)
+	spiWrite(MAX7219_SCAN_LIMIT_ADDR,		7);			// Set to 7 for 8 digits
+	
+	i = 0;
+	//while(1) {
+	//	i++;
+	//	update_display_wrap(i); // Display a test value to make sure everything is working
+	//}
 
 	// Configure switches for user input and begin reading their values
 	SWITCHES = 0xFF;  // Make switch pins inputs
+	T0 = 1; // put this in input mode TODO wtf
 	prev_switch_value = 0x8;
 
 	while(1) {
@@ -425,15 +445,19 @@ void main(void) {
 		if (prev_switch_value != switch_value) {
 			if (switch_value == 0x00) { // TODO enumerate these hardcoded values
 				// DC measurement mode
+				spiWrite(MAX7219_DIGIT8_ADDR,				1);
 				setup_dc_measure();
 			} else if (switch_value == 0x01) {
 				// Frequency measurement mode
+				spiWrite(MAX7219_DIGIT8_ADDR,				2);
 				setup_frequency_measure();
 			} else if (switch_value == 0x02) {
 				// Amplitude measurement mode
+				spiWrite(MAX7219_DIGIT8_ADDR,				3);
 				setup_amplitude_measure();
 			} else {
 				// Default to DC measurement mode (switch_value == 0x03)
+				spiWrite(MAX7219_DIGIT8_ADDR,				1);
 				setup_dc_measure();
 			}
 		}

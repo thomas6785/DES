@@ -1,0 +1,13 @@
+- LED display for the units
+- option to change units in use
+- scaling and shifting to appropriate units
+- double dabble in Assembly
+- Amplitude measurement underestimate correction
+- Calibration for 1.25 != 1.25 ?
+- Tune IIR filter response time
+- refactor amplitude measurement:
+	- use timer 2 to time out the window
+	- use ADC CCONV
+	- could use number of samples to measure time instead of timer 2
+
+Get another board next week
