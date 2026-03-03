@@ -2,7 +2,7 @@
 #include "typedef.h"	// variable type definitions
 
 #define SWITCHES  	P2		// switches are connected to Port 2
-#define LOAD 				RXD
+#define SPI_LOAD 		RXD
 
 #define TF2_pos 			(7)
 #define EXF2_pos 			(6)
@@ -77,18 +77,13 @@
 #define MAX7219_SHUTDOWN_ADDR			(12)
 #define MAX7219_DISPLAY_TEST_ADDR	(15)
 
-
-
-
-void update_display_wrap(uint16 value);
-
-
 // TODO there are WAY too many global variables here, move them into the appropriate functions
 static uint16 adc_iir_output;          // IIR filter for ADC samples
 static uint16 frequency_iir_output;    // IIR filter for frequency measurements
 static uint16 frequency_counter;
 static uint16 frequency_value;
 
+// TODO there are WAY too many global variables here, move them into the appropriate functions
 static uint16 y_max; // For amplitude measurement, we need to keep track of the maximum value in the sampling window
 static uint16 y_max_minus_1; // We need to keep track of the sample before the maximum value to implement the peak detection algorithm for amplitude measurement
 static uint16 y_max_plus_1; // We need to keep track of the sample after the maximum value to implement the peak detection algorithm for amplitude measurement
@@ -101,13 +96,99 @@ static uint16 y_min_plus_1;
 static uint8 prev_was_lowest; 
 static uint16 amplitude_t1_interrupt_counter;
 
-sfr16 ADCDATA = 0xD9;
+sfr16 ADCDATA = 0xD9; // TODO why???
+
+
+void spiWrite(uint8 address, uint8 data_value) {
+	int i;
+
+	SPI_LOAD = 0;				// load goes low at start
+
+	// Write the address byte
+	SPIDAT = address;		// send address byte (writing to SPIdat will trigger the SPI transmission too)
+	while(~ISPI);				// wait until ISPI is 1 indicating the SPI write is done
+	ISPI = 0;						// reset ISPI
+
+	// Need a small delay between SPI transactions
+	for(i=0; i <=10000; i++){} // TODO shorten delay - not clear if it is necessary or not?
+
+	// Write the data byte
+	SPIDAT = data_value;	// send data byte
+	while(~ISPI);					// wait until ISPI is 1 indicating the SPI write is done
+	ISPI = 0;							// reset ISPI
+
+	SPI_LOAD = 1;					// load goes high at end to tell the peripheral to update
+
+	for(i=0; i <=10000; i++); //Delay
+	// TODO remove this delay - not clear if it is necessary or not?
+}
+
+void display_value(uint16 value) {// TODO should be int not uint
+	// Take in a 16-bit binary value and convert to decimal, then
+	// display on the 7-segment display
+	int i;
+	uint8 bcd[3]; // Array to hold the BCD digits. bcd[0] is the ones and tens, bcd[1] is the hundreds and thousands, etc.
+	char sign; // Assume input is always positive for now, so sign bit is 0 TODO use something smaller than a char
+	// TODO maybe just use a 32-bit word instead of 3 8-bit words since the compiler will be smarter about bitshifting then
+	// If the value is negative, flip the sign bit and make the value positive for the BCD conversion
+	//if (value < 0) {
+	//	sign = 1;
+	//	value = -value;
+	//} else {
+	//	sign = 0;
+	//}
+	sign = 0;
+
+	bcd[0] = 0; // Ones and tens
+	bcd[1] = 0; // hundreds and thousands
+	bcd[2] = 0; // tens of thousands TODO merge sign bit into MSB of this byte
+
+		// TODO rewrite this code in Assembly, particularly the bitshifting operations are MUCH more efficient using rotations through the carry bit
+	for (i = 0; i<16; i++) {
+		// if any BCD digit has more than 5, increment it by 3
+		if (i != 0) { // if statement so we can skip this the first time round
+			if ((bcd[0] & 0x0F) > 0x04) { bcd[0] += 0x03; }
+			if ((bcd[0] & 0xF0) > 0x40) { bcd[0] += 0x30; }
+			if ((bcd[1] & 0x0F) > 0x04) { bcd[1] += 0x03; }
+			if ((bcd[1] & 0xF0) > 0x40) { bcd[1] += 0x30; }
+			if ((bcd[2] & 0x0F) > 0x04) { bcd[2] += 0x03; }
+		}
+
+		// shift a bit into the BCD array
+		bcd[2] = bcd[2] << 1;											// Shift bcd[2] left by 1
+		bcd[2] = bcd[2] | (0x01 & (bcd[1] >> 7));	// Move the MSB of bcd[1] to the LSB of bcd[2]
+		bcd[1] = bcd[1] << 1;											// Shift bcd[1] left by 1
+		bcd[1] = bcd[1] | (0x01 & (bcd[0] >> 7));	// Move the MSB of bcd[0] to the LSB of bcd[1]
+		bcd[0] = bcd[0] << 1;											// Shift bcd[0] left by 1
+		bcd[0] = bcd[0] | (0x01 & (value >> 15));	// Shift the MSB of the input binary value into the LSB of bcd[0]
+		value = value << 1;								// Shift input value left by 1 to get the next bit into the MSB
+	}
+	
+	// Write the BCD to the display using SPI
+	spiWrite(MAX7219_DIGIT1_ADDR,		bcd[0] & 0x0F);	// Ones
+	spiWrite(MAX7219_DIGIT2_ADDR,		(bcd[0] & 0xF0) >> 4);	// Tens
+	spiWrite(MAX7219_DIGIT3_ADDR,		bcd[1] & 0x0F);	// Hundreds
+	spiWrite(MAX7219_DIGIT4_ADDR,		(bcd[1] & 0xF0) >> 4);	// Thousands
+	spiWrite(MAX7219_DIGIT5_ADDR,		bcd[2] & 0x0F);	// Ten thousands
+	// TODO also write a sign bit to the display
+	// TODO and maybe write to the more significant digits
+}
+
+void update_display_via_iir(uint16 value) {
+	// Wrapper function which updates an IIR filter and then calls display_value to update the display.
+	static uint16 display_iir_output = 0; // IIR filter for display value. Initialise to zero. STATIC VARIABLE so it will persist across function calls
+
+	// Update IIR filter
+	display_iir_output = ((7*value) >> 3) + (display_iir_output >> 3);
+
+	display_value(display_iir_output);
+}
 
 /*------------------------------------------------
 Interrupt service routine for timer 2 interrupt.
 Called by the hardware when the interrupt occurs.
 ------------------------------------------------*/
-void timer2(void) interrupt 5 { // interrupt vector at 002BH
+void timer2_isr(void) interrupt 5 { // interrupt vector at 002BH
 	// Check what mode we are in:
 	if ((SWITCHES&0x03) == 0x01) {
 		// Frequency measurement mode. Increment the register, if it is 25, reset it and record the value on the counter
@@ -117,13 +198,13 @@ void timer2(void) interrupt 5 { // interrupt vector at 002BH
 			// Now record how many pulses T0 has counted in the last 0.1s. Can simply be bit shifted to get the frequency in Hz.
 			// Pass frequency through IIR filter to smooth it out
 			frequency_value = (TH0 << 8) | TL0;
-			update_display_wrap(frequency_value);
+			update_display_via_iir(frequency_value);
 		}
 	}
 	TF2 = 0; // Clear the interrupt
 }  // end timer2 interrupt service routine
 
-void timer0(void) interrupt 1 {
+void timer0_isr(void) interrupt 1 {
 	// This is the sampling window timer for amplitude measurement mode. We need to reset the peak detection algorithm at the end of each sampling window.
 	// and use the polynomial interpolation algorithm to calculate the actual maximum value based on y_max, y_max_minus_1, and y_max_plus_1
 	if ((SWITCHES&0x03) == 0x02) {
@@ -148,7 +229,7 @@ void timer0(void) interrupt 1 {
 			prev_was_lowest = 0;
 			amplitude_t1_interrupt_counter = 0;
 			amplitude_value = amplitude_max - amplitude_min;
-			update_display_wrap(amplitude_value);
+			update_display_via_iir(amplitude_value);
 		} else{
 			amplitude_t1_interrupt_counter++;
 		}
@@ -157,12 +238,12 @@ void timer0(void) interrupt 1 {
 }
 
 void adc_isr(void) interrupt 6 {
-	if ((SWITCHES&0x03) == 0x00) {
+	if ((SWITCHES&0x03) == 0x00) { // TODO I don't like that we are reading the switches directly in the ISR
 		// DC measurement mode. Take the sample and update the IIR filter output
 		// IIR Filter
 		uint16 sample_value = ADCDATA & 0x0FFF; //TODO is this correct?
 		sample_value = sample_value & 0x0FFF;
-		update_display_wrap(sample_value); // TODO find a systematic way to reset IIR filter after mode switch
+		update_display_via_iir(sample_value); // TODO find a systematic way to reset IIR filter after mode switch?
 
 	} else if ((SWITCHES&0x03) == 0x02) {
 		// Amplitude measurement mode. 
@@ -315,90 +396,6 @@ void setup_amplitude_measure(void) {
 	ET0 = 1;   // Enable Timer 0 interrupt
 }
 
-void spiWrite(uint8 address, uint8 data_value) {
-	int i;
-
-	LOAD = 0;						// load goes low at start
-
-	// Write the address byte
-	SPIDAT = address;		// send address byte (writing to SPIdat will trigger the SPI transmission too)
-	while(~ISPI);				// wait until ISPI is 1 indicating the SPI write is done
-	ISPI = 0;						// reset ISPI
-
-	// Need a small delay between SPI transactions
-	for(i=0; i <=10000; i++){} // TODO shorten delay - not clear if it is necessary or not?
-
-	// Write the data byte
-	SPIDAT = data_value;	// send data byte
-	while(~ISPI);					// wait until ISPI is 1 indicating the SPI write is done
-	ISPI = 0;							// reset ISPI
-
-	LOAD = 1;							// load goes high at end to tell the peripheral to update
-
-	for(i=0; i <=10000; i++); //Delay
-	// TODO remove this delay - not clear if it is necessary or not?
-}
-
-void display_value(uint16 value) {// TODO should be int not uint
-	// Take in a 16-bit binary value and convert to decimal, then
-	// display on the 7-segment display
-	int i;
-	uint8 bcd[3]; // Array to hold the BCD digits. bcd[0] is the ones and tens, bcd[1] is the hundreds and thousands, etc.
-	char sign; // Assume input is always positive for now, so sign bit is 0 TODO use something smaller than a char
-	// TODO maybe just use a 32-bit word instead of 3 8-bit words since the compiler will be smarter about bitshifting then
-	// If the value is negative, flip the sign bit and make the value positive for the BCD conversion
-	//if (value < 0) {
-	//	sign = 1;
-	//	value = -value;
-	//} else {
-	//	sign = 0;
-	//}
-	sign = 0;
-
-	bcd[0] = 0; // Ones and tens
-	bcd[1] = 0; // hundreds and thousands
-	bcd[2] = 0; // tens of thousands TODO merge sign bit into MSB of this byte
-
-	for (i = 0; i<16; i++) {
-		// if any BCD digit has more than 5, increment it by 3
-		if (i != 0) { // if statement so we can skip this the first time round
-			if ((bcd[0] & 0x0F) > 0x04) { bcd[0] += 0x03; }
-			if ((bcd[0] & 0xF0) > 0x40) { bcd[0] += 0x30; }
-			if ((bcd[1] & 0x0F) > 0x04) { bcd[1] += 0x03; }
-			if ((bcd[1] & 0xF0) > 0x40) { bcd[1] += 0x30; }
-			if ((bcd[2] & 0x0F) > 0x04) { bcd[2] += 0x03; }
-		}
-
-		// shift a bit into the BCD array
-		bcd[2] = bcd[2] << 1;											// Shift bcd[2] left by 1
-		bcd[2] = bcd[2] | (0x01 & (bcd[1] >> 7));	// Move the MSB of bcd[1] to the LSB of bcd[2]
-		bcd[1] = bcd[1] << 1;											// Shift bcd[1] left by 1
-		bcd[1] = bcd[1] | (0x01 & (bcd[0] >> 7));	// Move the MSB of bcd[0] to the LSB of bcd[1]
-		bcd[0] = bcd[0] << 1;											// Shift bcd[0] left by 1
-		bcd[0] = bcd[0] | (0x01 & (value >> 15));	// Shift the MSB of the input binary value into the LSB of bcd[0]
-		value = value << 1;								// Shift input value left by 1 to get the next bit into the MSB
-	}
-	
-	// Write the BCD to the display using SPI
-	spiWrite(MAX7219_DIGIT1_ADDR,		bcd[0] & 0x0F);	// Ones
-	spiWrite(MAX7219_DIGIT2_ADDR,		(bcd[0] & 0xF0) >> 4);	// Tens
-	spiWrite(MAX7219_DIGIT3_ADDR,		bcd[1] & 0x0F);	// Hundreds
-	spiWrite(MAX7219_DIGIT4_ADDR,		(bcd[1] & 0xF0) >> 4);	// Thousands
-	spiWrite(MAX7219_DIGIT5_ADDR,		bcd[2] & 0x0F);	// Ten thousands
-	// TODO also write a sign bit to the display
-	// TODO and maybe write to the more significant digits
-}
-
-void update_display_wrap(uint16 value) {
-	// Wrapper function which updates an IIR filter and then calls display_value to update the display.
-	static uint16 display_iir_output = 0; // IIR filter for display value. Initialise to zero. STATIC VARIABLE so it will persist across function calls
-
-	// Update IIR filter
-	display_iir_output = ((7*value) >> 3) + (display_iir_output >> 3);
-
-	display_value(display_iir_output);
-}
-
 void main(void) {
 	int i;
 	uint8 prev_switch_value;
@@ -431,7 +428,7 @@ void main(void) {
 	i = 0;
 	//while(1) {
 	//	i++;
-	//	update_display_wrap(i); // Display a test value to make sure everything is working
+	//	update_display_via_iir(i); // Display a test value to make sure everything is working
 	//}
 
 	// Configure switches for user input and begin reading their values

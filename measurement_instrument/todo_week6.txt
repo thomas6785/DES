@@ -16,6 +16,8 @@ P2:
 - Calibration for 1.25 != 1.23 ?
 - double dabble in Assembly
 - option to change units in use
+- double check for errors with atomic operation
+	- Most ISR's are
 
 Extra features?
 - amplitude measurement underestimate correction
