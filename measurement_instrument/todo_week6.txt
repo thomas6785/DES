@@ -1,13 +1,31 @@
+P1:
 - LED display for the units
-- option to change units in use
+- Get another board next week
 - scaling and shifting to appropriate units
-- double dabble in Assembly
-- Amplitude measurement underestimate correction
-- Calibration for 1.25 != 1.25 ?
-- Tune IIR filter response time
+- high-level code cleanup and refactoring
+	- make sure all the interrupts are correctly enabled/disabled for each mode
+	- rename function names and split out some commonly used functions
 - refactor amplitude measurement:
 	- use timer 2 to time out the window
 	- use ADC CCONV
 	- could use number of samples to measure time instead of timer 2
 
-Get another board next week
+P2:
+- Tune IIR filter response time
+- Amplitude measurement underestimate correction
+- Calibration for 1.25 != 1.23 ?
+- double dabble in Assembly
+- option to change units in use
+
+Extra features?
+- amplitude measurement underestimate correction
+- switch to use hex/decimal
+- heartbeat LED + on/off switch
+
+Verification:
+- Verification plan
+	- amplitude test
+	- frequency test
+	- DC measure test
+	- all modes/features
+	- simulation and VnC
