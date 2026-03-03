@@ -2,7 +2,7 @@
 #include "typedef.h"	// variable type definitions
 
 #define SWITCHES  	P2		// switches are connected to Port 2
-#define SPI_LOAD 		RXD
+#define SPI_LOAD 		WR
 
 #define TF2_pos 			(7)
 #define EXF2_pos 			(6)
@@ -190,8 +190,10 @@ void timer2_isr(void) interrupt 5 { // interrupt vector at 002BH
 			frequency_counter = 0;
 			// Now record how many pulses T0 has counted in the last 0.1s. Can simply be bit shifted to get the frequency in Hz.
 			// Pass frequency through IIR filter to smooth it out
-			frequency_value = (TH0 << 8) | TL0;
+			frequency_value = (TH1 << 8) | TL1;
 			update_display_via_iir(frequency_value);
+			TH1 = 0;
+			TL1 = 0;
 		}
 	}
 	else if ((SWITCHES&0x03) == 0x02) {
@@ -281,6 +283,8 @@ void setup_frequency_measure(void) {
 	// Enable Timer 2 interrupt
 	//IE = // TODO write entire IE register appropriately and do the same for amplitude measure mode
 	ET2 = 1;
+	ET1 = 0;
+	ET0 = 0;
 	EA = 1;    // Enable global interrupts
 	EADC = 0;  // Disable ADC interrupt
 
@@ -293,14 +297,17 @@ void setup_frequency_measure(void) {
 	//       (1 << CT_pos)   | // Timer/counter mode
 	//       (0 << M1_pos)   | // Mode bit 1
 	//       (1 << M0_pos);    // Mode bit 0
-	TMOD = 0x05; //0b00000101; // look at diagram on page 70 for mode 1. Gate is LOW so that we are always counting, and timer is connected to P3.4
+	TMOD = 0x50; //0b00000101; // look at diagram on page 70 for mode 1. Gate is LOW so that we are always counting, and timer is connected to P3.4
 
-	TCON = (0 << TF0_pos) | // Timer 0 overflow flag
-	       (1 << TR0_pos) | // Timer 0 run control
-	       (0 << IE1_pos) | // External interrupt 1 flag
-	       (0 << IT1_pos) | // External interrupt 1 type
-	       (0 << IE0_pos) | // External interrupt 0 flag
-	       (0 << IT0_pos);   // External interrupt 0 type
+	TCON =	(0 << TF1_pos) | // Timer 1 overflow flag off
+					(1 << TR1_pos) | // Timer 1 should be running
+					(0 << TF0_pos) | // Timer 0 overflow flag
+					(0 << TR0_pos) | // Timer 0 run control
+					(0 << IE1_pos) | // External interrupt 1 flag
+					(0 << IT1_pos) | // External interrupt 1 type
+					(0 << IE0_pos) | // External interrupt 0 flag
+					(0 << IT0_pos);   // External interrupt 0 type
+				 
 }
 
 void setup_amplitude_measure(void) {
@@ -334,10 +341,9 @@ void setup_amplitude_measure(void) {
 	RCAP2L = 0x00;
 	RCAP2H = 0x00;
 
-	
+	EA = 1;			// Enable global interrupts // TODO use a single write to IE
 	EADC = 1;		// Enable ADC interrupt
-	EA = 1;			// Enable global interrupts
-	ET2 = 1;		// Enable Timer 0 interrupt
+	ET2 = 1;		// Enable Timer 2 interrupt
 }
 
 void main(void) {
@@ -360,25 +366,25 @@ void main(void) {
 	spiWrite(MAX7219_SHUTDOWN_ADDR,			1);			// Switch on the display
 	spiWrite(MAX7219_DECODE_MODE_ADDR,	0xFF);	// Set to '1' to use a LUT to display digits using the 7 segment display
 	spiWrite(MAX7219_DIGIT1_ADDR,				0);			// Some digits to display
-	spiWrite(MAX7219_DIGIT2_ADDR,				1);			// Some digits to display
-	spiWrite(MAX7219_DIGIT3_ADDR,				2);			// Some digits to display
-	spiWrite(MAX7219_DIGIT4_ADDR,				3);			// Some digits to display
-	spiWrite(MAX7219_DIGIT5_ADDR,				4);			// Some digits to display
-	spiWrite(MAX7219_DIGIT6_ADDR,				5);			// Some digits to display
-	spiWrite(MAX7219_DIGIT7_ADDR,				6);			// Some digits to display
-	spiWrite(MAX7219_DIGIT8_ADDR,				7);			// Some digits to display
+	spiWrite(MAX7219_DIGIT2_ADDR,				0);			// Some digits to display
+	spiWrite(MAX7219_DIGIT3_ADDR,				0);			// Some digits to display
+	spiWrite(MAX7219_DIGIT4_ADDR,				0);			// Some digits to display
+	spiWrite(MAX7219_DIGIT5_ADDR,				0);			// Some digits to display
+	spiWrite(MAX7219_DIGIT6_ADDR,				0);			// Some digits to display
+	spiWrite(MAX7219_DIGIT7_ADDR,				0);			// Some digits to display
+	spiWrite(MAX7219_DIGIT8_ADDR,				0);			// Some digits to display
 	spiWrite(MAX7219_INTENSITY_ADDR,		15);		// Set to 15 for max brightness (for now TODO)
 	spiWrite(MAX7219_SCAN_LIMIT_ADDR,		7);			// Set to 7 for 8 digits
 	
-	i = 0;
-	while(1) {
-		i++;
-		update_display_via_iir(i); // Display a test value to make sure everything is working
-	}
+	//i = 0;
+	//while(1) {
+	//	i++;
+	//	update_display_via_iir(i); // Display a test value to make sure everything is working
+	//}
 
 	// Configure switches for user input and begin reading their values
 	SWITCHES = 0xFF;  // Make switch pins inputs
-	T0 = 1; // put this in input mode TODO wtf
+	T1 = 1; // put timer 1 counter input in input mode 
 	prev_switch_value = 0x8;
 
 	while(1) {
@@ -398,9 +404,8 @@ void main(void) {
 				spiWrite(MAX7219_DIGIT8_ADDR,				3);
 				setup_amplitude_measure();
 			} else {
-				// Default to DC measurement mode (switch_value == 0x03)
-				spiWrite(MAX7219_DIGIT8_ADDR,				1);
-				setup_dc_measure();
+				spiWrite(MAX7219_DIGIT8_ADDR,				0);
+				//setup_dc_measure();
 			}
 		}
 		prev_switch_value = switch_value;
