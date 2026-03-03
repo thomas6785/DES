@@ -335,9 +335,9 @@ void setup_amplitude_measure(void) {
 	RCAP2H = 0x00;
 
 	
-	EADC =1; // Enable ADC interrupt
-	EA = 1;    // Enable global interrupts
-	ET2 = 1;   // Enable Timer 0 interrupt
+	EADC = 1;		// Enable ADC interrupt
+	EA = 1;			// Enable global interrupts
+	ET2 = 1;		// Enable Timer 0 interrupt
 }
 
 void main(void) {
@@ -353,27 +353,28 @@ void main(void) {
 	 					(3 << SPR_pos);
 	
 	//spiWrite(MAX7219_DISPLAY_TEST_ADDR,	1);		// Run display test
+	//while(1);
 	//for(i=0; i <=1000000; i++); //Delay for the display test to be visible to humans
-	//spiWrite(MAX7219_DISPLAY_TEST_ADDR,	0);		// Disable display test
+	spiWrite(MAX7219_DISPLAY_TEST_ADDR,	0);		// Disable display test
 
 	spiWrite(MAX7219_SHUTDOWN_ADDR,			1);			// Switch on the display
-	spiWrite(MAX7219_DIGIT1_ADDR,				0);			// Some digits to display
-	spiWrite(MAX7219_DIGIT2_ADDR,				0);			// Some digits to display
-	spiWrite(MAX7219_DIGIT3_ADDR,				0);			// Some digits to display
-	spiWrite(MAX7219_DIGIT4_ADDR,				0);			// Some digits to display
-	spiWrite(MAX7219_DIGIT5_ADDR,				0);			// Some digits to display
-	spiWrite(MAX7219_DIGIT6_ADDR,				0);			// Some digits to display
-	spiWrite(MAX7219_DIGIT7_ADDR,				0);			// Some digits to display
-	spiWrite(MAX7219_DIGIT8_ADDR,				0);			// Some digits to display
 	spiWrite(MAX7219_DECODE_MODE_ADDR,	0xFF);	// Set to '1' to use a LUT to display digits using the 7 segment display
+	spiWrite(MAX7219_DIGIT1_ADDR,				0);			// Some digits to display
+	spiWrite(MAX7219_DIGIT2_ADDR,				1);			// Some digits to display
+	spiWrite(MAX7219_DIGIT3_ADDR,				2);			// Some digits to display
+	spiWrite(MAX7219_DIGIT4_ADDR,				3);			// Some digits to display
+	spiWrite(MAX7219_DIGIT5_ADDR,				4);			// Some digits to display
+	spiWrite(MAX7219_DIGIT6_ADDR,				5);			// Some digits to display
+	spiWrite(MAX7219_DIGIT7_ADDR,				6);			// Some digits to display
+	spiWrite(MAX7219_DIGIT8_ADDR,				7);			// Some digits to display
 	spiWrite(MAX7219_INTENSITY_ADDR,		15);		// Set to 15 for max brightness (for now TODO)
 	spiWrite(MAX7219_SCAN_LIMIT_ADDR,		7);			// Set to 7 for 8 digits
 	
 	i = 0;
-	//while(1) {
-	//	i++;
-	//	update_display_via_iir(i); // Display a test value to make sure everything is working
-	//}
+	while(1) {
+		i++;
+		update_display_via_iir(i); // Display a test value to make sure everything is working
+	}
 
 	// Configure switches for user input and begin reading their values
 	SWITCHES = 0xFF;  // Make switch pins inputs
