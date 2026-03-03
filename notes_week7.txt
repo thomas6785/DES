@@ -1,0 +1,6 @@
+Board R
+Small display thing
+Connect display to the SPI ports for power
+
+Ensure Schmitt trigger is being used for port 3.4
+Can't use timer 0 for edge counting
