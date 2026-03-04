@@ -114,6 +114,7 @@ void update_display_via_iir(uint16 value) { // TODO should use camelCase not sna
 
 	displayValue(display_iir_output);
 }
+// TODO skip SPI writes if the value is unchanged
 
 void reset_iir() {
 	reset_iir_on_next_input = 1;

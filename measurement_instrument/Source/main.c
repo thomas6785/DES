@@ -20,7 +20,7 @@ void clear_interrupts_and_timers() { // TODO can't we make all these functions '
 	// Disable all interrupts
 	IE = 0; // IE = Interrupt enable. Different bits map to different interrupts so '0 is no interrupts
 
-	// Stop timers that are being used 
+	// Stop timers that are being used
 	TR0 = 0;   // Stop Timer 0
 	TR1 = 0;   // Stop Timer 1
 	TR2 = 0;   // Stop Timer 2
@@ -59,7 +59,7 @@ void timer2_isr(void) interrupt 5 { // interrupt vector at 002BH
 	}
 	else if ((SWITCHES&0x03) == 0x02) {
 			//TODO check if this could be smaller
-			if (amplitude_t1_interrupt_counter >= 17){
+			if (amplitude_t1_interrupt_counter >= 17){ // TODO use == not >=
 			amplitude_value = y_max - y_min; // Get the amplitude value for the sampling window
 
 			// Reset the max and min for the next sampling window
@@ -69,7 +69,7 @@ void timer2_isr(void) interrupt 5 { // interrupt vector at 002BH
 			update_display_via_iir(amplitude_value);
 			}
 			else{
-				amplitude_t1_interrupt_counter ++;
+				amplitude_t1_interrupt_counter++;
 			}
 	}
 	TF2 = 0; // Clear the interrupt
