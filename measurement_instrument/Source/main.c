@@ -153,8 +153,6 @@ void setup_dc_measure(void) {
 	          (0 << CCONV_pos)  | // 0: disable continuous conversion
 	          (0 << SCONV_pos)  | // 0: no 'single conversion' needed either, we are using timer 2 instead to trigger conversions at regular intervals
 	          (0 << CS_pos);      // select channel 0 (AIN0)
-
-	EADC = 1;  // Enable ADC interrupt for DC measure mode
 }
 
 void setup_frequency_measure(void) {
@@ -196,6 +194,8 @@ void setup_amplitude_measure(void) {
 	          (1 << CCONV_pos)  | // ADC conversion complete flag
 	          (0 << SCONV_pos)  | // ADC sequence complete flag
 	          (0 << CS_pos);      // ADC channel select bits
+
+	EADC = 1;  // Enable ADC interrupt for amplitude measure mode
 }
 
 void setup_heartbeat(void){
