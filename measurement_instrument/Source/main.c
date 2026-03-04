@@ -15,7 +15,6 @@ static uint16 y_min = 0xFFFF; // For amplitude measurement, we also need to keep
 static uint16 amplitude_t1_interrupt_counter;
 
 static uint8 current_mode;
-static uint16 heartbeat_counter;
 
 sfr16 ADCDATA = 0xD9; // TODO why???
 
@@ -117,9 +116,11 @@ void adc_isr(void) interrupt 6 {
 }
 
 void timer0_isr(void) interrupt 1 {
+	static uint16 heartbeat_counter; // Used to divide ISR frequency so LED blinks slowly. Static so it persists across function calls
+
 	// This is used for the heartbeat LED blinking. Just toggle the LED and clear the interrupt flag
-	if (heartbeat_counter >= 20){
-		T0 = ~ T0; // Toggle LED
+	if (heartbeat_counter >= 20) {
+		HEARTBEAT_LED = ~HEARTBEAT_LED; // Toggle LED
 		heartbeat_counter = 0;
 	}
 	else{

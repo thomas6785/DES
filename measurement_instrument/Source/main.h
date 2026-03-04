@@ -80,6 +80,8 @@
 #define AMPLITUDE_MODE		(2)
 #define DISPLAY_TEST_MODE	(3)
 
+#define HEARTBEAT_LED		T0
+
 void spiWrite(uint8 address, uint8 data_value);
 void update_display_via_iir(uint16 value);
 void reset_iir();
