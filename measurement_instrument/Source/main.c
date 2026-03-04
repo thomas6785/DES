@@ -1,81 +1,6 @@
 #include <ADUC841.H>	// special function register definitions
 #include "typedef.h"	// variable type definitions
-
-#define SWITCHES  	P2		// switches are connected to Port 2
-#define SPI_LOAD 		WR
-
-#define TF2_pos 			(7)
-#define EXF2_pos 			(6)
-#define RCLK_pos 			(5)
-#define TCLK_pos			(4)
-#define EXEN2_pos 		(3)
-#define TR2_pos				(2)
-#define CNT2_pos 			(1)
-#define CAP2_pos 			(0)
-
-#define MD1_pos 			(7)
-#define EXT_REF_pos 	(6)
-#define CK1_pos 			(5)
-#define CK0_pos				(4)
-#define AQ_pos 				(2)
-#define T2C_pos 			(1)
-#define EXC_pos 			(0)
-
-#define ADCI_pos 			(7)
-#define DMA_pos 			(6)
-#define CCONV_pos 		(5)
-#define SCONV_pos			(4)
-#define CS_pos 				(0)
-
-// TCON definitions
-#define TF1_pos 			(7)
-#define TR1_pos 			(6)
-#define TF0_pos 			(5)
-#define TR0_pos 			(4)
-#define IE1_pos 			(3)
-#define IT1_pos 			(2)
-#define IE0_pos 			(1)
-#define IT0_pos 			(0)
-
-// TMOD definitions for timer 0
-#define GATE_pos 			(3)
-#define CT_pos 				(2)
-#define M1_pos 				(1)
-#define M0_pos 				(0)
-
-// SPI Con
-#define ISPI_pos				(7) // Interrupt bit
-#define WCOL_pos				(6) // Write collision bit
-#define SPE_pos					(5) // SPI interface enable
-#define SPIM_pos				(4) // set for master, clear for slave mode
-#define CPOL_pos				(3) // set for clock to idle high, clear for idle low
-#define CPHA_pos				(2) // clock polarity. Set for leading edge to transmti, clear for trailing edge to transmit
-#define SPR_pos					(0) // select SCLCK rate - see data sheet
-
-// Interrupt enable register bit positions
-#define EA_pos					(7) // Global interrupt enable bit
-#define EADC_pos				(6) // ADC interrupt enable bit
-#define ET2_pos					(5) // Timer 2 interrupt enable bit
-#define ES_pos					(4) // Serial interrupt enable bit
-#define ET1_pos					(3) // Timer 1 interrupt enable bit
-#define EX1_pos					(2) // External interrupt 1 enable bit
-#define ET0_pos					(1) // Timer 0 interrupt enable bit
-#define EX0_pos					(0) // External interrupt 0 enable bit
-
-// Register addresses on the MAX7219 display
-#define MAX7219_DIGIT1_ADDR				(1)
-#define MAX7219_DIGIT2_ADDR				(2)
-#define MAX7219_DIGIT3_ADDR				(3)
-#define MAX7219_DIGIT4_ADDR				(4)
-#define MAX7219_DIGIT5_ADDR				(5)
-#define MAX7219_DIGIT6_ADDR				(6)
-#define MAX7219_DIGIT7_ADDR				(7)
-#define MAX7219_DIGIT8_ADDR				(8)
-#define MAX7219_DECODE_MODE_ADDR	(9)
-#define MAX7219_INTENSITY_ADDR		(10)
-#define MAX7219_SCAN_LIMIT_ADDR		(11)
-#define MAX7219_SHUTDOWN_ADDR			(12)
-#define MAX7219_DISPLAY_TEST_ADDR	(15)
+#include "main.h"
 
 // TODO there are WAY too many global variables here, move them into the appropriate functions
 static uint16 adc_iir_output;          // IIR filter for ADC samples
@@ -91,90 +16,24 @@ static uint16 amplitude_t1_interrupt_counter;
 
 sfr16 ADCDATA = 0xD9; // TODO why???
 
+void clear_interrupts_and_timers() { // TODO can't we make all these functions 'inline'? Compiler seems not to like the 'inline' keyword
+	// Disable all interrupts
+	IE = 0; // IE = Interrupt enable. Different bits map to different interrupts so '0 is no interrupts
 
-void spiWrite(uint8 address, uint8 data_value) {
-	int i;
+	// Stop timers that are being used 
+	TR0 = 0;   // Stop Timer 0
+	TR1 = 0;   // Stop Timer 1
+	TR2 = 0;   // Stop Timer 2
 
-	SPI_LOAD = 0;				// load goes low at start
+	// Clear timer interrupt flags
+	TF0 = 0;
+	TF1 = 0;
+	TF2 = 0;
 
-	// Write the address byte
-	SPIDAT = address;		// send address byte (writing to SPIdat will trigger the SPI transmission too)
-	while(~ISPI);				// wait until ISPI is 1 indicating the SPI write is done
-	ISPI = 0;						// reset ISPI
-
-	// Need a small delay between SPI transactions
-	for(i=0; i <=10000; i++){} // TODO shorten delay - not clear if it is necessary or not?
-
-	// Write the data byte
-	SPIDAT = data_value;	// send data byte
-	while(~ISPI);					// wait until ISPI is 1 indicating the SPI write is done
-	ISPI = 0;							// reset ISPI
-
-	SPI_LOAD = 1;					// load goes high at end to tell the peripheral to update
-
-	for(i=0; i <=10000; i++); //Delay
-	// TODO remove this delay - not clear if it is necessary or not?
-}
-
-void display_value(uint16 value) {// TODO should be int not uint
-	// Take in a 16-bit binary value and convert to decimal, then
-	// display on the 7-segment display
-	int i;
-	uint8 bcd[3]; // Array to hold the BCD digits. bcd[0] is the ones and tens, bcd[1] is the hundreds and thousands, etc.
-	char sign; // Assume input is always positive for now, so sign bit is 0 TODO use something smaller than a char
-	// TODO maybe just use a 32-bit word instead of 3 8-bit words since the compiler will be smarter about bitshifting then
-	// If the value is negative, flip the sign bit and make the value positive for the BCD conversion
-	//if (value < 0) {
-	//	sign = 1;
-	//	value = -value;
-	//} else {
-	//	sign = 0;
-	//}
-	sign = 0;
-
-	bcd[0] = 0; // Ones and tens
-	bcd[1] = 0; // hundreds and thousands
-	bcd[2] = 0; // tens of thousands TODO merge sign bit into MSB of this byte
-
-		// TODO rewrite this code in Assembly, particularly the bitshifting operations are MUCH more efficient using rotations through the carry bit
-	for (i = 0; i<16; i++) {
-		// if any BCD digit has more than 5, increment it by 3
-		if (i != 0) { // if statement so we can skip this the first time round
-			if ((bcd[0] & 0x0F) > 0x04) { bcd[0] += 0x03; }
-			if ((bcd[0] & 0xF0) > 0x40) { bcd[0] += 0x30; }
-			if ((bcd[1] & 0x0F) > 0x04) { bcd[1] += 0x03; }
-			if ((bcd[1] & 0xF0) > 0x40) { bcd[1] += 0x30; }
-			if ((bcd[2] & 0x0F) > 0x04) { bcd[2] += 0x03; }
-		}
-
-		// shift a bit into the BCD array
-		bcd[2] = bcd[2] << 1;											// Shift bcd[2] left by 1
-		bcd[2] = bcd[2] | (0x01 & (bcd[1] >> 7));	// Move the MSB of bcd[1] to the LSB of bcd[2]
-		bcd[1] = bcd[1] << 1;											// Shift bcd[1] left by 1
-		bcd[1] = bcd[1] | (0x01 & (bcd[0] >> 7));	// Move the MSB of bcd[0] to the LSB of bcd[1]
-		bcd[0] = bcd[0] << 1;											// Shift bcd[0] left by 1
-		bcd[0] = bcd[0] | (0x01 & (value >> 15));	// Shift the MSB of the input binary value into the LSB of bcd[0]
-		value = value << 1;								// Shift input value left by 1 to get the next bit into the MSB
-	}
-	
-	// Write the BCD to the display using SPI
-	spiWrite(MAX7219_DIGIT1_ADDR,		bcd[0] & 0x0F);	// Ones
-	spiWrite(MAX7219_DIGIT2_ADDR,		(bcd[0] & 0xF0) >> 4);	// Tens
-	spiWrite(MAX7219_DIGIT3_ADDR,		bcd[1] & 0x0F);	// Hundreds
-	spiWrite(MAX7219_DIGIT4_ADDR,		(bcd[1] & 0xF0) >> 4);	// Thousands
-	spiWrite(MAX7219_DIGIT5_ADDR,		bcd[2] & 0x0F);	// Ten thousands
-	// TODO also write a sign bit to the display
-	// TODO and maybe write to the more significant digits
-}
-
-void update_display_via_iir(uint16 value) {
-	// Wrapper function which updates an IIR filter and then calls display_value to update the display.
-	static uint16 display_iir_output = 0; // IIR filter for display value. Initialise to zero. STATIC VARIABLE so it will persist across function calls
-
-	// Update IIR filter
-	display_iir_output = ((7*value) >> 3) + (display_iir_output >> 3);
-
-	display_value(display_iir_output);
+	// Clear counters to remove leftovers when switching modes
+	TH0 = 0; TL0 = 0;
+	TH1 = 0; TL1 = 0;
+	TH2 = 0; TL2 = 0;
 }
 
 /*------------------------------------------------
@@ -182,16 +41,18 @@ Interrupt service routine for timer 2 interrupt.
 Called by the hardware when the interrupt occurs.
 ------------------------------------------------*/
 void timer2_isr(void) interrupt 5 { // interrupt vector at 002BH
+	// TODO split each mode of operation into a separate function here (they can be inlined by compiler)
 	// Check what mode we are in:
-	if ((SWITCHES&0x03) == 0x01) {
+	if ((SWITCHES&0x03) == 0x01) { // TODO I dislike this direct reading of the switches in the ISR, maybe have a global variable that is set in the main loop when we read the switches and then check that here instead
 		// Frequency measurement mode. Increment the register, if it is 25, reset it and record the value on the counter
 		frequency_counter++;
 		if (frequency_counter >= 25) { // TODO make this == not >=
 			frequency_counter = 0;
-			// Now record how many pulses T0 has counted in the last 0.1s. Can simply be bit shifted to get the frequency in Hz.
+			// Now record how many pulses T1 has counted in the last 0.1s. Can simply be bit shifted to get the frequency in Hz.
 			// Pass frequency through IIR filter to smooth it out
 			frequency_value = (TH1 << 8) | TL1;
 			update_display_via_iir(frequency_value);
+			// Reset timer 1 for the next measurement
 			TH1 = 0;
 			TL1 = 0;
 		}
@@ -219,7 +80,7 @@ void adc_isr(void) interrupt 6 {
 		// DC measurement mode. Take the sample and update the IIR filter output
 		// IIR Filter
 		sample_value = sample_value & 0x0FFF;
-		update_display_via_iir(sample_value); // TODO find a systematic way to reset IIR filter after mode switch?
+		update_display_via_iir(sample_value);
 
 	} else if ((SWITCHES&0x03) == 0x02) {
 		// Record the highest and lowest value
@@ -259,6 +120,7 @@ void setup_dc_measure(void) {
 	          (0 << CCONV_pos)  | // ADC conversion complete flag
 	          (0 << SCONV_pos)  | // ADC sequence complete flag
 	          (0 << CS_pos);      // ADC channel select bits
+
 	EA = 1;    // Enable global interrupts
 	EADC = 1;  // Enable ADC interrupt
 }
@@ -347,7 +209,6 @@ void setup_amplitude_measure(void) {
 }
 
 void main(void) {
-	int i;
 	uint8 prev_switch_value;
 	
 	SPICON =	(0 << ISPI_pos)	|
@@ -358,42 +219,29 @@ void main(void) {
 	 					(0 << CPHA_pos)	|
 	 					(3 << SPR_pos);
 	
-	//spiWrite(MAX7219_DISPLAY_TEST_ADDR,	1);		// Run display test
-	//while(1);
-	//for(i=0; i <=1000000; i++); //Delay for the display test to be visible to humans
-	spiWrite(MAX7219_DISPLAY_TEST_ADDR,	0);		// Disable display test
+	initialDisplaySetup(); // set up the SPI display, including a display test long enough for humans to see all LEDs light up
 
-	spiWrite(MAX7219_SHUTDOWN_ADDR,			1);			// Switch on the display
-	spiWrite(MAX7219_DECODE_MODE_ADDR,	0xFF);	// Set to '1' to use a LUT to display digits using the 7 segment display
-	spiWrite(MAX7219_DIGIT1_ADDR,				0);			// Some digits to display
-	spiWrite(MAX7219_DIGIT2_ADDR,				0);			// Some digits to display
-	spiWrite(MAX7219_DIGIT3_ADDR,				0);			// Some digits to display
-	spiWrite(MAX7219_DIGIT4_ADDR,				0);			// Some digits to display
-	spiWrite(MAX7219_DIGIT5_ADDR,				0);			// Some digits to display
-	spiWrite(MAX7219_DIGIT6_ADDR,				0);			// Some digits to display
-	spiWrite(MAX7219_DIGIT7_ADDR,				0);			// Some digits to display
-	spiWrite(MAX7219_DIGIT8_ADDR,				0);			// Some digits to display
-	spiWrite(MAX7219_INTENSITY_ADDR,		15);		// Set to 15 for max brightness (for now TODO)
-	spiWrite(MAX7219_SCAN_LIMIT_ADDR,		7);			// Set to 7 for 8 digits
-	
 	//i = 0;
 	//while(1) {
 	//	i++;
-	//	update_display_via_iir(i); // Display a test value to make sure everything is working
+	//	update_display_via_iir(i);
 	//}
 
 	// Configure switches for user input and begin reading their values
 	SWITCHES = 0xFF;  // Make switch pins inputs
-	T1 = 1; // put timer 1 counter input in input mode 
+	T1 = 1; // put timer 1 counter input in input mode  TODO why is this in main??
 	prev_switch_value = 0x8;
 
 	while(1) {
 		// Read switches and enter appropriate mode
-		uint8 switch_value = SWITCHES & 0x03;		
+		uint8 switch_value = SWITCHES & 0x03;
 		if (prev_switch_value != switch_value) {
+			clear_interrupts_and_timers(); // If we are switching mode, disable interrupts and clear timers before switching modes to avoid any issues with leftover state from the previous mode
+			reset_iir(); // Reset the IIR filter for the display when we switch modes (this will set a flag that causes it to overwrite the IIR value on the next update, then return to normal IIR operation)
+
 			if (switch_value == 0x00) { // TODO enumerate these hardcoded values
 				// DC measurement mode
-				spiWrite(MAX7219_DIGIT8_ADDR,				1);
+				spiWrite(MAX7219_DIGIT8_ADDR,				1); // TODO replace these SPI writes with using the LEDs on port 0
 				setup_dc_measure();
 			} else if (switch_value == 0x01) {
 				// Frequency measurement mode
