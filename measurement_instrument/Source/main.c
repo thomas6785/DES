@@ -66,6 +66,7 @@ void timer2_isr(void) interrupt 5 { // interrupt vector at 002BH
 			y_max = 0x00;
 			y_min = 0xFFFF;
 			amplitude_t1_interrupt_counter = 0;
+			update_display_via_iir(amplitude_value);
 			}
 			else{
 				amplitude_t1_interrupt_counter ++;
@@ -75,7 +76,7 @@ void timer2_isr(void) interrupt 5 { // interrupt vector at 002BH
 }  // end timer2 interrupt service routine
 
 void adc_isr(void) interrupt 6 {
-	uint16 sample_value = ADCDATA & 0x0FFF; //TODO is this correct?
+	uint16 sample_value = (ADCDATAH <<8 | ADCDATAL) & 0x0FFF; //TODO is this correct?
 	if ((SWITCHES&0x03) == 0x00) { // TODO I don't like that we are reading the switches directly in the ISR
 		// DC measurement mode. Take the sample and update the IIR filter output
 		// IIR Filter
