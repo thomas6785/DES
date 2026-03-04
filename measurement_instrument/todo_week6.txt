@@ -1,14 +1,9 @@
 P1:
 - LED display for the units
-- Get another board next week
 - scaling and shifting to appropriate units
 - high-level code cleanup and refactoring
 	- make sure all the interrupts are correctly enabled/disabled for each mode
 	- rename function names and split out some commonly used functions
-- refactor amplitude measurement:
-	- use timer 2 to time out the window
-	- use ADC CCONV
-	- could use number of samples to measure time instead of timer 2
 
 P2:
 - Tune IIR filter response time
@@ -18,11 +13,13 @@ P2:
 - option to change units in use
 - double check for errors with atomic operation
 	- Most ISR's are
+- display current mode on LED panel
 
 Extra features?
 - amplitude measurement underestimate correction
 - switch to use hex/decimal
-- heartbeat LED + on/off switch
+- switch to change response time of IIR filter
+- heartbeat LED + on/off switch (use timer 1 and make sure timer 2 is higher priority)
 
 Verification:
 - Verification plan
