@@ -8,6 +8,7 @@ P1:
 P2:
 - Tune IIR filter response time
 - Increase precision of IIR filter
+- Add a display test mode
 - Conditional compilation for extra features
 - Amplitude measurement underestimate correction
 - Calibration for 1.25 != 1.23 ?
