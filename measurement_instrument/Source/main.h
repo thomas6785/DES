@@ -75,6 +75,11 @@
 #define MAX7219_SHUTDOWN_ADDR			(12)
 #define MAX7219_DISPLAY_TEST_ADDR	(15)
 
+#define DC_MODE						(0)
+#define FREQUENCY_MODE		(1)
+#define AMPLITUDE_MODE		(2)
+#define DISPLAY_TEST_MODE	(3)
+
 void spiWrite(uint8 address, uint8 data_value);
 void update_display_via_iir(uint16 value);
 void reset_iir();
