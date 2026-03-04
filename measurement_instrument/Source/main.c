@@ -109,13 +109,10 @@ void timer2_isr(void) interrupt 5 { // interrupt vector at 002BH
 
 void adc_isr(void) interrupt 6 {
 	uint16 sample_value = (ADCDATAH <<8 | ADCDATAL) & 0x0FFF; //TODO is this correct?
-	/*if ((SWITCHES&0x03) == 0x00) { // TODO I don't like that we are reading the switches directly in the ISR
-		// DC measurement mode. Take the sample and update the IIR filter output
+	if (current_mode == DC_MODE) {
 		// IIR Filter
-		sample_value = sample_value & 0x0FFF;
 		feed_iir(sample_value);
-
-	} else*/ if (current_mode == AMPLITUDE_MODE) { // TODO edge case hazard here: if we only just switched into amplitude mode, it may not be set up yet, so the ADC data could be old
+	} else if (current_mode == AMPLITUDE_MODE) {
 		// Record the highest and lowest value
 		if (sample_value > y_max){
 			y_max = sample_value;
