@@ -237,7 +237,8 @@ void write_status_leds(void) {
 }
 
 void main(void) {
-	uint8 prev_mode;
+	uint8 prev_switches;
+	uint8 current_switches;
 
 	initialDisplaySetup(); // set up the SPI display, including a display test long enough for humans to see all LEDs light up
 	timer2setup();
