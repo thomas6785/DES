@@ -86,12 +86,13 @@ void displayValue(uint16 value) {// TODO should be int not uint
 	
 	// Write the BCD to the display using SPI
 	spiWrite(MAX7219_DIGIT1_ADDR,		bcd[0] & 0x0F);	// Ones
-	spiWrite(MAX7219_DIGIT2_ADDR,		(bcd[0] & 0xF0) >> 4);	// Tens
+	spiWrite(MAX7219_DIGIT2_ADDR,		(bcd[0] & 0xF0) >> 4 | 0x80);	// Tens. MSB is set to display a decimal point
 	spiWrite(MAX7219_DIGIT3_ADDR,		bcd[1] & 0x0F);	// Hundreds
 	spiWrite(MAX7219_DIGIT4_ADDR,		(bcd[1] & 0xF0) >> 4);	// Thousands
 	spiWrite(MAX7219_DIGIT5_ADDR,		bcd[2] & 0x0F);	// Ten thousands
 	// TODO also write a sign bit to the display
 	// TODO and maybe write to the more significant digits
+	// TODO need logic to move three decimal places over to switch from Hz to kHz or mV to V
 }
 
 static uint8 reset_iir_on_next_input = 0; // Flag to indicate if we should reset the IIR filter to the NEXT input value. This is set to 1 when we switch modes and then reset to 0 after the first update. This is necessary because otherwise when we switch modes the IIR filter will still be at the value from the previous mode and it will take a long time to converge to the new value, which is confusing for users.
