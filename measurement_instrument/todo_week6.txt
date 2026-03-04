@@ -15,6 +15,10 @@ P2:
 - option to change units in use
 - double check for errors with atomic operation
 	- Most ISR's are
+- move double dabble and display calls to foreground to keep ISR's short
+	- will need to ensure the display value is retrieved atomically
+- do measurements for DC vs. AC on different channels so we can bypass the level shifter for DC mode
+- record max/min DC voltage
 
 Extra features?
 - amplitude measurement underestimate correction
