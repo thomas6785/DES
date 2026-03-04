@@ -4,16 +4,21 @@
 
 void delay() {
 	// Delay for ~1000 clocks e.g. to allow SPI transaction to complete
+	// TODO implement this in ASM instead - compiler bloats
+	
 	uint8 k;
-	for(k=0; k != 256; k++);
+ 	for(k=0; k != 255; k++);
 }
 
 void humanScaleDelay() {
 	uint8 i,j,k;
-	// Approximately a 6 second delay TODO check this in simulation
-	for(i=0; i != 256; i++)
-		for(j=0; j != 256; j++)
-			for(k=0; k != 256; k++);
+	// Approximately a ~2 second software delay
+
+	// TODO implement this in ASM instead - slightly more compact
+
+	for(i=0; i != 75; i++)
+		for(j=0; j != 255; j++)
+			for(k=0; k != 255; k++);
 }
 
 void spiWrite(uint8 address, uint8 data_value) {
@@ -41,9 +46,9 @@ void spiWrite(uint8 address, uint8 data_value) {
 void displayValue(uint16 value) {// TODO should be int not uint
 	// Take in a 16-bit binary value and convert to binary-coded decimal, then
 	// display on the 7-segment display
-	int i;
+	uint8 i;
 	uint8 bcd[3]; // Array to hold the BCD digits. bcd[0] is the ones and tens, bcd[1] is the hundreds and thousands, etc.
-	char sign; // Assume input is always positive for now, so sign bit is 0 TODO use something smaller than a char
+	uint8 sign; // Assume input is always positive for now, so sign bit is 0 TODO use something smaller than a char
 	// TODO maybe just use a 32-bit word instead of 3 8-bit words since the compiler will be smarter about bitshifting then
 	// If the value is negative, flip the sign bit and make the value positive for the BCD conversion
 	//if (value < 0) {
@@ -114,7 +119,7 @@ void reset_iir() {
 	reset_iir_on_next_input = 1;
 }
 
-void initialDisplaySetup() {
+void initialDisplaySetup() { // TODO functions like this are only called once so should be inlined, but the uVision compiler doesn't have support for inlining. The suggested alternative is to use a macro or just take the hit on the overhead
 	SPICON =	(0 << ISPI_pos)	|
 	 					(0 << WCOL_pos)	|
 	 					(1 << SPE_pos)	|
