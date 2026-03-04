@@ -210,7 +210,7 @@ void setup_amplitude_measure(void) {
 
 void main(void) {
 	uint8 prev_switch_value;
-	
+
 	initialDisplaySetup(); // set up the SPI display, including a display test long enough for humans to see all LEDs light up
 
 	//i = 0;
