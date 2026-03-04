@@ -90,6 +90,11 @@
 #define MODE_SWITCHES					(SWITCHES & 0x03) // bits 0 and 1 of SWITCHES control the mode of operation
 
 void spiWrite(uint8 address, uint8 data_value);
-void update_display_via_iir(uint16 value);
+void updateDisplay();
 void reset_iir();
 void initialDisplaySetup();
+
+int16 get_dc_mode_measurement(void);
+void setup_dc_measure(void);
+
+void feed_iir(uint32 value_in);
