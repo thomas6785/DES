@@ -14,7 +14,7 @@ static uint16 amplitude_value; // This is the final amplitude value after polyno
 static uint16 y_min = 0xFFFF; // For amplitude measurement, we also need to keep track of the minimum value in the sampling window
 static uint16 amplitude_t1_interrupt_counter;
 
-static uint8 current_mode;
+uint8 current_mode;
 
 sfr16 ADCDATA = 0xD9; // TODO why???
 
@@ -73,7 +73,7 @@ Interrupt service routine for timer 2 interrupt.
 Called by the hardware when the interrupt occurs.
 ------------------------------------------------*/
 void timer2_isr(void) interrupt 5 { // interrupt vector at 002BH
-	uint16 new_measurement_value;
+	int16 new_measurement_value;
 	// TODO split each mode of operation into a separate function here (they can be inlined by compiler)
 	
 	static uint8 timer2_interrupt_count = 0; // tracks how many ISR's have occured. We only respond to every 27th ISR so we are updating every 10/64 seconds
@@ -85,8 +85,10 @@ void timer2_isr(void) interrupt 5 { // interrupt vector at 002BH
 
 		if (current_mode == FREQUENCY_MODE) {
 			new_measurement_value = (TH1 << 8) | TL1; // Read the value of timer 1, which is counting the edges on the input signal
+			// TODO check if this has overflowed the max frequency. Note that new_measurement_value is SIGNED so max frequency is halved
 			// TODO scale and shift
 			TH1 = 0; TL1 = 0; // Reset timer 1 for the next measurement
+			feed_iir(new_measurement_value); // update IIR filter with the new measured value
 		}
 		else if (current_mode == AMPLITUDE_MODE) {
 			new_measurement_value = y_max - y_min; // Get the amplitude value for the sampling window
@@ -95,13 +97,11 @@ void timer2_isr(void) interrupt 5 { // interrupt vector at 002BH
 			// Reset the max and min for the next sampling window
 			y_max = 0x00;
 			y_min = 0xFFFF;
+			feed_iir(new_measurement_value); // update IIR filter with the new measured value
 		}
 		else if (current_mode == DC_MODE) {
-			new_measurement_value = ADCDATA & 0x0FFF; // TODO scale and shift
-			// TODO check if this is the correct way to read ADCDATA
-			// TODO check that ADCDATA is always valid for reading at any time
+			// Do nothing
 		}
-		update_display_via_iir(new_measurement_value); // update the display with the new measured value
 	} // TODO move handling for each individual mode to a separate function for readability
 
 	TF2 = 0; // Clear the interrupt flag
@@ -113,7 +113,7 @@ void adc_isr(void) interrupt 6 {
 		// DC measurement mode. Take the sample and update the IIR filter output
 		// IIR Filter
 		sample_value = sample_value & 0x0FFF;
-		update_display_via_iir(sample_value);
+		feed_iir(sample_value);
 
 	} else*/ if (current_mode == AMPLITUDE_MODE) { // TODO edge case hazard here: if we only just switched into amplitude mode, it may not be set up yet, so the ADC data could be old
 		// Record the highest and lowest value
@@ -138,24 +138,6 @@ void timer0_isr(void) interrupt 1 {
 		heartbeat_counter = 0;
 	}
 	TF0 = 0; // clear interrupt flag
-}
-
-void setup_dc_measure(void) {
-	// Configure ADC for DC
-	ADCCON1 = (1 << MD1_pos)    | // Operating mode of ADC
-	          (0 << EXT_REF_pos)| // External reference
-	          (0 << CK1_pos)    | // ADC clock divide bits
-	          (0 << CK0_pos)    | // ADC clock divide bits
-	          (3 << AQ_pos)     | // number of ADC clock cycles
-	          (1 << T2C_pos)    | // trigger ADC conversion on timer 2 overflow
-	          (0 << EXC_pos);     // external trigger off
-
-	// Enable ADC interrupt // TODO this is wrong, we don't need to set the flag ourselves here
-	ADCCON2 = (0 << ADCI_pos)   | // 0: clear ADC interrupt flag
-	          (0 << DMA_pos)    | // 0: not using DMA
-	          (0 << CCONV_pos)  | // 0: disable continuous conversion
-	          (0 << SCONV_pos)  | // 0: no 'single conversion' needed either, we are using timer 2 instead to trigger conversions at regular intervals
-	          (0 << CS_pos);      // select channel 0 (AIN0)
 }
 
 void setup_frequency_measure(void) {
@@ -268,6 +250,7 @@ void main(void) {
 			setup_interrupts_and_timers(); // Set interrupts and timers back to their default configurations
 			reset_iir(); // Reset the IIR filter for the display when we switch modes (this will set a flag that causes it to overwrite the IIR value on the next update, then return to normal IIR operation)
 			write_status_leds();
+
 			// TODO use a switch case statement here
 			if (current_mode == DC_MODE) {
 				setup_dc_measure();
@@ -280,5 +263,6 @@ void main(void) {
 			}
 		}
 		prev_switches = current_switches;
+		updateDisplay();
 	}
 }  // end main

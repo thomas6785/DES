@@ -15,6 +15,7 @@ void humanScaleDelay() {
 	// Approximately a ~2 second software delay
 
 	// TODO implement this in ASM instead - slightly more compact
+	// TODO why is this in displayControl?
 
 	for(i=0; i != 75; i++)
 		for(j=0; j != 255; j++)
@@ -43,12 +44,12 @@ void spiWrite(uint8 address, uint8 data_value) {
 	// TODO remove this delay - not clear if it is necessary or not? but 10k is definitely too many cycles
 }
 
-void displayValue(uint16 value) {// TODO should be int not uint
+void displayValue(int16 value) {
 	// Take in a 16-bit binary value and convert to binary-coded decimal, then
 	// display on the 7-segment display
 	uint8 i;
 	uint8 bcd[3]; // Array to hold the BCD digits. bcd[0] is the ones and tens, bcd[1] is the hundreds and thousands, etc.
-	uint8 sign; // Assume input is always positive for now, so sign bit is 0 TODO use something smaller than a char
+	//uint8 sign; // Assume input is always positive for now, so sign bit is 0 TODO use something smaller than a char
 	// TODO maybe just use a 32-bit word instead of 3 8-bit words since the compiler will be smarter about bitshifting then
 	// If the value is negative, flip the sign bit and make the value positive for the BCD conversion
 	//if (value < 0) {
@@ -57,7 +58,6 @@ void displayValue(uint16 value) {// TODO should be int not uint
 	//} else {
 	//	sign = 0;
 	//}
-	sign = 0;
 
 	bcd[0] = 0; // Ones and tens
 	bcd[1] = 0; // hundreds and thousands
@@ -95,32 +95,6 @@ void displayValue(uint16 value) {// TODO should be int not uint
 	// TODO need logic to move three decimal places over to switch from Hz to kHz or mV to V
 }
 
-static uint8 reset_iir_on_next_input = 0; // Flag to indicate if we should reset the IIR filter to the NEXT input value. This is set to 1 when we switch modes and then reset to 0 after the first update. This is necessary because otherwise when we switch modes the IIR filter will still be at the value from the previous mode and it will take a long time to converge to the new value, which is confusing for users.
-
-void update_display_via_iir(uint16 value) { // TODO should use camelCase not snake_case
-	// Wrapper function which updates an IIR filter and then calls display_value to update the display.
-
-	static uint16 display_iir_output = 0; // IIR filter for display value. Initialise to zero. STATIC VARIABLE so it will persist across function calls
-
-	// Update IIR filter
-	if (reset_iir_on_next_input) {
-		// If newmode is 1, reset the IIR filter to the new value immediately
-		display_iir_output = value;
-		reset_iir_on_next_input = 0; // Reset the flag
-	} else {
-		// If newmode is 0, update the IIR filter with the new value using a simple IIR filter with a time constant of 8 samples
-		display_iir_output = ((7*value) >> 3) + (display_iir_output >> 3);
-		// TODO make the forgetting factor configurable by the user
-	}
-
-	displayValue(display_iir_output);
-}
-// TODO skip SPI writes if the value is unchanged
-
-void reset_iir() {
-	reset_iir_on_next_input = 1;
-}
-
 void initialDisplaySetup() { // TODO functions like this are only called once so should be inlined, but the uVision compiler doesn't have support for inlining. The suggested alternative is to use a macro or just take the hit on the overhead
 	SPICON =	(0 << ISPI_pos)	|
 	 					(0 << WCOL_pos)	|
@@ -148,4 +122,27 @@ void initialDisplaySetup() { // TODO functions like this are only called once so
 	spiWrite(MAX7219_DIGIT8_ADDR,				0);			// Initially display all 0's
 	spiWrite(MAX7219_INTENSITY_ADDR,		15);		// Set to 15 for max brightness (for now TODO set brightness appropriately)
 	spiWrite(MAX7219_SCAN_LIMIT_ADDR,		7);			// Set to 7 for 8 digits for now TODO we may not need all 8 digits
+}
+
+extern uint16 iir_value;
+extern uint8 current_mode; // TODO not sure 'extern' is a clean solution for this, might be better to put these in the header file
+
+void updateDisplay() {
+	uint16 scaled_value;
+	static previous_iir_value = 0;
+	
+	if (iir_value != previous_iir_value) { // 'if' statement so we can skip updating the display if nothing has changed
+		if (current_mode == FREQUENCY_MODE) {
+			// TODO scale and shift the frequency value appropriately before displaying
+			scaled_value = iir_value;
+		}
+		else if (current_mode == AMPLITUDE_MODE) {
+			scaled_value = ((iir_value*7)>>2)*7;
+		}
+		else if (current_mode == DC_MODE) {
+			scaled_value = ((iir_value*7)>>3)*7; // TODO justify "7/8 * 7" calculation in comments
+		}
+		displayValue(scaled_value); // Update the display with the current value of the IIR filter
+		previous_iir_value = iir_value;
+	}
 }
