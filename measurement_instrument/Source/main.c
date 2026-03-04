@@ -160,7 +160,7 @@ void setup_frequency_measure(void) {
 	//       (1 << CT_pos)   | // Timer/counter mode
 	//       (0 << M1_pos)   | // Mode bit 1
 	//       (1 << M0_pos);    // Mode bit 0
-	TMOD = 0x50; //0b00000101; // look at diagram on page 70 for mode 1. Gate is LOW so that we are always counting, and timer is connected to P3.4
+	TMOD = 0x50; //0b00000101; // look at diagram on page 70 for mode 1. Gate is LOW so that we are always counting, and timer is connected to P3.5
 
 	TCON =	(0 << TF1_pos) | // Timer 1 overflow flag off
 					(1 << TR1_pos) | // Timer 1 should be running
@@ -170,11 +170,9 @@ void setup_frequency_measure(void) {
 					(0 << IT1_pos) | // External interrupt 1 type
 					(0 << IE0_pos) | // External interrupt 0 flag
 					(0 << IT0_pos);   // External interrupt 0 type
-				 
 }
 
 void setup_amplitude_measure(void) {
-
 	// Configure ADC to measure with frequency 150kHz
 	ADCCON1 = (1 << MD1_pos)    | // Operating mode of ADC
 	          (0 << EXT_REF_pos)| // External reference
