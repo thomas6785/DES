@@ -227,9 +227,9 @@ void write_status_leds(void) {
 		P0 = P0 | (1 << 4); // To display Hz
 	} else if ((current_mode == FREQUENCY_MODE) && ((SCALE_UNITS_SWITCHES) == 0x01)) {
 		P0 = P0 | (1 << 5); // To display KHz
-	} else if ((current_mode == DC_MODE) && ((SCALE_UNITS_SWITCHES) == 0x00)) {
+	} else if ((current_mode == DC_MODE || current_mode == AMPLITUDE_MODE) && ((SCALE_UNITS_SWITCHES) == 0x00)) {
 		P0 = P0 | (1 << 6); // To display mV
-	} else if ((current_mode == DC_MODE) && ((SCALE_UNITS_SWITCHES) == 0x01)) {
+	} else if ((current_mode == DC_MODE || current_mode == AMPLITUDE_MODE) && ((SCALE_UNITS_SWITCHES) == 0x01)) {
 		P0 = P0 | (1 << 7); // To display V
 	} else {
 		P0 = P0 & 0x0F; // Clear bits 4 to 7 if we are in a mode where they aren't used
