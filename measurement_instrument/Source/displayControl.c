@@ -115,11 +115,20 @@ void reset_iir() {
 }
 
 void initialDisplaySetup() {
+	SPICON =	(0 << ISPI_pos)	|
+	 					(0 << WCOL_pos)	|
+	 					(1 << SPE_pos)	|
+	 					(1 << SPIM_pos)	|
+	 					(0 << CPOL_pos)	|
+	 					(0 << CPHA_pos)	|
+	 					(3 << SPR_pos); // TODO check if we can make the SPI clock faster, we probably can
+
 	// Run a display test
 	spiWrite(MAX7219_DISPLAY_TEST_ADDR,	1);		// Display test register will enable all LEDs
 	humanScaleDelay();												// Delay for the display test to be visible to humans
 	spiWrite(MAX7219_DISPLAY_TEST_ADDR,	0);		// Display test register will enable all LEDs
 
+	// Set up the display for normal operation
 	spiWrite(MAX7219_SHUTDOWN_ADDR,			1);			// Switch on the display
 	spiWrite(MAX7219_DECODE_MODE_ADDR,	0xFF);	// Set to '1' to use a LUT to display digits using the 7 segment display
 	spiWrite(MAX7219_DIGIT1_ADDR,				0);			// Initially display all 0's // TODO can probably remove this as we will immediately overwrite it

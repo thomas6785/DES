@@ -211,14 +211,6 @@ void setup_amplitude_measure(void) {
 void main(void) {
 	uint8 prev_switch_value;
 	
-	SPICON =	(0 << ISPI_pos)	|
-	 					(0 << WCOL_pos)	|
-	 					(1 << SPE_pos)	|
-	 					(1 << SPIM_pos)	|
-	 					(0 << CPOL_pos)	|
-	 					(0 << CPHA_pos)	|
-	 					(3 << SPR_pos);
-	
 	initialDisplaySetup(); // set up the SPI display, including a display test long enough for humans to see all LEDs light up
 
 	//i = 0;
