@@ -222,7 +222,9 @@ void write_status_leds(void) {
 	//P0 bits 0 to 2 represent the mode in binary, so we can just write the value of the mode to those bits to display it on the LEDs
 	//P0 bits 4,5,6, and 7 represent what measurement is being displayed (Hz, KHz, V or mV) depending on SCALE_UNITS_SWITCHES and the mode of the device.
 	P0 = (P0 & 0xF0) | (current_mode & 0x07); // Set bits 0 to 2 to the current mode, without affecting bits 4 to 7
+	// TODO shouldn't it be 0x03?
 
+	// TODO active low?
 	if ((current_mode == FREQUENCY_MODE) && ((SCALE_UNITS_SWITCHES) == 0x00)) {
 		P0 = P0 | (1 << 4); // To display Hz
 	} else if ((current_mode == FREQUENCY_MODE) && ((SCALE_UNITS_SWITCHES) == 0x01)) {
