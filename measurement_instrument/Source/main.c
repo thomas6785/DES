@@ -153,8 +153,6 @@ void setup_dc_measure(void) {
 	          (0 << CCONV_pos)  | // 0: disable continuous conversion
 	          (0 << SCONV_pos)  | // 0: no 'single conversion' needed either, we are using timer 2 instead to trigger conversions at regular intervals
 	          (0 << CS_pos);      // select channel 0 (AIN0)
-
-	EADC = 1;  // Enable ADC interrupt for DC measure mode
 }
 
 void setup_frequency_measure(void) {
@@ -196,6 +194,8 @@ void setup_amplitude_measure(void) {
 	          (1 << CCONV_pos)  | // ADC conversion complete flag
 	          (0 << SCONV_pos)  | // ADC sequence complete flag
 	          (0 << CS_pos);      // ADC channel select bits
+
+	EADC = 1;  // Enable ADC interrupt for amplitude measure mode
 }
 
 void setup_heartbeat(void){
@@ -222,7 +222,9 @@ void write_status_leds(void) {
 	//P0 bits 0 to 2 represent the mode in binary, so we can just write the value of the mode to those bits to display it on the LEDs
 	//P0 bits 4,5,6, and 7 represent what measurement is being displayed (Hz, KHz, V or mV) depending on SCALE_UNITS_SWITCHES and the mode of the device.
 	P0 = (P0 & 0xF0) | (current_mode & 0x07); // Set bits 0 to 2 to the current mode, without affecting bits 4 to 7
+	// TODO shouldn't it be 0x03?
 
+	// TODO active low?
 	if ((current_mode == FREQUENCY_MODE) && ((SCALE_UNITS_SWITCHES) == 0x00)) {
 		P0 = P0 | (1 << 4); // To display Hz
 	} else if ((current_mode == FREQUENCY_MODE) && ((SCALE_UNITS_SWITCHES) == 0x01)) {
