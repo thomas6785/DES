@@ -15,6 +15,7 @@ static uint16 y_min = 0xFFFF; // For amplitude measurement, we also need to keep
 static uint16 amplitude_t1_interrupt_counter;
 
 static uint8 current_mode;
+static uint16 heartbeat_counter;
 
 sfr16 ADCDATA = 0xD9; // TODO why???
 
@@ -23,11 +24,9 @@ void clear_interrupts_and_timers() { // TODO can't we make all these functions '
 	IE = 0; // IE = Interrupt enable. Different bits map to different interrupts so '0 is no interrupts
 
 	// Stop timers that are being used
-	TR0 = 0;   // Stop Timer 0
 	TR1 = 0;   // Stop Timer 1
 
 	// Clear timer interrupt flags
-	TF0 = 0;
 	TF1 = 0;
 	TF2 = 0;
 
@@ -117,6 +116,18 @@ void adc_isr(void) interrupt 6 {
 	}
 }
 
+void timer0_isr(void) interrupt 1 {
+	// This is used for the heartbeat LED blinking. Just toggle the LED and clear the interrupt flag
+	if (heartbeat_counter >= 20){
+		T0 = ~ T0; // Toggle LED
+		heartbeat_counter = 0;
+	}
+	else{
+		heartbeat_counter++;
+	}
+	TF0 = 0;
+}
+
 void setup_dc_measure(void) {
 	// Configure ADC for DC
 	ADCCON1 = (1 << MD1_pos)    | // Operating mode of ADC
@@ -149,7 +160,6 @@ void setup_frequency_measure(void) {
 	//IE = // TODO write entire IE register appropriately and do the same for amplitude measure mode
 	ET2 = 1;
 	ET1 = 0;
-	ET0 = 0;
 	EA = 1;    // Enable global interrupts
 	EADC = 0;  // Disable ADC interrupt
 
@@ -191,6 +201,26 @@ void setup_amplitude_measure(void) {
 	ET2 = 1;		// Enable Timer 2 interrupt
 }
 
+void heartbeat(void){
+	// Setup timer 0 to be used for heartbeat LED blinking
+	TMOD = (0 << GATE_pos) | // Timer 0 gate control
+	       (0 << CT_pos)   | // Timer/counter mode
+	       (1 << M1_pos)   | // Mode bit 1 
+	       (0 << M0_pos);    // Mode bit 0
+
+	TCON =	(0 << TF1_pos) | // Timer 1 overflow flag off
+			(0 << TR1_pos) | // Timer 1 should be running
+			(0 << TF0_pos) | // Timer 0 overflow flag
+			(1 << TR0_pos) | // Timer 0 run control
+			(0 << IE1_pos) | // External interrupt 1 flag
+			(0 << IT1_pos) | // External interrupt 1 type
+			(0 << IE0_pos) | // External interrupt 0 flag
+			(0 << IT0_pos);   // External interrupt 0 type
+	
+	ET0 = 1;
+	EA = 1;
+}
+
 void main(void) {
 	uint8 prev_mode;
 
@@ -214,6 +244,7 @@ void main(void) {
 		if (prev_mode != current_mode) {
 			clear_interrupts_and_timers(); // If we are switching mode, disable interrupts and clear timers before switching modes to avoid any issues with leftover state from the previous mode
 			reset_iir(); // Reset the IIR filter for the display when we switch modes (this will set a flag that causes it to overwrite the IIR value on the next update, then return to normal IIR operation)
+			heartbeat(); // Start the heartbeat LED blinking to show that the system is alive and running
 
 			if (current_mode == DC_MODE) {
 				// DC measurement mode
