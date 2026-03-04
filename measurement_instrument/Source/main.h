@@ -82,6 +82,13 @@
 
 #define HEARTBEAT_LED		T0
 
+#define HEX_NOT_DEC_SWITCH		(SWITCHES & 0x80) >> 7 // bit 7 of SWITCHES controls whether we display in hex or decimal
+#define IIR_SPEED_SWITCHES		(SWITCHES & 0x40) >> 6 // bit 6 of SWITCHES control the speed of the IIR filter
+#define HEARTBEAT_SWITCH			(SWITCHES & 0x20) >> 5 // bit 5 of SWITCHES controls whether the heartbeat LED is on or off
+#define SCALE_UNITS_SWITCHES	(SWITCHES & 0x10) >> 4 // bit 4 of SWITCHES control the units we display in (e.g. Hz vs kHz or mV vs V)
+
+#define MODE_SWITCHES					(SWITCHES & 0x03) // bits 0 and 1 of SWITCHES control the mode of operation
+
 void spiWrite(uint8 address, uint8 data_value);
 void update_display_via_iir(uint16 value);
 void reset_iir();
