@@ -112,7 +112,7 @@ void adc_isr(void) interrupt 6 {
 		sample_value = sample_value & 0x0FFF;
 		update_display_via_iir(sample_value);
 
-	} else*/ if ((SWITCHES&0x03) == 0x02) {
+	} else*/ if (current_mode == AMPLITUDE_MODE) { // TODO edge case hazard here: if we only just switched into amplitude mode, it may not be set up yet, so the ADC data could be old
 		// Record the highest and lowest value
 		if (sample_value > y_max){
 			y_max = sample_value;
@@ -131,7 +131,7 @@ void timer0_isr(void) interrupt 1 {
 	heartbeat_counter++;
 
 	if (heartbeat_counter == 50) {
-		HEARTBEAT_LED = ~HEARTBEAT_LED & (SWITCHES >> 5); // Toggle LED (unless bit 5 of SWITCHES is low)
+		HEARTBEAT_LED = ~HEARTBEAT_LED & HEARTBEAT_SWITCH; // Toggle LED (unless bit 5 of SWITCHES is low)
 		heartbeat_counter = 0;
 	}
 	TF0 = 0; // clear interrupt flag
@@ -239,7 +239,7 @@ void main(void) {
 
 	while(1) {
 		// Read switches and enter appropriate mode
-		current_mode = SWITCHES & 0x03;
+		current_mode = MODE_SWITCHES;
 		if (prev_mode != current_mode) {
 			setup_interrupts_and_timers(); // Set interrupts and timers back to their default configurations
 			reset_iir(); // Reset the IIR filter for the display when we switch modes (this will set a flag that causes it to overwrite the IIR value on the next update, then return to normal IIR operation)
