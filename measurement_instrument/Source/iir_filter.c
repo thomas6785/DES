@@ -24,7 +24,9 @@ void feed_iir(uint32 value_in) { // TODO should use camelCase not snake_case
 		reset_iir_on_next_input = 0; // Reset the flag
 	} else {
 		// If reset_iir_on_next_input is 0, update the IIR filter with the new value using a simple IIR filter with a time constant of 8 samples
-		iir_value_full = ((7*value_in) << 5) + (iir_value_full >> 3);
+		if (IIR_SPEED_SWITCHES)				iir_value_full = ((7*value_in) << 5) + (iir_value_full >> 3);
+		else													iir_value_full = ((15*value_in) << 4) + (iir_value_full >> 4);
+
 		// we only left shift the new value by 5 because we want to left shift by 8 bits then multiply by 7/8
 		// right-shift the old value by 3 to divide by 8
 		// TODO make the forgetting factor configurable by the user
