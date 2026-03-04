@@ -218,6 +218,24 @@ void setup_heartbeat(void){
 					(0 << IT0_pos);   // External interrupt 0 type
 }
 
+void write_status_leds(void) {
+	//P0 bits 0 to 2 represent the mode in binary, so we can just write the value of the mode to those bits to display it on the LEDs
+	//P0 bits 4,5,6, and 7 represent what measurement is being displayed (Hz, KHz, V or mV) depending on SCALE_UNITS_SWITCHES and the mode of the device.
+	P0 = (P0 & 0xF0) | (current_mode & 0x07); // Set bits 0 to 2 to the current mode, without affecting bits 4 to 7
+
+	if ((current_mode == FREQUENCY_MODE) && ((SCALE_UNITS_SWITCHES) == 0x00)) {
+		P0 = P0 | (1 << 4); // To display Hz
+	} else if ((current_mode == FREQUENCY_MODE) && ((SCALE_UNITS_SWITCHES) == 0x01)) {
+		P0 = P0 | (1 << 5); // To display KHz
+	} else if ((current_mode == DC_MODE) && ((SCALE_UNITS_SWITCHES) == 0x00)) {
+		P0 = P0 | (1 << 6); // To display mV
+	} else if ((current_mode == DC_MODE) && ((SCALE_UNITS_SWITCHES) == 0x01)) {
+		P0 = P0 | (1 << 7); // To display V
+	} else {
+		P0 = P0 & 0x0F; // Clear bits 4 to 7 if we are in a mode where they aren't used
+	}
+}
+
 void main(void) {
 	uint8 prev_mode;
 
@@ -226,42 +244,33 @@ void main(void) {
 	setup_heartbeat(); // Start the heartbeat LED blinking to show that the system is alive and running
 	setup_interrupts_and_timers();
 
-	//i = 0;
-	//while(1) {
-	//	i++;
-	//	update_display_via_iir(i);
-	//}
-
 	// Configure switches for user input and begin reading their values
 	SWITCHES = 0xFF;  // Make switch pins inputs
 	T1 = 1; // put timer 1 counter input in input mode  TODO why is this in main??
-	prev_mode = 0x8;
+	prev_switches = 0x8;
 
 	while(1) {
 		// Read switches and enter appropriate mode
+		current_switches = SWITCHES ;
 		current_mode = MODE_SWITCHES;
-		if (prev_mode != current_mode) {
+		if (prev_switches != current_switches) {
 			setup_interrupts_and_timers(); // Set interrupts and timers back to their default configurations
 			reset_iir(); // Reset the IIR filter for the display when we switch modes (this will set a flag that causes it to overwrite the IIR value on the next update, then return to normal IIR operation)
-
+			write_status_leds(); 
 			if (current_mode == DC_MODE) {
 				// DC measurement mode
-				spiWrite(MAX7219_DIGIT8_ADDR,				1); // TODO replace these SPI writes with using the LEDs on port 0
 				setup_dc_measure();
 			} else if (current_mode == FREQUENCY_MODE) {
 				// Frequency measurement mode
-				spiWrite(MAX7219_DIGIT8_ADDR,				2);
 				setup_frequency_measure(); 
 			} else if (current_mode == AMPLITUDE_MODE) {
 				// Amplitude measurement mode
-				spiWrite(MAX7219_DIGIT8_ADDR,				3);
 				setup_amplitude_measure();
 			} else if (current_mode == DISPLAY_TEST_MODE) {
 				// Display test mode
-				spiWrite(MAX7219_DIGIT8_ADDR,				4);
 				//setup_display_test(); TODO
 			}
 		}
-		prev_mode = current_mode;
+		prev_switches = current_switches;
 	}
 }  // end main
