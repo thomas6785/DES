@@ -42,6 +42,9 @@ void setup_interrupts_and_timers() { // TODO can't we make all these functions '
 	// Clear counters to remove leftovers when switching modes
 	TH0 = 0; TL0 = 0;
 	TH2 = 0; TL2 = 0;
+
+	// Turn off the display test, if it was on from the display test mode
+	spiWrite(MAX7219_DISPLAY_TEST_ADDR,	0);
 }
 
 void timer2setup(void) {
@@ -238,8 +241,13 @@ void write_status_leds(void) {
 	}
 }
 
+void setup_display_test(void) {
+	spiWrite(MAX7219_DISPLAY_TEST_ADDR,	1);
+	// write to the display to turn on the display test mode, which should light up all the LEDs. This is used for testing that the display is working and also to show users that the device is on and working when they switch it on.
+}
+
 void main(void) {
-	uint8 prev_mode;
+	uint8 prev_switches,current_switches;
 
 	initialDisplaySetup(); // set up the SPI display, including a display test long enough for humans to see all LEDs light up
 	timer2setup();
@@ -253,24 +261,22 @@ void main(void) {
 
 	while(1) {
 		// Read switches and enter appropriate mode
+		// TODO I think this could all be a bit cleaner
 		current_switches = SWITCHES ;
 		current_mode = MODE_SWITCHES;
 		if (prev_switches != current_switches) {
 			setup_interrupts_and_timers(); // Set interrupts and timers back to their default configurations
 			reset_iir(); // Reset the IIR filter for the display when we switch modes (this will set a flag that causes it to overwrite the IIR value on the next update, then return to normal IIR operation)
-			write_status_leds(); 
+			write_status_leds();
+			// TODO use a switch case statement here
 			if (current_mode == DC_MODE) {
-				// DC measurement mode
 				setup_dc_measure();
 			} else if (current_mode == FREQUENCY_MODE) {
-				// Frequency measurement mode
 				setup_frequency_measure(); 
 			} else if (current_mode == AMPLITUDE_MODE) {
-				// Amplitude measurement mode
 				setup_amplitude_measure();
 			} else if (current_mode == DISPLAY_TEST_MODE) {
-				// Display test mode
-				//setup_display_test(); TODO
+				setup_display_test();
 			}
 		}
 		prev_switches = current_switches;
