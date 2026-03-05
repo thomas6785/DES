@@ -75,7 +75,7 @@ void displayValue(uint32 value) {
 		bcd = bcd + 0xB00; // Add B to the most significant nybble being cut off to give the effect of rounding to the nearest value
 		bcd = bcd >> 12; // Cut off the last 12 bits to remove the last 3 decimal digits
 	}
-	
+
 	// Write the BCD to the display using SPI
 	spiWrite(MAX7219_DIGIT1_ADDR,		((bcd & 0x00000F)>>0) );	// Tenths
 	spiWrite(MAX7219_DIGIT2_ADDR,		((bcd & 0x0000F0)>>4) | 0x80);	// Ones. MSB is set to display a decimal point
