@@ -31,7 +31,7 @@ void setup_interrupts_and_timers() { // TODO can't we make all these functions '
 				(0 << EX0_pos );
 
 	// Clear counters to remove leftovers when switching modes
-	TH0 = 0; TL0 = 0;
+	TH1 = 0; TL1 = 0;
 	TH2 = 0; TL2 = 0;
 
 	// Turn off the display test, if it was on from the display test mode
@@ -145,7 +145,7 @@ void setup_display_test(void) {
 void main(void) {
 	uint8 perv_switches;
 	uint8 current_switches;
-	uint8 display_update_divider;
+	uint16 display_update_divider;
 	
 	display_update_divider = 0;
 
@@ -185,7 +185,7 @@ void main(void) {
 		
 		// Update the display every x loops (throttled to avoid flickering)
 		display_update_divider++;
-		if (display_update_divider == 30) {
+		if ((display_update_divider == 30000) & ~(FREEZE_SWITCH)) {
 			display_update_divider = 0;
 			updateDisplay();
 		}

@@ -1,0 +1,19 @@
+LEDS:
+	LEFTMOST:	DC mode
+				Freq mode
+				Amp mode
+				Display test mode
+				Hz
+				kHz
+				mV
+	RIGHTMOST:	V
+
+SWITCHES:
+	LEFTMOST:	1: Mode
+				2: Mode
+				3: -
+				4: -
+				5: Change units
+				6: Heartbeat on/off
+				7: IIR speed
+	RIGHTMOST:	8: Freeze display
