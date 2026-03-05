@@ -2,19 +2,10 @@
 #include "typedef.h"	// variable type definitions
 #include "main.h"
 
-// TODO there are WAY too many global variables here, move them into the appropriate functions
-static uint16 adc_iir_output;          // IIR filter for ADC samples
-static uint16 frequency_iir_output;    // IIR filter for frequency measurements
-static uint16 frequency_counter;
-static uint16 frequency_value;
-
-// TODO there are WAY too many global variables here, move them into the appropriate functions
 static uint16 y_max =0x00; // For amplitude measurement, we need to keep track of the maximum value in the sampling window
-static uint16 amplitude_value; // This is the final amplitude value after polynomial interpolation
 static uint16 y_min = 0xFFFF; // For amplitude measurement, we also need to keep track of the minimum value in the sampling window
-static uint16 amplitude_t1_interrupt_counter;
 
-uint8 current_mode;
+uint8 current_mode; // the mode we are in currently
 
 sfr16 ADCDATA = 0xD9; // TODO why???
 
@@ -61,11 +52,11 @@ void timer2setup(void) {
 	        (0 << CNT2_pos)    | // Timer/counter mode
 	        (0 << CAP2_pos);     // Capture/reload mode
 
-	// Set reload value to 1536
-	// This gives an ISR every 64,000 clock cycles
-	// which is then divided by 27 so the display is updated every 10/64 seconds
-	RCAP2L = 0x00;
-	RCAP2H = 0x06;
+	RCAP2L = 0x10;
+	RCAP2H = 0x2D;
+	// set reload value to 0x2D10
+	// in frequency mode we divide this by 8 to get a sampling window of 39.0625 milliseconds (such that we can multiply by 256 to get our frequency in multiples of 0.1 Hz)
+	// in amplitude mode we divide this by 32 to get a sampling window of 0.15625 seconds (long enough to capture the peak and trough of any signal many times)
 }
 
 /*------------------------------------------------
@@ -74,41 +65,37 @@ Called by the hardware when the interrupt occurs.
 ------------------------------------------------*/
 void timer2_isr(void) interrupt 5 { // interrupt vector at 002BH
 	int16 new_measurement_value;
-	// TODO split each mode of operation into a separate function here (they can be inlined by compiler)
+	// TODO split each mode of operation into a separate function here (they can be inlined by compiler) tidy this function generally
 	
-	static uint8 timer2_interrupt_count = 0; // tracks how many ISR's have occured. We only respond to every 27th ISR so we are updating every 10/64 seconds
+	static uint8 timer2_interrupt_count = 0; // tracks how many ISR's have occured. We only respond to every 8th ISR so we are updating every 10/256 seconds
 	// static variable so it will persist across function calls
 
 	timer2_interrupt_count++;
-	if (timer2_interrupt_count == 27) {
-		timer2_interrupt_count = 0;
-
+	if (timer2_interrupt_count == 8) {
 		if (current_mode == FREQUENCY_MODE) {
+			timer2_interrupt_count = 0;
 			new_measurement_value = (TH1 << 8) | TL1; // Read the value of timer 1, which is counting the edges on the input signal
-			// TODO check if this has overflowed the max frequency. Note that new_measurement_value is SIGNED so max frequency is halved
-			// TODO scale and shift
+			// TODO check if this has overflowed the max frequency
 			TH1 = 0; TL1 = 0; // Reset timer 1 for the next measurement
 			feed_iir(new_measurement_value); // update IIR filter with the new measured value
 		}
-		else if (current_mode == AMPLITUDE_MODE) {
+
+		if (current_mode == AMPLITUDE_MODE) {
+			timer2_interrupt_count = 0;
 			new_measurement_value = y_max - y_min; // Get the amplitude value for the sampling window
-			// TODO scale and shift
 
 			// Reset the max and min for the next sampling window
 			y_max = 0x00;
 			y_min = 0xFFFF;
 			feed_iir(new_measurement_value); // update IIR filter with the new measured value
 		}
-		else if (current_mode == DC_MODE) {
-			// Do nothing
-		}
-	} // TODO move handling for each individual mode to a separate function for readability
+	}
 
 	TF2 = 0; // Clear the interrupt flag
 }  // end timer2 ISR
 
 void adc_isr(void) interrupt 6 {
-	uint16 sample_value = (ADCDATAH <<8 | ADCDATAL) & 0x0FFF; //TODO is this correct?
+	uint16 sample_value = (ADCDATAH <<8 | ADCDATAL) & 0x0FFF;
 	if (current_mode == DC_MODE) {
 		// IIR Filter
 		feed_iir(sample_value);
@@ -124,112 +111,37 @@ void adc_isr(void) interrupt 6 {
 	}
 }
 
-void timer0_isr(void) interrupt 1 {
-	static uint16 heartbeat_counter = 0; // Used to divide ISR frequency so LED blinks slowly. Static so it persists across function calls
-
-	// This is used for the heartbeat LED blinking. Just toggle the LED and clear the interrupt flag
-	heartbeat_counter++;
-
-	if (heartbeat_counter == 50) {
-		HEARTBEAT_LED = ~HEARTBEAT_LED & HEARTBEAT_SWITCH; // Toggle LED (unless bit 5 of SWITCHES is low)
-		heartbeat_counter = 0;
-	}
-	TF0 = 0; // clear interrupt flag
-}
-
-void setup_frequency_measure(void) {
-	// Frequency measurement mode.
-	// Uses timer 2 to generate an ISR every 0.1 seconds
-	// and timer 0 to count positive edges on the input signal
-	// every 0.1 s, the value in timer 0 is read and displayed (via the IIR filter),
-	// then timer 0 is reset
-
-	// Configure timer 0 to count the input frequency. Use in mode 1.
-	//TMOD = (0 << GATE_pos) | // Timer 0 gate control
-	//       (1 << CT_pos)   | // Timer/counter mode
-	//       (0 << M1_pos)   | // Mode bit 1
-	//       (1 << M0_pos);    // Mode bit 0
-	TMOD = 0x51; //0b00000101; // look at diagram on page 70 for mode 1. Gate is LOW so that we are always counting, and timer is connected to P3.5 TODO use defined bit positions here
-
-	TCON =	(0 << TF1_pos) | // Timer 1 overflow flag off
-					(1 << TR1_pos) | // Timer 1 should be running
-					(0 << TF0_pos) | // Timer 0 overflow flag
-					(1 << TR0_pos) | // Timer 0 run control
-					(0 << IE1_pos) | // External interrupt 1 flag
-					(0 << IT1_pos) | // External interrupt 1 type
-					(0 << IE0_pos) | // External interrupt 0 flag
-					(0 << IT0_pos);   // External interrupt 0 type
-}
-
-void setup_amplitude_measure(void) {
-	// Configure ADC to measure with frequency 150kHz
-	ADCCON1 = (1 << MD1_pos)    | // Operating mode of ADC
-	          (0 << EXT_REF_pos)| // External reference
-	          (0 << CK1_pos)    | // ADC clock divide bits
-	          (0 << CK0_pos)    | // ADC clock divide bits
-	          (3 << AQ_pos)     | // number of ADC clock cycles
-	          (0 << T2C_pos)    | // Which timer to use
-	          (0 << EXC_pos);     // external trigger
-
-	ADCCON2 = (0 << ADCI_pos)   | // ADC interrupt flag
-	          (0 << DMA_pos)    | // ADC DMA flag
-	          (1 << CCONV_pos)  | // ADC conversion complete flag
-	          (0 << SCONV_pos)  | // ADC sequence complete flag
-	          (0 << CS_pos);      // ADC channel select bits
-
-	EADC = 1;  // Enable ADC interrupt for amplitude measure mode
-}
-
-void setup_heartbeat(void){
-	// Setup timer 0 to be used for heartbeat LED blinking
-	//TMOD = (0 << GATE_pos) | // Timer 0 gate control
-	//       (0 << CT_pos)   | // Timer/counter mode
-	//       (1 << M1_pos)   | // Mode bit 1 
-	//       (0 << M0_pos);    // Mode bit 0
-	// TODO
-	TMOD = 0x51;
-	// TODO use defined bit positions here and resolve conflict with configuration for T1 in frequency measure mode
-
-	TCON =	(0 << TF1_pos) | // Timer 1 overflow flag off
-					(0 << TR1_pos) | // Timer 1 should be running
-					(0 << TF0_pos) | // Timer 0 overflow flag
-					(1 << TR0_pos) | // Timer 0 run control
-					(0 << IE1_pos) | // External interrupt 1 flag
-					(0 << IT1_pos) | // External interrupt 1 type
-					(0 << IE0_pos) | // External interrupt 0 flag
-					(0 << IT0_pos);   // External interrupt 0 type
-}
-
 void write_status_leds(void) {
-	//P0 bits 0 to 2 represent the mode in binary, so we can just write the value of the mode to those bits to display it on the LEDs
-	//P0 bits 4,5,6, and 7 represent what measurement is being displayed (Hz, KHz, V or mV) depending on SCALE_UNITS_SWITCHES and the mode of the device.
-	P0 = (P0 & 0xF0) | (current_mode & 0x07); // Set bits 0 to 2 to the current mode, without affecting bits 4 to 7
-	// TODO shouldn't it be 0x03?
+	//P0 bits 0,1 represent the mode in binary, so we can just write the value of the mode to those bits to display it on the LEDs
+	//P0 bits 4,5,6, and 7 represent what measurement is being displayed (Hz, KHz, V or mV) depending on SCALE_UNITS_SWITCH and the mode of the device.
+	uint8 lights = 0;
+	lights = current_mode & 0x03; // Set bits 0,1 to the current mode, without affecting bits 4 to 7
 
-	// TODO active low?
-	if ((current_mode == FREQUENCY_MODE) && ((SCALE_UNITS_SWITCHES) == 0x00)) {
-		P0 = P0 | (1 << 4); // To display Hz
-	} else if ((current_mode == FREQUENCY_MODE) && ((SCALE_UNITS_SWITCHES) == 0x01)) {
-		P0 = P0 | (1 << 5); // To display KHz
-	} else if ((current_mode == DC_MODE || current_mode == AMPLITUDE_MODE) && ((SCALE_UNITS_SWITCHES) == 0x00)) {
-		P0 = P0 | (1 << 6); // To display mV
-	} else if ((current_mode == DC_MODE || current_mode == AMPLITUDE_MODE) && ((SCALE_UNITS_SWITCHES) == 0x01)) {
-		P0 = P0 | (1 << 7); // To display V
+	if ((current_mode == FREQUENCY_MODE) && ((SCALE_UNITS_SWITCH) == 0x00)) {
+		lights = lights | (1 << 4); // To display Hz
+	} else if ((current_mode == FREQUENCY_MODE) && ((SCALE_UNITS_SWITCH) == 0x01)) {
+		lights = lights | (1 << 5); // To display KHz
+	} else if ((current_mode == DC_MODE || current_mode == AMPLITUDE_MODE) && ((SCALE_UNITS_SWITCH) == 0x00)) {
+		lights = lights | (1 << 6); // To display mV
+	} else if ((current_mode == DC_MODE || current_mode == AMPLITUDE_MODE) && ((SCALE_UNITS_SWITCH) == 0x01)) {
+		lights = lights | (1 << 7); // To display V
 	} else {
-		P0 = P0 & 0x0F; // Clear bits 4 to 7 if we are in a mode where they aren't used
+		lights = lights & 0x0F; // Clear bits 4 to 7 if we are in a mode where they aren't used
 	}
+
+	P0 = ~lights; // invert because the LED output is active low
 }
 
 void setup_display_test(void) {
 	spiWrite(MAX7219_DISPLAY_TEST_ADDR,	1);
-	// write to the display to turn on the display test mode, which should light up all the LEDs. This is used for testing that the display is working and also to show users that the device is on and working when they switch it on.
+	// write to the display to turn on the display test mode, which should light up all the LEDs on the peripheral display. This is used for testing that the display is working and also to show users that the device is on and working when they switch it on.
 }
 
 void main(void) {
 	uint8 prev_switches;
 	uint8 current_switches;
 
-	initialDisplaySetup(); // set up the SPI display, including a display test long enough for humans to see all LEDs light up
+ 	initialDisplaySetup(); // set up the SPI display, including a display test long enough for humans to see all LEDs light up
 	timer2setup();
 	setup_heartbeat(); // Start the heartbeat LED blinking to show that the system is alive and running
 	setup_interrupts_and_timers();
@@ -245,9 +157,9 @@ void main(void) {
 		current_switches = SWITCHES ;
 		current_mode = MODE_SWITCHES;
 		if (prev_switches != current_switches) {
+			write_status_leds();
 			setup_interrupts_and_timers(); // Set interrupts and timers back to their default configurations
 			reset_iir(); // Reset the IIR filter for the display when we switch modes (this will set a flag that causes it to overwrite the IIR value on the next update, then return to normal IIR operation)
-			write_status_leds();
 
 			// TODO use a switch case statement here
 			if (current_mode == DC_MODE) {
@@ -264,3 +176,4 @@ void main(void) {
 		updateDisplay();
 	}
 }  // end main
+// TODO make sure that IIR isn't reset if we toggle a non-mode swt

@@ -1,7 +1,7 @@
 #define SWITCHES  	P2		// switches are connected to Port 2
 #define SPI_LOAD 		WR
 
-// TODO comments on all of these
+// TODO comments on all of these bit definitions explaining what they are for and how they work
 #define TF2_pos 			(7)
 #define EXF2_pos 			(6)
 #define RCLK_pos 			(5)
@@ -85,7 +85,7 @@
 #define HEX_NOT_DEC_SWITCH		((SWITCHES & 0x80) >> 7) // bit 7 of SWITCHES controls whether we display in hex or decimal
 #define IIR_SPEED_SWITCHES		((SWITCHES & 0x40) >> 6) // bit 6 of SWITCHES control the speed of the IIR filter
 #define HEARTBEAT_SWITCH			((SWITCHES & 0x20) >> 5) // bit 5 of SWITCHES controls whether the heartbeat LED is on or off
-#define SCALE_UNITS_SWITCHES	((SWITCHES & 0x10) >> 4) // bit 4 of SWITCHES control the units we display in (e.g. Hz vs kHz or mV vs V)
+#define SCALE_UNITS_SWITCH  	((SWITCHES & 0x10) >> 4) // bit 4 of SWITCHES control the units we display in (e.g. Hz vs kHz or mV vs V)
 
 #define MODE_SWITCHES					(SWITCHES & 0x03) // bits 0 and 1 of SWITCHES control the mode of operation
 
@@ -94,7 +94,15 @@ void updateDisplay();
 void reset_iir();
 void initialDisplaySetup();
 
-int16 get_dc_mode_measurement(void);
-void setup_dc_measure(void);
-
 void feed_iir(uint32 value_in);
+
+#define IIR_HIDDEN_PRECISION_BITS	(12) // Number of bits of hidden precision in the IIR filter. This allows us to have a faster forgetting factor without losing precision in the display value, which makes the display value converge faster to the new value when we switch modes, which is less confusing for users.
+// the IIR filter value is 32 bits
+// the upper 4 are not used
+// the next 16 are the integer part
+// the lower 12 are 'hidden precision' (though actually we will be using it in some cases)
+
+void setup_heartbeat(void);
+void setup_frequency_measure(void);
+void setup_dc_measure(void);
+void setup_amplitude_measure(void);
