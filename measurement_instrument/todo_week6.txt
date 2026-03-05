@@ -8,7 +8,6 @@ P2:
 - Amplitude measurement underestimate correction
 - Calibration for 1.25 != 1.23 ?
 - stop using time 2 for amplitude and instead rely on detecting rising edges (if we have that available to us?)
-- option to change units in use
 - double check for errors with atomic operation
 	- Most ISR's are
 - record max/min DC voltage
