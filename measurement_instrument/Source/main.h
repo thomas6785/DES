@@ -106,3 +106,6 @@ void setup_heartbeat(void);
 void setup_frequency_measure(void);
 void setup_dc_measure(void);
 void setup_amplitude_measure(void);
+
+uint32 get_amplitude_measurement(void)
+void amplitude_handle_sample(uint32 sample_value);

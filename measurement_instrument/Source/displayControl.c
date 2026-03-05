@@ -89,13 +89,13 @@ void displayValue(uint32 value) {
 }
 
 void initialDisplaySetup() { // TODO functions like this are only called once so should be inlined, but the uVision compiler doesn't have support for inlining. The suggested alternative is to use a macro or just take the hit on the overhead
-	SPICON =	(0 << ISPI_pos)	|
-	 					(0 << WCOL_pos)	|
-	 					(1 << SPE_pos)	|
-	 					(1 << SPIM_pos)	|
-	 					(0 << CPOL_pos)	|
-	 					(0 << CPHA_pos)	|
-	 					(3 << SPR_pos); // TODO check if we can make the SPI clock faster, we probably can
+	SPICON =	(0 << ISPI_pos)	| // clear the interrupt flag
+	 					(0 << WCOL_pos)	| // clear write collision error bit
+	 					(1 << SPE_pos)	| // enable SPI
+	 					(1 << SPIM_pos)	| // we are a master not a slave
+	 					(0 << CPOL_pos)	| // set clock polariy
+	 					(0 << CPHA_pos)	| // set clock phase
+	 					(0 << SPR_pos); // use fastest clock speed for SPI: f_osc/2
 
 	// Run a display test
 	spiWrite(MAX7219_DISPLAY_TEST_ADDR,	1);		// Display test register will enable all LEDs

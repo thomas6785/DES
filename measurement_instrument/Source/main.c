@@ -82,12 +82,7 @@ void timer2_isr(void) interrupt 5 { // interrupt vector at 002BH
 
 		if (current_mode == AMPLITUDE_MODE) {
 			timer2_interrupt_count = 0;
-			new_measurement_value = y_max - y_min; // Get the amplitude value for the sampling window
-
-			// Reset the max and min for the next sampling window
-			y_max = 0x00;
-			y_min = 0xFFFF;
-			feed_iir(new_measurement_value); // update IIR filter with the new measured value
+			feed_iir(get_amplitude_measurement()); // update IIR filter with the new measured value
 		}
 	}
 
@@ -100,14 +95,7 @@ void adc_isr(void) interrupt 6 {
 		// IIR Filter
 		feed_iir(sample_value);
 	} else if (current_mode == AMPLITUDE_MODE) {
-		// Record the highest and lowest value
-		if (sample_value > y_max){
-			y_max = sample_value;
-		}
-
-		if (sample_value < y_min){
-			y_min = sample_value;
-		}
+		amplitude_handle_sample(sample_value);
 	}
 }
 
