@@ -2,8 +2,8 @@ Board R
 Small display thing
 Connect display to the SPI ports for power
 
-Ensure Schmitt trigger is being used for port 3.4
-Can't use timer 0 for edge counting
+Ensure Schmitt trigger is being used for port 3.5
+Can't use timer 1 for edge counting
 
 
 
@@ -11,7 +11,7 @@ Can't use timer 0 for edge counting
 NOTE:
 - Use channel 1 for DC measurement (connect to the pot)
 - Use channel 0 for amplitude measurement (connect to the level shifter)
-- Use P3.4 for Schmitt trigger (timer 1)
+- Use P3.5 for Schmitt trigger (timer 1)
 
 
 - Check how much you can shorten the delays in the spiWrite functions
