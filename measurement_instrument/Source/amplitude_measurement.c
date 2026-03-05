@@ -32,7 +32,6 @@ static uint8 prev_was_highest;
 static uint8 prev_was_lowest;
 
 void amplitude_handle_sample(uint32 sample_value) {
-	static uint16 sample_value = ADCDATA & 0x0FFF;
 
 	// Update the peak detection algorithm
 	if (sample_value > y_max) {
