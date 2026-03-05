@@ -115,7 +115,12 @@ void write_status_leds(void) {
 	//P0 bits 0,1 represent the mode in binary, so we can just write the value of the mode to those bits to display it on the LEDs
 	//P0 bits 4,5,6, and 7 represent what measurement is being displayed (Hz, KHz, V or mV) depending on SCALE_UNITS_SWITCH and the mode of the device.
 	uint8 lights = 0;
-	lights = current_mode & 0x03; // Set bits 0,1 to the current mode, without affecting bits 4 to 7
+	switch (current_mode) {
+		case DC_MODE: lights						= lights | 0x01; break;
+		case FREQUENCY_MODE: lights			= lights | 0x02; break;
+		case AMPLITUDE_MODE: lights			= lights | 0x04; break;
+		case DISPLAY_TEST_MODE: lights	= lights | 0x08; break;
+	}
 
 	if ((current_mode == FREQUENCY_MODE) && ((SCALE_UNITS_SWITCH) == 0x00)) {
 		lights = lights | (1 << 4); // To display Hz
@@ -138,8 +143,11 @@ void setup_display_test(void) {
 }
 
 void main(void) {
-	uint8 prev_switches;
+	uint8 perv_switches;
 	uint8 current_switches;
+	uint8 display_update_divider;
+	
+	display_update_divider = 0;
 
  	initialDisplaySetup(); // set up the SPI display, including a display test long enough for humans to see all LEDs light up
 	timer2setup();
@@ -149,18 +157,19 @@ void main(void) {
 	// Configure switches for user input and begin reading their values
 	SWITCHES = 0xFF;  // Make switch pins inputs
 	T1 = 1; // put timer 1 counter input in input mode  TODO why is this in main??
-	prev_switches = 0x8;
+	perv_switches = 0x8;
 
 	while(1) {
 		// Read switches and enter appropriate mode
 		// TODO I think this could all be a bit cleaner
 		current_switches = SWITCHES ;
 		current_mode = MODE_SWITCHES;
-		if (prev_switches != current_switches) {
+		if (perv_switches != current_switches) {
 			write_status_leds();
 			setup_interrupts_and_timers(); // Set interrupts and timers back to their default configurations
 			reset_iir(); // Reset the IIR filter for the display when we switch modes (this will set a flag that causes it to overwrite the IIR value on the next update, then return to normal IIR operation)
-
+			// TODO IIR shouldn't reset on unit switch or other switches that are not mode switches
+			
 			// TODO use a switch case statement here
 			if (current_mode == DC_MODE) {
 				setup_dc_measure();
@@ -172,8 +181,14 @@ void main(void) {
 				setup_display_test();
 			}
 		}
-		prev_switches = current_switches;
-		updateDisplay();
+		perv_switches = current_switches;
+		
+		// Update the display every x loops (throttled to avoid flickering)
+		display_update_divider++;
+		if (display_update_divider == 30) {
+			display_update_divider = 0;
+			updateDisplay();
+		}
 	}
 }  // end main
 // TODO make sure that IIR isn't reset if we toggle a non-mode swt

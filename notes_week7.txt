@@ -10,7 +10,7 @@ Can't use timer 0 for edge counting
 
 NOTE:
 - Use channel 1 for DC measurement (connect to the pot)
-- Use channel 2 for amplitude measurement (connect to the level shifter)
+- Use channel 0 for amplitude measurement (connect to the level shifter)
 - Use P3.4 for Schmitt trigger (timer 1)
 
 

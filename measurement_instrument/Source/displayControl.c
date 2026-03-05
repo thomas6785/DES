@@ -72,7 +72,8 @@ void displayValue(uint32 value) {
 	}
 
 	if (SCALE_UNITS_SWITCH) { // if we are scaling units Hz->kHz mV-V, then
-		bcd = bcd + 0xB00; // Add B to the most significant nybble being cut off to give the effect of rounding to the nearest value
+		//bcd = bcd + 0xB00; // Add B to the most significant nybble being cut off to give the effect of rounding to the nearest value
+		// TODO rounding to nearest digit
 		bcd = bcd >> 12; // Cut off the last 12 bits to remove the last 3 decimal digits
 	}
 

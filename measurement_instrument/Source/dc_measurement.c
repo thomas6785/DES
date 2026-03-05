@@ -18,7 +18,7 @@ void setup_dc_measure(void) {
 	          (0 << DMA_pos)    | // 0: not using DMA
 	          (0 << CCONV_pos)  | // 0: disable continuous conversion - we will just keep taking samples and updating the IIR
 	          (0 << SCONV_pos)  | // 0: no 'single conversion' needed either, we are using timer 2 instead to trigger conversions at regular intervals
-	          (1 << CS_pos);      // select channel 1 (AIN0)
+	          (1 << CS_pos);      // select channel 1 (AIN1)
 
   EADC = 1;  // Enable ADC interrupt for DC measure mode
   ET2 = 0; // ignore timer 2 interrupts for DC mode

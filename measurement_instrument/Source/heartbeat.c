@@ -9,10 +9,9 @@ void timer0_isr(void) interrupt 1 {
 	heartbeat_counter++;
 
 	if (heartbeat_counter == 50) {
-		HEARTBEAT_LED = ~HEARTBEAT_LED & HEARTBEAT_SWITCH; // Toggle LED (unless bit 5 of SWITCHES is low)
+		HEARTBEAT_LED = ~HEARTBEAT_LED | HEARTBEAT_SWITCH; // Toggle LED (unless bit 5 of SWITCHES is low)
 		heartbeat_counter = 0;
-	}
-	TF0 = 0; // clear interrupt flag
+	}	TF0 = 0; // clear interrupt flag
 }
 
 void setup_heartbeat(void){
