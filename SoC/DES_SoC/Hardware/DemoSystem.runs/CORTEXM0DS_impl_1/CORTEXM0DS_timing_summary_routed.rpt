@@ -1,0 +1,1418 @@
+Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2015.2 (win64) Build 1266856 Fri Jun 26 16:35:25 MDT 2015
+| Date         : Thu Mar 26 14:57:11 2026
+| Host         : Eleclab59 running 64-bit major release  (build 9200)
+| Command      : report_timing_summary -warn_on_violation -max_paths 10 -file CORTEXM0DS_timing_summary_routed.rpt -rpx CORTEXM0DS_timing_summary_routed.rpx
+| Design       : CORTEXM0DS
+| Device       : 7a100t-csg324
+| Speed File   : -1  PRODUCTION 1.14 2014-09-11
+-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Timing Summary Report
+
+------------------------------------------------------------------------------------------------
+| Timer Settings
+| --------------
+------------------------------------------------------------------------------------------------
+
+  Enable Multi Corner Analysis               :  Yes
+  Enable Pessimism Removal                   :  Yes
+  Pessimism Removal Resolution               :  Nearest Common Node
+  Enable Input Delay Default Clock           :  No
+  Enable Preset / Clear Arcs                 :  No
+  Disable Flight Delays                      :  No
+
+  Corner  Analyze    Analyze    
+  Name    Max Paths  Min Paths  
+  ------  ---------  ---------  
+  Slow    Yes        Yes        
+  Fast    Yes        Yes        
+
+
+
+check_timing report
+
+Table of Contents
+-----------------
+1. checking no_clock
+2. checking constant_clock
+3. checking pulse_width_clock
+4. checking unconstrained_internal_endpoints
+5. checking no_input_delay
+6. checking no_output_delay
+7. checking multiple_clock
+8. checking generated_clocks
+9. checking loops
+10. checking partial_input_delay
+11. checking partial_output_delay
+12. checking latch_loops
+
+1. checking no_clock
+--------------------
+ There are 0 register/latch pins with no clock.
+
+
+2. checking constant_clock
+--------------------------
+ There are 0 register/latch pins with constant_clock.
+
+
+3. checking pulse_width_clock
+-----------------------------
+ There are 0 register/latch pins which need pulse_width check
+
+
+4. checking unconstrained_internal_endpoints
+--------------------------------------------
+ There are 0 pins that are not constrained for maximum delay.
+
+ There are 0 pins that are not constrained for maximum delay due to constant clock.
+
+
+5. checking no_input_delay
+--------------------------
+ There are 53 input ports with no input delay specified. (HIGH)
+
+ There are 0 input ports with no input delay but user has a false path constraint.
+
+
+6. checking no_output_delay
+---------------------------
+ There are 75 ports with no output delay specified. (HIGH)
+
+ There are 0 ports with no output delay but user has a false path constraint
+
+ There are 0 ports with no output delay but with a timing clock defined on it or propagating through it
+
+
+7. checking multiple_clock
+--------------------------
+ There are 0 register/latch pins with multiple clocks.
+
+
+8. checking generated_clocks
+----------------------------
+ There are 0 generated clocks that are not connected to a clock source.
+
+
+9. checking loops
+-----------------
+ There are 0 combinational loops in the design.
+
+
+10. checking partial_input_delay
+--------------------------------
+ There are 0 input ports with partial input delay specified.
+
+
+11. checking partial_output_delay
+---------------------------------
+ There are 0 ports with partial output delay specified.
+
+
+12. checking latch_loops
+------------------------
+ There are 0 combinational latch loops in the design through latch input
+
+
+
+------------------------------------------------------------------------------------------------
+| Design Timing Summary
+| ---------------------
+------------------------------------------------------------------------------------------------
+
+    WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+    -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+      3.898        0.000                      0                 1423        0.143        0.000                      0                 1423        9.500        0.000                       0                   843  
+
+
+All user specified timing constraints are met.
+
+
+------------------------------------------------------------------------------------------------
+| Clock Summary
+| -------------
+------------------------------------------------------------------------------------------------
+
+Clock  Waveform(ns)       Period(ns)      Frequency(MHz)
+-----  ------------       ----------      --------------
+HCLK   {0.000 10.000}     20.000          50.000          
+
+
+------------------------------------------------------------------------------------------------
+| Intra Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+Clock             WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints     WPWS(ns)     TPWS(ns)  TPWS Failing Endpoints  TPWS Total Endpoints  
+-----             -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------     --------     --------  ----------------------  --------------------  
+HCLK                3.898        0.000                      0                 1423        0.143        0.000                      0                 1423        9.500        0.000                       0                   843  
+
+
+------------------------------------------------------------------------------------------------
+| Inter Clock Table
+| -----------------
+------------------------------------------------------------------------------------------------
+
+From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints  
+----------    --------          -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------  
+
+
+------------------------------------------------------------------------------------------------
+| Other Path Groups Table
+| -----------------------
+------------------------------------------------------------------------------------------------
+
+Path Group    From Clock    To Clock          WNS(ns)      TNS(ns)  TNS Failing Endpoints  TNS Total Endpoints      WHS(ns)      THS(ns)  THS Failing Endpoints  THS Total Endpoints  
+----------    ----------    --------          -------      -------  ---------------------  -------------------      -------      -------  ---------------------  -------------------  
+
+
+------------------------------------------------------------------------------------------------
+| Timing Details
+| --------------
+------------------------------------------------------------------------------------------------
+
+
+---------------------------------------------------------------------------------------------------
+From Clock:  HCLK
+  To Clock:  HCLK
+
+Setup :            0  Failing Endpoints,  Worst Slack        3.898ns,  Total Violation        0.000ns
+Hold  :            0  Failing Endpoints,  Worst Slack        0.143ns,  Total Violation        0.000ns
+PW    :            0  Failing Endpoints,  Worst Slack        9.500ns,  Total Violation        0.000ns
+---------------------------------------------------------------------------------------------------
+
+
+Max Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             3.898ns  (required time - arrival time)
+  Source:                 u_logic/Wzy2z4_reg/C
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/Pdi2z4_reg/D
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (HCLK rise@20.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        16.049ns  (logic 4.485ns (27.946%)  route 11.564ns (72.054%))
+  Logic Levels:           16  (CARRY4=4 LUT2=2 LUT3=1 LUT4=1 LUT6=8)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 20.924 - 20.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.973     0.973    u_logic/HCLK
+    SLICE_X17Y49         FDPE                                         r  u_logic/Wzy2z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X17Y49         FDPE (Prop_fdpe_C_Q)         0.456     1.429 f  u_logic/Wzy2z4_reg/Q
+                         net (fo=116, routed)         1.389     2.818    u_logic/Wzy2z4
+    SLICE_X30Y54         LUT2 (Prop_lut2_I0_O)        0.148     2.966 f  u_logic/HADDR[28]_INST_0_i_39/O
+                         net (fo=2, routed)           1.181     4.146    u_logic/HADDR[28]_INST_0_i_39_n_0
+    SLICE_X30Y49         LUT6 (Prop_lut6_I1_O)        0.328     4.474 f  u_logic/HADDR[28]_INST_0_i_26/O
+                         net (fo=2, routed)           0.668     5.142    u_logic/HADDR[28]_INST_0_i_26_n_0
+    SLICE_X32Y52         LUT6 (Prop_lut6_I5_O)        0.124     5.266 f  u_logic/HADDR[28]_INST_0_i_11/O
+                         net (fo=30, routed)          1.233     6.499    u_logic/HADDR[28]_INST_0_i_11_n_0
+    SLICE_X43Y63         LUT2 (Prop_lut2_I1_O)        0.124     6.623 r  u_logic/HADDR[28]_INST_0_i_13/O
+                         net (fo=32, routed)          0.952     7.576    u_logic/HADDR[28]_INST_0_i_13_n_0
+    SLICE_X35Y52         LUT6 (Prop_lut6_I1_O)        0.124     7.700 r  u_logic/G6d3z4_i_3/O
+                         net (fo=5, routed)           0.445     8.144    u_logic/G6d3z4_i_3_n_0
+    SLICE_X36Y51         LUT6 (Prop_lut6_I0_O)        0.124     8.268 r  u_logic/HADDR[6]_INST_0_i_24/O
+                         net (fo=2, routed)           0.653     8.922    u_logic/p_1_in[3]
+    SLICE_X36Y55         LUT4 (Prop_lut4_I2_O)        0.124     9.046 r  u_logic/HADDR[6]_INST_0_i_27/O
+                         net (fo=1, routed)           0.000     9.046    u_logic/HADDR[6]_INST_0_i_27_n_0
+    SLICE_X36Y55         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.401     9.447 r  u_logic/HADDR[6]_INST_0_i_17/CO[3]
+                         net (fo=1, routed)           0.000     9.447    u_logic/HADDR[6]_INST_0_i_17_n_0
+    SLICE_X36Y56         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334     9.781 r  u_logic/HADDR[6]_INST_0_i_21/O[1]
+                         net (fo=1, routed)           0.475    10.256    u_logic/p_1_in1_in[3]
+    SLICE_X37Y55         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.853    11.109 r  u_logic/HADDR[6]_INST_0_i_3/CO[3]
+                         net (fo=1, routed)           0.000    11.109    u_logic/HADDR[6]_INST_0_i_3_n_0
+    SLICE_X37Y56         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.313    11.422 f  u_logic/HADDR[10]_INST_0_i_3/O[3]
+                         net (fo=4, routed)           0.988    12.410    u_logic/p_0_in303_in
+    SLICE_X40Y58         LUT3 (Prop_lut3_I1_O)        0.334    12.744 f  u_logic/B613z4_i_2/O
+                         net (fo=2, routed)           0.816    13.559    u_logic/B613z4_i_2_n_0
+    SLICE_X40Y59         LUT6 (Prop_lut6_I3_O)        0.326    13.885 r  u_logic/Pdi2z4_i_20/O
+                         net (fo=1, routed)           0.803    14.688    u_logic/Pdi2z4_i_20_n_0
+    SLICE_X43Y59         LUT6 (Prop_lut6_I2_O)        0.124    14.812 r  u_logic/Pdi2z4_i_10/O
+                         net (fo=2, routed)           0.899    15.711    u_logic/Pdi2z4_i_10_n_0
+    SLICE_X38Y56         LUT6 (Prop_lut6_I2_O)        0.124    15.835 r  u_logic/Pdi2z4_i_3/O
+                         net (fo=2, routed)           1.063    16.898    u_logic/Pdi2z4_i_3_n_0
+    SLICE_X24Y43         LUT6 (Prop_lut6_I1_O)        0.124    17.022 r  u_logic/Pdi2z4_i_1/O
+                         net (fo=1, routed)           0.000    17.022    u_logic/Eyhvx4
+    SLICE_X24Y43         FDPE                                         r  u_logic/Pdi2z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)      20.000    20.000 r  
+                                                      0.000    20.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.924    20.924    u_logic/HCLK
+    SLICE_X24Y43         FDPE                                         r  u_logic/Pdi2z4_reg/C
+                         clock pessimism              0.000    20.924    
+                         clock uncertainty           -0.035    20.889    
+    SLICE_X24Y43         FDPE (Setup_fdpe_C_D)        0.031    20.920    u_logic/Pdi2z4_reg
+  -------------------------------------------------------------------
+                         required time                         20.920    
+                         arrival time                         -17.022    
+  -------------------------------------------------------------------
+                         slack                                  3.898    
+
+Slack (MET) :             4.085ns  (required time - arrival time)
+  Source:                 u_logic/Wzy2z4_reg/C
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/Tki2z4_reg/D
+                            (rising edge-triggered cell FDCE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (HCLK rise@20.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        15.860ns  (logic 4.485ns (28.279%)  route 11.375ns (71.721%))
+  Logic Levels:           16  (CARRY4=4 LUT2=2 LUT3=1 LUT4=1 LUT6=8)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 20.924 - 20.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.973     0.973    u_logic/HCLK
+    SLICE_X17Y49         FDPE                                         r  u_logic/Wzy2z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X17Y49         FDPE (Prop_fdpe_C_Q)         0.456     1.429 f  u_logic/Wzy2z4_reg/Q
+                         net (fo=116, routed)         1.389     2.818    u_logic/Wzy2z4
+    SLICE_X30Y54         LUT2 (Prop_lut2_I0_O)        0.148     2.966 f  u_logic/HADDR[28]_INST_0_i_39/O
+                         net (fo=2, routed)           1.181     4.146    u_logic/HADDR[28]_INST_0_i_39_n_0
+    SLICE_X30Y49         LUT6 (Prop_lut6_I1_O)        0.328     4.474 f  u_logic/HADDR[28]_INST_0_i_26/O
+                         net (fo=2, routed)           0.668     5.142    u_logic/HADDR[28]_INST_0_i_26_n_0
+    SLICE_X32Y52         LUT6 (Prop_lut6_I5_O)        0.124     5.266 f  u_logic/HADDR[28]_INST_0_i_11/O
+                         net (fo=30, routed)          1.233     6.499    u_logic/HADDR[28]_INST_0_i_11_n_0
+    SLICE_X43Y63         LUT2 (Prop_lut2_I1_O)        0.124     6.623 r  u_logic/HADDR[28]_INST_0_i_13/O
+                         net (fo=32, routed)          0.952     7.576    u_logic/HADDR[28]_INST_0_i_13_n_0
+    SLICE_X35Y52         LUT6 (Prop_lut6_I1_O)        0.124     7.700 r  u_logic/G6d3z4_i_3/O
+                         net (fo=5, routed)           0.445     8.144    u_logic/G6d3z4_i_3_n_0
+    SLICE_X36Y51         LUT6 (Prop_lut6_I0_O)        0.124     8.268 r  u_logic/HADDR[6]_INST_0_i_24/O
+                         net (fo=2, routed)           0.653     8.922    u_logic/p_1_in[3]
+    SLICE_X36Y55         LUT4 (Prop_lut4_I2_O)        0.124     9.046 r  u_logic/HADDR[6]_INST_0_i_27/O
+                         net (fo=1, routed)           0.000     9.046    u_logic/HADDR[6]_INST_0_i_27_n_0
+    SLICE_X36Y55         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.401     9.447 r  u_logic/HADDR[6]_INST_0_i_17/CO[3]
+                         net (fo=1, routed)           0.000     9.447    u_logic/HADDR[6]_INST_0_i_17_n_0
+    SLICE_X36Y56         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334     9.781 r  u_logic/HADDR[6]_INST_0_i_21/O[1]
+                         net (fo=1, routed)           0.475    10.256    u_logic/p_1_in1_in[3]
+    SLICE_X37Y55         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.853    11.109 r  u_logic/HADDR[6]_INST_0_i_3/CO[3]
+                         net (fo=1, routed)           0.000    11.109    u_logic/HADDR[6]_INST_0_i_3_n_0
+    SLICE_X37Y56         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.313    11.422 f  u_logic/HADDR[10]_INST_0_i_3/O[3]
+                         net (fo=4, routed)           0.988    12.410    u_logic/p_0_in303_in
+    SLICE_X40Y58         LUT3 (Prop_lut3_I1_O)        0.334    12.744 f  u_logic/B613z4_i_2/O
+                         net (fo=2, routed)           0.816    13.559    u_logic/B613z4_i_2_n_0
+    SLICE_X40Y59         LUT6 (Prop_lut6_I3_O)        0.326    13.885 r  u_logic/Pdi2z4_i_20/O
+                         net (fo=1, routed)           0.803    14.688    u_logic/Pdi2z4_i_20_n_0
+    SLICE_X43Y59         LUT6 (Prop_lut6_I2_O)        0.124    14.812 r  u_logic/Pdi2z4_i_10/O
+                         net (fo=2, routed)           0.899    15.711    u_logic/Pdi2z4_i_10_n_0
+    SLICE_X38Y56         LUT6 (Prop_lut6_I2_O)        0.124    15.835 r  u_logic/Pdi2z4_i_3/O
+                         net (fo=2, routed)           0.873    16.709    u_logic/Pdi2z4_i_3_n_0
+    SLICE_X25Y48         LUT6 (Prop_lut6_I5_O)        0.124    16.833 r  u_logic/Tki2z4_i_1/O
+                         net (fo=1, routed)           0.000    16.833    u_logic/Xxhvx4
+    SLICE_X25Y48         FDCE                                         r  u_logic/Tki2z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)      20.000    20.000 r  
+                                                      0.000    20.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.924    20.924    u_logic/HCLK
+    SLICE_X25Y48         FDCE                                         r  u_logic/Tki2z4_reg/C
+                         clock pessimism              0.000    20.924    
+                         clock uncertainty           -0.035    20.889    
+    SLICE_X25Y48         FDCE (Setup_fdce_C_D)        0.029    20.918    u_logic/Tki2z4_reg
+  -------------------------------------------------------------------
+                         required time                         20.918    
+                         arrival time                         -16.833    
+  -------------------------------------------------------------------
+                         slack                                  4.085    
+
+Slack (MET) :             4.118ns  (required time - arrival time)
+  Source:                 u_logic/Nnc3z4_reg/C
+                            (rising edge-triggered cell FDCE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/Ql23z4_reg/D
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (HCLK rise@20.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        15.717ns  (logic 3.124ns (19.877%)  route 12.593ns (80.123%))
+  Logic Levels:           14  (LUT2=2 LUT3=3 LUT4=1 LUT5=2 LUT6=6)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 20.924 - 20.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.973     0.973    u_logic/HCLK
+    SLICE_X49Y45         FDCE                                         r  u_logic/Nnc3z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X49Y45         FDCE (Prop_fdce_C_Q)         0.456     1.429 r  u_logic/Nnc3z4_reg/Q
+                         net (fo=7, routed)           1.147     2.576    u_logic/Nnc3z4
+    SLICE_X48Y42         LUT2 (Prop_lut2_I0_O)        0.153     2.729 r  u_logic/I3y2z4_i_93/O
+                         net (fo=1, routed)           0.420     3.148    u_logic/I3y2z4_i_93_n_0
+    SLICE_X46Y41         LUT6 (Prop_lut6_I0_O)        0.327     3.475 r  u_logic/I3y2z4_i_51/O
+                         net (fo=28, routed)          1.011     4.486    u_logic/I3y2z4_i_51_n_0
+    SLICE_X45Y39         LUT3 (Prop_lut3_I2_O)        0.150     4.636 r  u_logic/Kyi2z4_i_22/O
+                         net (fo=17, routed)          0.759     5.395    u_logic/Kyi2z4_i_22_n_0
+    SLICE_X50Y36         LUT4 (Prop_lut4_I0_O)        0.332     5.727 f  u_logic/Ek03z4_i_136/O
+                         net (fo=30, routed)          1.555     7.282    u_logic/Ek03z4_i_136_n_0
+    SLICE_X40Y36         LUT2 (Prop_lut2_I1_O)        0.152     7.434 r  u_logic/Ek03z4_i_96/O
+                         net (fo=15, routed)          0.844     8.278    u_logic/Ek03z4_i_96_n_0
+    SLICE_X47Y36         LUT3 (Prop_lut3_I1_O)        0.332     8.610 r  u_logic/Kyi2z4_i_53/O
+                         net (fo=10, routed)          0.672     9.282    u_logic/Kyi2z4_i_53_n_0
+    SLICE_X47Y37         LUT6 (Prop_lut6_I4_O)        0.124     9.406 r  u_logic/I3y2z4_i_98/O
+                         net (fo=5, routed)           0.550     9.956    u_logic/I3y2z4_i_98_n_0
+    SLICE_X46Y37         LUT5 (Prop_lut5_I4_O)        0.124    10.080 r  u_logic/I3y2z4_i_92/O
+                         net (fo=2, routed)           1.000    11.080    u_logic/I3y2z4_i_92_n_0
+    SLICE_X42Y35         LUT3 (Prop_lut3_I0_O)        0.150    11.230 r  u_logic/I3y2z4_i_55/O
+                         net (fo=1, routed)           0.307    11.536    u_logic/I3y2z4_i_55_n_0
+    SLICE_X42Y36         LUT6 (Prop_lut6_I5_O)        0.328    11.864 r  u_logic/I3y2z4_i_26/O
+                         net (fo=2, routed)           0.972    12.836    u_logic/I3y2z4_i_26_n_0
+    SLICE_X43Y38         LUT6 (Prop_lut6_I2_O)        0.124    12.960 r  u_logic/Kyi2z4_i_6/O
+                         net (fo=1, routed)           0.590    13.550    u_logic/Kyi2z4_i_6_n_0
+    SLICE_X42Y39         LUT6 (Prop_lut6_I1_O)        0.124    13.674 r  u_logic/Kyi2z4_i_3/O
+                         net (fo=2, routed)           0.457    14.131    u_logic/Kyi2z4_i_3_n_0
+    SLICE_X42Y42         LUT6 (Prop_lut6_I2_O)        0.124    14.255 f  u_logic/Trq2z4_i_4/O
+                         net (fo=9, routed)           1.345    15.600    u_logic/Trq2z4_i_4_n_0
+    SLICE_X40Y62         LUT5 (Prop_lut5_I0_O)        0.124    15.724 r  u_logic/Nf03z4_i_1/O
+                         net (fo=16, routed)          0.966    16.690    u_logic/C3qvx4
+    SLICE_X33Y68         FDPE                                         r  u_logic/Ql23z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)      20.000    20.000 r  
+                                                      0.000    20.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.924    20.924    u_logic/HCLK
+    SLICE_X33Y68         FDPE                                         r  u_logic/Ql23z4_reg/C
+                         clock pessimism              0.000    20.924    
+                         clock uncertainty           -0.035    20.889    
+    SLICE_X33Y68         FDPE (Setup_fdpe_C_D)       -0.081    20.808    u_logic/Ql23z4_reg
+  -------------------------------------------------------------------
+                         required time                         20.808    
+                         arrival time                         -16.690    
+  -------------------------------------------------------------------
+                         slack                                  4.118    
+
+Slack (MET) :             4.154ns  (required time - arrival time)
+  Source:                 u_logic/Dks2z4_reg/C
+                            (rising edge-triggered cell FDCE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/J0n2z4_reg/D
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (HCLK rise@20.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        15.695ns  (logic 3.332ns (21.230%)  route 12.363ns (78.770%))
+  Logic Levels:           14  (LUT2=1 LUT3=2 LUT4=2 LUT5=3 LUT6=6)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 20.924 - 20.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.973     0.973    u_logic/HCLK
+    SLICE_X42Y41         FDCE                                         r  u_logic/Dks2z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X42Y41         FDCE (Prop_fdce_C_Q)         0.518     1.491 f  u_logic/Dks2z4_reg/Q
+                         net (fo=16, routed)          1.162     2.653    u_logic/Dks2z4
+    SLICE_X48Y41         LUT6 (Prop_lut6_I1_O)        0.124     2.777 r  u_logic/I3y2z4_i_45/O
+                         net (fo=2, routed)           0.484     3.261    u_logic/I3y2z4_i_45_n_0
+    SLICE_X48Y41         LUT3 (Prop_lut3_I0_O)        0.118     3.379 r  u_logic/I3y2z4_i_22/O
+                         net (fo=29, routed)          0.964     4.343    u_logic/I3y2z4_i_22_n_0
+    SLICE_X50Y38         LUT3 (Prop_lut3_I1_O)        0.318     4.661 r  u_logic/Ek03z4_i_164/O
+                         net (fo=5, routed)           0.766     5.427    u_logic/Ek03z4_i_164_n_0
+    SLICE_X51Y40         LUT5 (Prop_lut5_I1_O)        0.328     5.755 r  u_logic/Ek03z4_i_135/O
+                         net (fo=44, routed)          0.958     6.713    u_logic/Ek03z4_i_135_n_0
+    SLICE_X49Y37         LUT5 (Prop_lut5_I4_O)        0.150     6.863 r  u_logic/Ek03z4_i_121/O
+                         net (fo=4, routed)           0.714     7.577    u_logic/Ek03z4_i_121_n_0
+    SLICE_X50Y37         LUT6 (Prop_lut6_I0_O)        0.326     7.903 r  u_logic/Lbn2z4_i_6/O
+                         net (fo=31, routed)          0.736     8.640    u_logic/Lbn2z4_i_6_n_0
+    SLICE_X41Y35         LUT6 (Prop_lut6_I2_O)        0.124     8.764 r  u_logic/Ek03z4_i_97/O
+                         net (fo=18, routed)          1.019     9.783    u_logic/Ek03z4_i_97_n_0
+    SLICE_X45Y38         LUT5 (Prop_lut5_I3_O)        0.150     9.933 r  u_logic/Ek03z4_i_84/O
+                         net (fo=2, routed)           0.734    10.667    u_logic/Ek03z4_i_84_n_0
+    SLICE_X41Y38         LUT4 (Prop_lut4_I0_O)        0.326    10.993 r  u_logic/G9w2z4_i_9/O
+                         net (fo=2, routed)           0.598    11.591    u_logic/G9w2z4_i_9_n_0
+    SLICE_X42Y40         LUT6 (Prop_lut6_I4_O)        0.124    11.715 r  u_logic/Kyi2z4_i_10/O
+                         net (fo=5, routed)           0.840    12.555    u_logic/Kyi2z4_i_10_n_0
+    SLICE_X43Y41         LUT2 (Prop_lut2_I0_O)        0.152    12.707 r  u_logic/Kyi2z4_i_4/O
+                         net (fo=4, routed)           0.647    13.354    u_logic/Kyi2z4_i_4_n_0
+    SLICE_X41Y42         LUT6 (Prop_lut6_I1_O)        0.326    13.680 f  u_logic/Lq03z4_i_8/O
+                         net (fo=2, routed)           0.987    14.667    u_logic/Lq03z4_i_8_n_0
+    SLICE_X47Y55         LUT4 (Prop_lut4_I0_O)        0.124    14.791 f  u_logic/Lq03z4_i_3/O
+                         net (fo=8, routed)           0.755    15.545    u_logic/Lq03z4_i_3_n_0
+    SLICE_X47Y60         LUT6 (Prop_lut6_I3_O)        0.124    15.669 r  u_logic/Pw03z4_i_1/O
+                         net (fo=16, routed)          0.998    16.668    u_logic/J70wx4
+    SLICE_X40Y68         FDPE                                         r  u_logic/J0n2z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)      20.000    20.000 r  
+                                                      0.000    20.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.924    20.924    u_logic/HCLK
+    SLICE_X40Y68         FDPE                                         r  u_logic/J0n2z4_reg/C
+                         clock pessimism              0.000    20.924    
+                         clock uncertainty           -0.035    20.889    
+    SLICE_X40Y68         FDPE (Setup_fdpe_C_D)       -0.067    20.822    u_logic/J0n2z4_reg
+  -------------------------------------------------------------------
+                         required time                         20.822    
+                         arrival time                         -16.668    
+  -------------------------------------------------------------------
+                         slack                                  4.154    
+
+Slack (MET) :             4.155ns  (required time - arrival time)
+  Source:                 u_logic/Dks2z4_reg/C
+                            (rising edge-triggered cell FDCE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/Pw03z4_reg/D
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (HCLK rise@20.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        15.700ns  (logic 3.332ns (21.223%)  route 12.368ns (78.777%))
+  Logic Levels:           14  (LUT2=1 LUT3=2 LUT4=2 LUT5=3 LUT6=6)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 20.924 - 20.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.973     0.973    u_logic/HCLK
+    SLICE_X42Y41         FDCE                                         r  u_logic/Dks2z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X42Y41         FDCE (Prop_fdce_C_Q)         0.518     1.491 f  u_logic/Dks2z4_reg/Q
+                         net (fo=16, routed)          1.162     2.653    u_logic/Dks2z4
+    SLICE_X48Y41         LUT6 (Prop_lut6_I1_O)        0.124     2.777 r  u_logic/I3y2z4_i_45/O
+                         net (fo=2, routed)           0.484     3.261    u_logic/I3y2z4_i_45_n_0
+    SLICE_X48Y41         LUT3 (Prop_lut3_I0_O)        0.118     3.379 r  u_logic/I3y2z4_i_22/O
+                         net (fo=29, routed)          0.964     4.343    u_logic/I3y2z4_i_22_n_0
+    SLICE_X50Y38         LUT3 (Prop_lut3_I1_O)        0.318     4.661 r  u_logic/Ek03z4_i_164/O
+                         net (fo=5, routed)           0.766     5.427    u_logic/Ek03z4_i_164_n_0
+    SLICE_X51Y40         LUT5 (Prop_lut5_I1_O)        0.328     5.755 r  u_logic/Ek03z4_i_135/O
+                         net (fo=44, routed)          0.958     6.713    u_logic/Ek03z4_i_135_n_0
+    SLICE_X49Y37         LUT5 (Prop_lut5_I4_O)        0.150     6.863 r  u_logic/Ek03z4_i_121/O
+                         net (fo=4, routed)           0.714     7.577    u_logic/Ek03z4_i_121_n_0
+    SLICE_X50Y37         LUT6 (Prop_lut6_I0_O)        0.326     7.903 r  u_logic/Lbn2z4_i_6/O
+                         net (fo=31, routed)          0.736     8.640    u_logic/Lbn2z4_i_6_n_0
+    SLICE_X41Y35         LUT6 (Prop_lut6_I2_O)        0.124     8.764 r  u_logic/Ek03z4_i_97/O
+                         net (fo=18, routed)          1.019     9.783    u_logic/Ek03z4_i_97_n_0
+    SLICE_X45Y38         LUT5 (Prop_lut5_I3_O)        0.150     9.933 r  u_logic/Ek03z4_i_84/O
+                         net (fo=2, routed)           0.734    10.667    u_logic/Ek03z4_i_84_n_0
+    SLICE_X41Y38         LUT4 (Prop_lut4_I0_O)        0.326    10.993 r  u_logic/G9w2z4_i_9/O
+                         net (fo=2, routed)           0.598    11.591    u_logic/G9w2z4_i_9_n_0
+    SLICE_X42Y40         LUT6 (Prop_lut6_I4_O)        0.124    11.715 r  u_logic/Kyi2z4_i_10/O
+                         net (fo=5, routed)           0.840    12.555    u_logic/Kyi2z4_i_10_n_0
+    SLICE_X43Y41         LUT2 (Prop_lut2_I0_O)        0.152    12.707 r  u_logic/Kyi2z4_i_4/O
+                         net (fo=4, routed)           0.647    13.354    u_logic/Kyi2z4_i_4_n_0
+    SLICE_X41Y42         LUT6 (Prop_lut6_I1_O)        0.326    13.680 f  u_logic/Lq03z4_i_8/O
+                         net (fo=2, routed)           0.987    14.667    u_logic/Lq03z4_i_8_n_0
+    SLICE_X47Y55         LUT4 (Prop_lut4_I0_O)        0.124    14.791 f  u_logic/Lq03z4_i_3/O
+                         net (fo=8, routed)           0.755    15.545    u_logic/Lq03z4_i_3_n_0
+    SLICE_X47Y60         LUT6 (Prop_lut6_I3_O)        0.124    15.669 r  u_logic/Pw03z4_i_1/O
+                         net (fo=16, routed)          1.004    16.673    u_logic/J70wx4
+    SLICE_X40Y67         FDPE                                         r  u_logic/Pw03z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)      20.000    20.000 r  
+                                                      0.000    20.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.924    20.924    u_logic/HCLK
+    SLICE_X40Y67         FDPE                                         r  u_logic/Pw03z4_reg/C
+                         clock pessimism              0.000    20.924    
+                         clock uncertainty           -0.035    20.889    
+    SLICE_X40Y67         FDPE (Setup_fdpe_C_D)       -0.061    20.828    u_logic/Pw03z4_reg
+  -------------------------------------------------------------------
+                         required time                         20.828    
+                         arrival time                         -16.673    
+  -------------------------------------------------------------------
+                         slack                                  4.155    
+
+Slack (MET) :             4.179ns  (required time - arrival time)
+  Source:                 u_logic/Dks2z4_reg/C
+                            (rising edge-triggered cell FDCE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/Eqq2z4_reg/D
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (HCLK rise@20.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        15.670ns  (logic 3.110ns (19.847%)  route 12.560ns (80.153%))
+  Logic Levels:           14  (LUT3=2 LUT4=1 LUT5=4 LUT6=7)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 20.924 - 20.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.973     0.973    u_logic/HCLK
+    SLICE_X42Y41         FDCE                                         r  u_logic/Dks2z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X42Y41         FDCE (Prop_fdce_C_Q)         0.518     1.491 f  u_logic/Dks2z4_reg/Q
+                         net (fo=16, routed)          1.162     2.653    u_logic/Dks2z4
+    SLICE_X48Y41         LUT6 (Prop_lut6_I1_O)        0.124     2.777 r  u_logic/I3y2z4_i_45/O
+                         net (fo=2, routed)           0.484     3.261    u_logic/I3y2z4_i_45_n_0
+    SLICE_X48Y41         LUT3 (Prop_lut3_I0_O)        0.118     3.379 r  u_logic/I3y2z4_i_22/O
+                         net (fo=29, routed)          0.964     4.343    u_logic/I3y2z4_i_22_n_0
+    SLICE_X50Y38         LUT3 (Prop_lut3_I1_O)        0.318     4.661 r  u_logic/Ek03z4_i_164/O
+                         net (fo=5, routed)           0.766     5.427    u_logic/Ek03z4_i_164_n_0
+    SLICE_X51Y40         LUT5 (Prop_lut5_I1_O)        0.328     5.755 r  u_logic/Ek03z4_i_135/O
+                         net (fo=44, routed)          0.958     6.713    u_logic/Ek03z4_i_135_n_0
+    SLICE_X49Y37         LUT5 (Prop_lut5_I4_O)        0.150     6.863 r  u_logic/Ek03z4_i_121/O
+                         net (fo=4, routed)           0.714     7.577    u_logic/Ek03z4_i_121_n_0
+    SLICE_X50Y37         LUT6 (Prop_lut6_I0_O)        0.326     7.903 r  u_logic/Lbn2z4_i_6/O
+                         net (fo=31, routed)          0.736     8.640    u_logic/Lbn2z4_i_6_n_0
+    SLICE_X41Y35         LUT6 (Prop_lut6_I2_O)        0.124     8.764 f  u_logic/Ek03z4_i_97/O
+                         net (fo=18, routed)          1.096     9.860    u_logic/Ek03z4_i_97_n_0
+    SLICE_X45Y38         LUT6 (Prop_lut6_I1_O)        0.124     9.984 r  u_logic/Ek03z4_i_87/O
+                         net (fo=2, routed)           0.464    10.448    u_logic/Ek03z4_i_87_n_0
+    SLICE_X42Y40         LUT6 (Prop_lut6_I0_O)        0.124    10.572 r  u_logic/Ek03z4_i_57/O
+                         net (fo=3, routed)           0.463    11.035    u_logic/Ek03z4_i_57_n_0
+    SLICE_X42Y40         LUT6 (Prop_lut6_I3_O)        0.124    11.159 r  u_logic/Ek03z4_i_26/O
+                         net (fo=15, routed)          1.204    12.363    u_logic/Ek03z4_i_26_n_0
+    SLICE_X37Y42         LUT4 (Prop_lut4_I0_O)        0.152    12.515 f  u_logic/Dwl2z4_i_2/O
+                         net (fo=2, routed)           0.647    13.162    u_logic/Dwl2z4_i_2_n_0
+    SLICE_X44Y45         LUT5 (Prop_lut5_I1_O)        0.332    13.494 f  u_logic/Tdp2z4_i_10/O
+                         net (fo=2, routed)           0.618    14.112    u_logic/Tdp2z4_i_10_n_0
+    SLICE_X46Y50         LUT6 (Prop_lut6_I2_O)        0.124    14.236 f  u_logic/Tdp2z4_i_3/O
+                         net (fo=9, routed)           1.046    15.282    u_logic/Tdp2z4_i_3_n_0
+    SLICE_X47Y60         LUT5 (Prop_lut5_I3_O)        0.124    15.406 r  u_logic/P9h3z4_i_1/O
+                         net (fo=16, routed)          1.237    16.643    u_logic/Mc0wx4
+    SLICE_X32Y71         FDPE                                         r  u_logic/Eqq2z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)      20.000    20.000 r  
+                                                      0.000    20.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.924    20.924    u_logic/HCLK
+    SLICE_X32Y71         FDPE                                         r  u_logic/Eqq2z4_reg/C
+                         clock pessimism              0.000    20.924    
+                         clock uncertainty           -0.035    20.889    
+    SLICE_X32Y71         FDPE (Setup_fdpe_C_D)       -0.067    20.822    u_logic/Eqq2z4_reg
+  -------------------------------------------------------------------
+                         required time                         20.822    
+                         arrival time                         -16.643    
+  -------------------------------------------------------------------
+                         slack                                  4.179    
+
+Slack (MET) :             4.187ns  (required time - arrival time)
+  Source:                 u_logic/Wzy2z4_reg/C
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/Mjl2z4_reg/D
+                            (rising edge-triggered cell FDCE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (HCLK rise@20.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        15.760ns  (logic 5.254ns (33.337%)  route 10.506ns (66.663%))
+  Logic Levels:           21  (CARRY4=9 LUT2=4 LUT4=2 LUT6=6)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 20.924 - 20.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.973     0.973    u_logic/HCLK
+    SLICE_X17Y49         FDPE                                         r  u_logic/Wzy2z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X17Y49         FDPE (Prop_fdpe_C_Q)         0.456     1.429 f  u_logic/Wzy2z4_reg/Q
+                         net (fo=116, routed)         1.389     2.818    u_logic/Wzy2z4
+    SLICE_X30Y54         LUT2 (Prop_lut2_I0_O)        0.148     2.966 f  u_logic/HADDR[28]_INST_0_i_39/O
+                         net (fo=2, routed)           1.181     4.146    u_logic/HADDR[28]_INST_0_i_39_n_0
+    SLICE_X30Y49         LUT6 (Prop_lut6_I1_O)        0.328     4.474 f  u_logic/HADDR[28]_INST_0_i_26/O
+                         net (fo=2, routed)           0.668     5.142    u_logic/HADDR[28]_INST_0_i_26_n_0
+    SLICE_X32Y52         LUT6 (Prop_lut6_I5_O)        0.124     5.266 f  u_logic/HADDR[28]_INST_0_i_11/O
+                         net (fo=30, routed)          1.233     6.499    u_logic/HADDR[28]_INST_0_i_11_n_0
+    SLICE_X43Y63         LUT2 (Prop_lut2_I1_O)        0.124     6.623 r  u_logic/HADDR[28]_INST_0_i_13/O
+                         net (fo=32, routed)          0.952     7.576    u_logic/HADDR[28]_INST_0_i_13_n_0
+    SLICE_X35Y52         LUT6 (Prop_lut6_I1_O)        0.124     7.700 r  u_logic/G6d3z4_i_3/O
+                         net (fo=5, routed)           0.445     8.144    u_logic/G6d3z4_i_3_n_0
+    SLICE_X36Y51         LUT6 (Prop_lut6_I0_O)        0.124     8.268 r  u_logic/HADDR[6]_INST_0_i_24/O
+                         net (fo=2, routed)           0.653     8.922    u_logic/p_1_in[3]
+    SLICE_X36Y55         LUT4 (Prop_lut4_I2_O)        0.124     9.046 r  u_logic/HADDR[6]_INST_0_i_27/O
+                         net (fo=1, routed)           0.000     9.046    u_logic/HADDR[6]_INST_0_i_27_n_0
+    SLICE_X36Y55         CARRY4 (Prop_carry4_S[3]_CO[3])
+                                                      0.401     9.447 r  u_logic/HADDR[6]_INST_0_i_17/CO[3]
+                         net (fo=1, routed)           0.000     9.447    u_logic/HADDR[6]_INST_0_i_17_n_0
+    SLICE_X36Y56         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.561 r  u_logic/HADDR[6]_INST_0_i_21/CO[3]
+                         net (fo=1, routed)           0.000     9.561    u_logic/HADDR[6]_INST_0_i_21_n_0
+    SLICE_X36Y57         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.675 r  u_logic/HADDR[10]_INST_0_i_14/CO[3]
+                         net (fo=1, routed)           0.000     9.675    u_logic/HADDR[10]_INST_0_i_14_n_0
+    SLICE_X36Y58         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.789 r  u_logic/HADDR[13]_INST_0_i_15/CO[3]
+                         net (fo=1, routed)           0.000     9.789    u_logic/HADDR[13]_INST_0_i_15_n_0
+    SLICE_X36Y59         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114     9.903 r  u_logic/HADDR[18]_INST_0_i_15/CO[3]
+                         net (fo=1, routed)           0.000     9.903    u_logic/HADDR[18]_INST_0_i_15_n_0
+    SLICE_X36Y60         CARRY4 (Prop_carry4_CI_CO[3])
+                                                      0.114    10.017 r  u_logic/HADDR[22]_INST_0_i_15/CO[3]
+                         net (fo=1, routed)           0.000    10.017    u_logic/HADDR[22]_INST_0_i_15_n_0
+    SLICE_X36Y61         CARRY4 (Prop_carry4_CI_O[1])
+                                                      0.334    10.351 r  u_logic/HADDR[26]_INST_0_i_14/O[1]
+                         net (fo=1, routed)           0.490    10.841    u_logic/p_1_in1_in[23]
+    SLICE_X37Y60         CARRY4 (Prop_carry4_S[1]_CO[3])
+                                                      0.853    11.694 r  u_logic/HADDR[26]_INST_0_i_2/CO[3]
+                         net (fo=1, routed)           0.000    11.694    u_logic/HADDR[26]_INST_0_i_2_n_0
+    SLICE_X37Y61         CARRY4 (Prop_carry4_CI_O[3])
+                                                      0.313    12.007 r  u_logic/HADDR[28]_INST_0_i_3/O[3]
+                         net (fo=4, routed)           0.736    12.743    u_logic/p_0_in52_in
+    SLICE_X44Y62         LUT2 (Prop_lut2_I0_O)        0.306    13.049 r  u_logic/HADDR[30]_INST_0_i_2/O
+                         net (fo=3, routed)           0.547    13.595    u_logic/HADDR[30]_INST_0_i_2_n_0
+    SLICE_X43Y63         LUT4 (Prop_lut4_I3_O)        0.118    13.713 f  u_logic/HTRANS[1]_INST_0_i_9/O
+                         net (fo=2, routed)           0.879    14.593    u_logic/HTRANS[1]_INST_0_i_9_n_0
+    SLICE_X43Y63         LUT2 (Prop_lut2_I0_O)        0.351    14.944 f  u_logic/HTRANS[1]_INST_0_i_5/O
+                         net (fo=8, routed)           0.757    15.701    u_logic/HTRANS[1]_INST_0_i_5_n_0
+    SLICE_X43Y52         LUT6 (Prop_lut6_I2_O)        0.332    16.033 r  u_logic/Mjl2z4_i_7/O
+                         net (fo=1, routed)           0.577    16.609    u_logic/Mjl2z4_i_7_n_0
+    SLICE_X43Y52         LUT6 (Prop_lut6_I5_O)        0.124    16.733 r  u_logic/Mjl2z4_i_1/O
+                         net (fo=1, routed)           0.000    16.733    u_logic/Nmnvx4
+    SLICE_X43Y52         FDCE                                         r  u_logic/Mjl2z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)      20.000    20.000 r  
+                                                      0.000    20.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.924    20.924    u_logic/HCLK
+    SLICE_X43Y52         FDCE                                         r  u_logic/Mjl2z4_reg/C
+                         clock pessimism              0.000    20.924    
+                         clock uncertainty           -0.035    20.889    
+    SLICE_X43Y52         FDCE (Setup_fdce_C_D)        0.031    20.920    u_logic/Mjl2z4_reg
+  -------------------------------------------------------------------
+                         required time                         20.920    
+                         arrival time                         -16.733    
+  -------------------------------------------------------------------
+                         slack                                  4.187    
+
+Slack (MET) :             4.192ns  (required time - arrival time)
+  Source:                 u_logic/Dks2z4_reg/C
+                            (rising edge-triggered cell FDCE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/Xg33z4_reg/D
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (HCLK rise@20.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        15.663ns  (logic 3.332ns (21.273%)  route 12.331ns (78.727%))
+  Logic Levels:           14  (LUT2=1 LUT3=2 LUT4=2 LUT5=4 LUT6=5)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 20.924 - 20.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.973     0.973    u_logic/HCLK
+    SLICE_X42Y41         FDCE                                         r  u_logic/Dks2z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X42Y41         FDCE (Prop_fdce_C_Q)         0.518     1.491 f  u_logic/Dks2z4_reg/Q
+                         net (fo=16, routed)          1.162     2.653    u_logic/Dks2z4
+    SLICE_X48Y41         LUT6 (Prop_lut6_I1_O)        0.124     2.777 r  u_logic/I3y2z4_i_45/O
+                         net (fo=2, routed)           0.484     3.261    u_logic/I3y2z4_i_45_n_0
+    SLICE_X48Y41         LUT3 (Prop_lut3_I0_O)        0.118     3.379 r  u_logic/I3y2z4_i_22/O
+                         net (fo=29, routed)          0.964     4.343    u_logic/I3y2z4_i_22_n_0
+    SLICE_X50Y38         LUT3 (Prop_lut3_I1_O)        0.318     4.661 r  u_logic/Ek03z4_i_164/O
+                         net (fo=5, routed)           0.766     5.427    u_logic/Ek03z4_i_164_n_0
+    SLICE_X51Y40         LUT5 (Prop_lut5_I1_O)        0.328     5.755 r  u_logic/Ek03z4_i_135/O
+                         net (fo=44, routed)          0.958     6.713    u_logic/Ek03z4_i_135_n_0
+    SLICE_X49Y37         LUT5 (Prop_lut5_I4_O)        0.150     6.863 r  u_logic/Ek03z4_i_121/O
+                         net (fo=4, routed)           0.714     7.577    u_logic/Ek03z4_i_121_n_0
+    SLICE_X50Y37         LUT6 (Prop_lut6_I0_O)        0.326     7.903 r  u_logic/Lbn2z4_i_6/O
+                         net (fo=31, routed)          0.736     8.640    u_logic/Lbn2z4_i_6_n_0
+    SLICE_X41Y35         LUT6 (Prop_lut6_I2_O)        0.124     8.764 r  u_logic/Ek03z4_i_97/O
+                         net (fo=18, routed)          1.019     9.783    u_logic/Ek03z4_i_97_n_0
+    SLICE_X45Y38         LUT5 (Prop_lut5_I3_O)        0.150     9.933 r  u_logic/Ek03z4_i_84/O
+                         net (fo=2, routed)           0.734    10.667    u_logic/Ek03z4_i_84_n_0
+    SLICE_X41Y38         LUT4 (Prop_lut4_I0_O)        0.326    10.993 r  u_logic/G9w2z4_i_9/O
+                         net (fo=2, routed)           0.598    11.591    u_logic/G9w2z4_i_9_n_0
+    SLICE_X42Y40         LUT6 (Prop_lut6_I4_O)        0.124    11.715 r  u_logic/Kyi2z4_i_10/O
+                         net (fo=5, routed)           0.840    12.555    u_logic/Kyi2z4_i_10_n_0
+    SLICE_X43Y41         LUT2 (Prop_lut2_I0_O)        0.152    12.707 r  u_logic/Kyi2z4_i_4/O
+                         net (fo=4, routed)           0.647    13.354    u_logic/Kyi2z4_i_4_n_0
+    SLICE_X41Y42         LUT6 (Prop_lut6_I1_O)        0.326    13.680 f  u_logic/Lq03z4_i_8/O
+                         net (fo=2, routed)           0.987    14.667    u_logic/Lq03z4_i_8_n_0
+    SLICE_X47Y55         LUT4 (Prop_lut4_I0_O)        0.124    14.791 f  u_logic/Lq03z4_i_3/O
+                         net (fo=8, routed)           0.662    15.452    u_logic/Lq03z4_i_3_n_0
+    SLICE_X44Y58         LUT5 (Prop_lut5_I2_O)        0.124    15.576 r  u_logic/X213z4_i_1/O
+                         net (fo=16, routed)          1.060    16.636    u_logic/M41wx4
+    SLICE_X28Y63         FDPE                                         r  u_logic/Xg33z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)      20.000    20.000 r  
+                                                      0.000    20.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.924    20.924    u_logic/HCLK
+    SLICE_X28Y63         FDPE                                         r  u_logic/Xg33z4_reg/C
+                         clock pessimism              0.000    20.924    
+                         clock uncertainty           -0.035    20.889    
+    SLICE_X28Y63         FDPE (Setup_fdpe_C_D)       -0.061    20.828    u_logic/Xg33z4_reg
+  -------------------------------------------------------------------
+                         required time                         20.828    
+                         arrival time                         -16.636    
+  -------------------------------------------------------------------
+                         slack                                  4.192    
+
+Slack (MET) :             4.198ns  (required time - arrival time)
+  Source:                 u_logic/Nnc3z4_reg/C
+                            (rising edge-triggered cell FDCE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/Gfg3z4_reg/D
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (HCLK rise@20.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        15.687ns  (logic 3.124ns (19.914%)  route 12.563ns (80.086%))
+  Logic Levels:           14  (LUT2=2 LUT3=3 LUT4=1 LUT5=1 LUT6=7)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 20.924 - 20.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.973     0.973    u_logic/HCLK
+    SLICE_X49Y45         FDCE                                         r  u_logic/Nnc3z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X49Y45         FDCE (Prop_fdce_C_Q)         0.456     1.429 r  u_logic/Nnc3z4_reg/Q
+                         net (fo=7, routed)           1.147     2.576    u_logic/Nnc3z4
+    SLICE_X48Y42         LUT2 (Prop_lut2_I0_O)        0.153     2.729 r  u_logic/I3y2z4_i_93/O
+                         net (fo=1, routed)           0.420     3.148    u_logic/I3y2z4_i_93_n_0
+    SLICE_X46Y41         LUT6 (Prop_lut6_I0_O)        0.327     3.475 r  u_logic/I3y2z4_i_51/O
+                         net (fo=28, routed)          1.011     4.486    u_logic/I3y2z4_i_51_n_0
+    SLICE_X45Y39         LUT3 (Prop_lut3_I2_O)        0.150     4.636 r  u_logic/Kyi2z4_i_22/O
+                         net (fo=17, routed)          0.759     5.395    u_logic/Kyi2z4_i_22_n_0
+    SLICE_X50Y36         LUT4 (Prop_lut4_I0_O)        0.332     5.727 f  u_logic/Ek03z4_i_136/O
+                         net (fo=30, routed)          1.555     7.282    u_logic/Ek03z4_i_136_n_0
+    SLICE_X40Y36         LUT2 (Prop_lut2_I1_O)        0.152     7.434 r  u_logic/Ek03z4_i_96/O
+                         net (fo=15, routed)          0.844     8.278    u_logic/Ek03z4_i_96_n_0
+    SLICE_X47Y36         LUT3 (Prop_lut3_I1_O)        0.332     8.610 r  u_logic/Kyi2z4_i_53/O
+                         net (fo=10, routed)          0.672     9.282    u_logic/Kyi2z4_i_53_n_0
+    SLICE_X47Y37         LUT6 (Prop_lut6_I4_O)        0.124     9.406 r  u_logic/I3y2z4_i_98/O
+                         net (fo=5, routed)           0.550     9.956    u_logic/I3y2z4_i_98_n_0
+    SLICE_X46Y37         LUT5 (Prop_lut5_I4_O)        0.124    10.080 r  u_logic/I3y2z4_i_92/O
+                         net (fo=2, routed)           1.000    11.080    u_logic/I3y2z4_i_92_n_0
+    SLICE_X42Y35         LUT3 (Prop_lut3_I0_O)        0.150    11.230 r  u_logic/I3y2z4_i_55/O
+                         net (fo=1, routed)           0.307    11.536    u_logic/I3y2z4_i_55_n_0
+    SLICE_X42Y36         LUT6 (Prop_lut6_I5_O)        0.328    11.864 r  u_logic/I3y2z4_i_26/O
+                         net (fo=2, routed)           0.972    12.836    u_logic/I3y2z4_i_26_n_0
+    SLICE_X43Y38         LUT6 (Prop_lut6_I2_O)        0.124    12.960 r  u_logic/Kyi2z4_i_6/O
+                         net (fo=1, routed)           0.590    13.550    u_logic/Kyi2z4_i_6_n_0
+    SLICE_X42Y39         LUT6 (Prop_lut6_I1_O)        0.124    13.674 r  u_logic/Kyi2z4_i_3/O
+                         net (fo=2, routed)           0.457    14.131    u_logic/Kyi2z4_i_3_n_0
+    SLICE_X42Y42         LUT6 (Prop_lut6_I2_O)        0.124    14.255 f  u_logic/Trq2z4_i_4/O
+                         net (fo=9, routed)           1.209    15.464    u_logic/Trq2z4_i_4_n_0
+    SLICE_X40Y60         LUT6 (Prop_lut6_I5_O)        0.124    15.588 r  u_logic/Avg3z4_i_1/O
+                         net (fo=16, routed)          1.072    16.660    u_logic/Bh0wx4
+    SLICE_X34Y72         FDPE                                         r  u_logic/Gfg3z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)      20.000    20.000 r  
+                                                      0.000    20.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.924    20.924    u_logic/HCLK
+    SLICE_X34Y72         FDPE                                         r  u_logic/Gfg3z4_reg/C
+                         clock pessimism              0.000    20.924    
+                         clock uncertainty           -0.035    20.889    
+    SLICE_X34Y72         FDPE (Setup_fdpe_C_D)       -0.031    20.858    u_logic/Gfg3z4_reg
+  -------------------------------------------------------------------
+                         required time                         20.858    
+                         arrival time                         -16.660    
+  -------------------------------------------------------------------
+                         slack                                  4.198    
+
+Slack (MET) :             4.198ns  (required time - arrival time)
+  Source:                 u_logic/Dks2z4_reg/C
+                            (rising edge-triggered cell FDCE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/Hi83z4_reg/D
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Setup (Max at Slow Process Corner)
+  Requirement:            20.000ns  (HCLK rise@20.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        15.637ns  (logic 3.332ns (21.309%)  route 12.305ns (78.691%))
+  Logic Levels:           14  (LUT2=1 LUT3=2 LUT4=2 LUT5=4 LUT6=5)
+  Clock Path Skew:        -0.049ns (DCD - SCD + CPR)
+    Destination Clock Delay (DCD):    0.924ns = ( 20.924 - 20.000 ) 
+    Source Clock Delay      (SCD):    0.973ns
+    Clock Pessimism Removal (CPR):    0.000ns
+  Clock Uncertainty:      0.035ns  ((TSJ^2 + TIJ^2)^1/2 + DJ) / 2 + PE
+    Total System Jitter     (TSJ):    0.071ns
+    Total Input Jitter      (TIJ):    0.000ns
+    Discrete Jitter          (DJ):    0.000ns
+    Phase Error              (PE):    0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.973     0.973    u_logic/HCLK
+    SLICE_X42Y41         FDCE                                         r  u_logic/Dks2z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X42Y41         FDCE (Prop_fdce_C_Q)         0.518     1.491 f  u_logic/Dks2z4_reg/Q
+                         net (fo=16, routed)          1.162     2.653    u_logic/Dks2z4
+    SLICE_X48Y41         LUT6 (Prop_lut6_I1_O)        0.124     2.777 r  u_logic/I3y2z4_i_45/O
+                         net (fo=2, routed)           0.484     3.261    u_logic/I3y2z4_i_45_n_0
+    SLICE_X48Y41         LUT3 (Prop_lut3_I0_O)        0.118     3.379 r  u_logic/I3y2z4_i_22/O
+                         net (fo=29, routed)          0.964     4.343    u_logic/I3y2z4_i_22_n_0
+    SLICE_X50Y38         LUT3 (Prop_lut3_I1_O)        0.318     4.661 r  u_logic/Ek03z4_i_164/O
+                         net (fo=5, routed)           0.766     5.427    u_logic/Ek03z4_i_164_n_0
+    SLICE_X51Y40         LUT5 (Prop_lut5_I1_O)        0.328     5.755 r  u_logic/Ek03z4_i_135/O
+                         net (fo=44, routed)          0.958     6.713    u_logic/Ek03z4_i_135_n_0
+    SLICE_X49Y37         LUT5 (Prop_lut5_I4_O)        0.150     6.863 r  u_logic/Ek03z4_i_121/O
+                         net (fo=4, routed)           0.714     7.577    u_logic/Ek03z4_i_121_n_0
+    SLICE_X50Y37         LUT6 (Prop_lut6_I0_O)        0.326     7.903 r  u_logic/Lbn2z4_i_6/O
+                         net (fo=31, routed)          0.736     8.640    u_logic/Lbn2z4_i_6_n_0
+    SLICE_X41Y35         LUT6 (Prop_lut6_I2_O)        0.124     8.764 r  u_logic/Ek03z4_i_97/O
+                         net (fo=18, routed)          1.019     9.783    u_logic/Ek03z4_i_97_n_0
+    SLICE_X45Y38         LUT5 (Prop_lut5_I3_O)        0.150     9.933 r  u_logic/Ek03z4_i_84/O
+                         net (fo=2, routed)           0.734    10.667    u_logic/Ek03z4_i_84_n_0
+    SLICE_X41Y38         LUT4 (Prop_lut4_I0_O)        0.326    10.993 r  u_logic/G9w2z4_i_9/O
+                         net (fo=2, routed)           0.598    11.591    u_logic/G9w2z4_i_9_n_0
+    SLICE_X42Y40         LUT6 (Prop_lut6_I4_O)        0.124    11.715 r  u_logic/Kyi2z4_i_10/O
+                         net (fo=5, routed)           0.840    12.555    u_logic/Kyi2z4_i_10_n_0
+    SLICE_X43Y41         LUT2 (Prop_lut2_I0_O)        0.152    12.707 r  u_logic/Kyi2z4_i_4/O
+                         net (fo=4, routed)           0.647    13.354    u_logic/Kyi2z4_i_4_n_0
+    SLICE_X41Y42         LUT6 (Prop_lut6_I1_O)        0.326    13.680 f  u_logic/Lq03z4_i_8/O
+                         net (fo=2, routed)           0.987    14.667    u_logic/Lq03z4_i_8_n_0
+    SLICE_X47Y55         LUT4 (Prop_lut4_I0_O)        0.124    14.791 f  u_logic/Lq03z4_i_3/O
+                         net (fo=8, routed)           0.662    15.452    u_logic/Lq03z4_i_3_n_0
+    SLICE_X44Y58         LUT5 (Prop_lut5_I2_O)        0.124    15.576 r  u_logic/X213z4_i_1/O
+                         net (fo=16, routed)          1.034    16.610    u_logic/M41wx4
+    SLICE_X32Y61         FDPE                                         r  u_logic/Hi83z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)      20.000    20.000 r  
+                                                      0.000    20.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.924    20.924    u_logic/HCLK
+    SLICE_X32Y61         FDPE                                         r  u_logic/Hi83z4_reg/C
+                         clock pessimism              0.000    20.924    
+                         clock uncertainty           -0.035    20.889    
+    SLICE_X32Y61         FDPE (Setup_fdpe_C_D)       -0.081    20.808    u_logic/Hi83z4_reg
+  -------------------------------------------------------------------
+                         required time                         20.808    
+                         arrival time                         -16.610    
+  -------------------------------------------------------------------
+                         slack                                  4.198    
+
+
+
+
+
+Min Delay Paths
+--------------------------------------------------------------------------------------
+Slack (MET) :             0.143ns  (arrival time - required time)
+  Source:                 u_logic/Wia3z4_reg/C
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/W0b3z4_reg/D
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (HCLK rise@0.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        0.256ns  (logic 0.186ns (72.524%)  route 0.070ns (27.476%))
+  Logic Levels:           1  (LUT6=1)
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.410     0.410    u_logic/HCLK
+    SLICE_X45Y47         FDPE                                         r  u_logic/Wia3z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X45Y47         FDPE (Prop_fdpe_C_Q)         0.141     0.551 r  u_logic/Wia3z4_reg/Q
+                         net (fo=2, routed)           0.070     0.622    u_logic/Wia3z4
+    SLICE_X44Y47         LUT6 (Prop_lut6_I1_O)        0.045     0.667 r  u_logic/W0b3z4_i_1/O
+                         net (fo=1, routed)           0.000     0.667    u_logic/Jsmvx4
+    SLICE_X44Y47         FDPE                                         r  u_logic/W0b3z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.432     0.432    u_logic/HCLK
+    SLICE_X44Y47         FDPE                                         r  u_logic/W0b3z4_reg/C
+                         clock pessimism              0.000     0.432    
+    SLICE_X44Y47         FDPE (Hold_fdpe_C_D)         0.092     0.524    u_logic/W0b3z4_reg
+  -------------------------------------------------------------------
+                         required time                         -0.524    
+                         arrival time                           0.667    
+  -------------------------------------------------------------------
+                         slack                                  0.143    
+
+Slack (MET) :             0.144ns  (arrival time - required time)
+  Source:                 u_logic/Nfb3z4_reg/C
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/Dhb3z4_reg/D
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (HCLK rise@0.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        0.285ns  (logic 0.186ns (65.194%)  route 0.099ns (34.806%))
+  Logic Levels:           1  (LUT6=1)
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.410     0.410    u_logic/HCLK
+    SLICE_X47Y46         FDPE                                         r  u_logic/Nfb3z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X47Y46         FDPE (Prop_fdpe_C_Q)         0.141     0.551 r  u_logic/Nfb3z4_reg/Q
+                         net (fo=2, routed)           0.099     0.650    u_logic/Nfb3z4
+    SLICE_X46Y46         LUT6 (Prop_lut6_I2_O)        0.045     0.695 r  u_logic/Dhb3z4_i_1/O
+                         net (fo=1, routed)           0.000     0.695    u_logic/Hrmvx4
+    SLICE_X46Y46         FDPE                                         r  u_logic/Dhb3z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.432     0.432    u_logic/HCLK
+    SLICE_X46Y46         FDPE                                         r  u_logic/Dhb3z4_reg/C
+                         clock pessimism              0.000     0.432    
+    SLICE_X46Y46         FDPE (Hold_fdpe_C_D)         0.120     0.552    u_logic/Dhb3z4_reg
+  -------------------------------------------------------------------
+                         required time                         -0.552    
+                         arrival time                           0.695    
+  -------------------------------------------------------------------
+                         slack                                  0.144    
+
+Slack (MET) :             0.171ns  (arrival time - required time)
+  Source:                 u_logic/Aea3z4_reg/C
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/F2o2z4_reg/D
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (HCLK rise@0.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        0.284ns  (logic 0.186ns (65.521%)  route 0.098ns (34.479%))
+  Logic Levels:           1  (LUT6=1)
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.410     0.410    u_logic/HCLK
+    SLICE_X44Y46         FDPE                                         r  u_logic/Aea3z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X44Y46         FDPE (Prop_fdpe_C_Q)         0.141     0.551 r  u_logic/Aea3z4_reg/Q
+                         net (fo=2, routed)           0.098     0.649    u_logic/Aea3z4
+    SLICE_X45Y46         LUT6 (Prop_lut6_I5_O)        0.045     0.694 r  u_logic/F2o2z4_i_1/O
+                         net (fo=1, routed)           0.000     0.694    u_logic/Etmvx4
+    SLICE_X45Y46         FDPE                                         r  u_logic/F2o2z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.432     0.432    u_logic/HCLK
+    SLICE_X45Y46         FDPE                                         r  u_logic/F2o2z4_reg/C
+                         clock pessimism              0.000     0.432    
+    SLICE_X45Y46         FDPE (Hold_fdpe_C_D)         0.091     0.523    u_logic/F2o2z4_reg
+  -------------------------------------------------------------------
+                         required time                         -0.523    
+                         arrival time                           0.694    
+  -------------------------------------------------------------------
+                         slack                                  0.171    
+
+Slack (MET) :             0.188ns  (arrival time - required time)
+  Source:                 u_logic/T5g3z4_reg/C
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/K7g3z4_reg/D
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (HCLK rise@0.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        0.301ns  (logic 0.186ns (61.796%)  route 0.115ns (38.204%))
+  Logic Levels:           1  (LUT6=1)
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.410     0.410    u_logic/HCLK
+    SLICE_X47Y47         FDPE                                         r  u_logic/T5g3z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X47Y47         FDPE (Prop_fdpe_C_Q)         0.141     0.551 r  u_logic/T5g3z4_reg/Q
+                         net (fo=3, routed)           0.115     0.666    u_logic/T5g3z4
+    SLICE_X48Y48         LUT6 (Prop_lut6_I2_O)        0.045     0.711 r  u_logic/K7g3z4_i_1/O
+                         net (fo=1, routed)           0.000     0.711    u_logic/Rpmvx4
+    SLICE_X48Y48         FDPE                                         r  u_logic/K7g3z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.432     0.432    u_logic/HCLK
+    SLICE_X48Y48         FDPE                                         r  u_logic/K7g3z4_reg/C
+                         clock pessimism              0.000     0.432    
+    SLICE_X48Y48         FDPE (Hold_fdpe_C_D)         0.091     0.523    u_logic/K7g3z4_reg
+  -------------------------------------------------------------------
+                         required time                         -0.523    
+                         arrival time                           0.711    
+  -------------------------------------------------------------------
+                         slack                                  0.188    
+
+Slack (MET) :             0.190ns  (arrival time - required time)
+  Source:                 u_logic/Jcw2z4_reg/C
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/Jcw2z4_reg/D
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (HCLK rise@0.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        0.302ns  (logic 0.186ns (61.533%)  route 0.116ns (38.467%))
+  Logic Levels:           1  (LUT6=1)
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.410     0.410    u_logic/HCLK
+    SLICE_X31Y41         FDPE                                         r  u_logic/Jcw2z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X31Y41         FDPE (Prop_fdpe_C_Q)         0.141     0.551 r  u_logic/Jcw2z4_reg/Q
+                         net (fo=2, routed)           0.116     0.667    u_logic/Jcw2z4
+    SLICE_X31Y41         LUT6 (Prop_lut6_I5_O)        0.045     0.712 r  u_logic/Jcw2z4_i_1/O
+                         net (fo=1, routed)           0.000     0.712    u_logic/Jcw2z4_i_1_n_0
+    SLICE_X31Y41         FDPE                                         r  u_logic/Jcw2z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.432     0.432    u_logic/HCLK
+    SLICE_X31Y41         FDPE                                         r  u_logic/Jcw2z4_reg/C
+                         clock pessimism              0.000     0.432    
+    SLICE_X31Y41         FDPE (Hold_fdpe_C_D)         0.091     0.523    u_logic/Jcw2z4_reg
+  -------------------------------------------------------------------
+                         required time                         -0.523    
+                         arrival time                           0.712    
+  -------------------------------------------------------------------
+                         slack                                  0.190    
+
+Slack (MET) :             0.190ns  (arrival time - required time)
+  Source:                 u_logic/Ydw2z4_reg/C
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/Ydw2z4_reg/D
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (HCLK rise@0.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        0.302ns  (logic 0.186ns (61.533%)  route 0.116ns (38.467%))
+  Logic Levels:           1  (LUT6=1)
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.410     0.410    u_logic/HCLK
+    SLICE_X31Y42         FDPE                                         r  u_logic/Ydw2z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X31Y42         FDPE (Prop_fdpe_C_Q)         0.141     0.551 r  u_logic/Ydw2z4_reg/Q
+                         net (fo=2, routed)           0.116     0.667    u_logic/Ydw2z4
+    SLICE_X31Y42         LUT6 (Prop_lut6_I5_O)        0.045     0.712 r  u_logic/Ydw2z4_i_1/O
+                         net (fo=1, routed)           0.000     0.712    u_logic/Qqhvx4
+    SLICE_X31Y42         FDPE                                         r  u_logic/Ydw2z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.432     0.432    u_logic/HCLK
+    SLICE_X31Y42         FDPE                                         r  u_logic/Ydw2z4_reg/C
+                         clock pessimism              0.000     0.432    
+    SLICE_X31Y42         FDPE (Hold_fdpe_C_D)         0.091     0.523    u_logic/Ydw2z4_reg
+  -------------------------------------------------------------------
+                         required time                         -0.523    
+                         arrival time                           0.712    
+  -------------------------------------------------------------------
+                         slack                                  0.190    
+
+Slack (MET) :             0.191ns  (arrival time - required time)
+  Source:                 u_logic/Jje3z4_reg/C
+                            (rising edge-triggered cell FDCE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/Jje3z4_reg/D
+                            (rising edge-triggered cell FDCE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (HCLK rise@0.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        0.303ns  (logic 0.186ns (61.324%)  route 0.117ns (38.676%))
+  Logic Levels:           1  (LUT6=1)
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.410     0.410    u_logic/HCLK
+    SLICE_X51Y45         FDCE                                         r  u_logic/Jje3z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X51Y45         FDCE (Prop_fdce_C_Q)         0.141     0.551 r  u_logic/Jje3z4_reg/Q
+                         net (fo=2, routed)           0.117     0.668    u_logic/Jje3z4
+    SLICE_X51Y45         LUT6 (Prop_lut6_I3_O)        0.045     0.713 r  u_logic/Jje3z4_i_1/O
+                         net (fo=1, routed)           0.000     0.713    u_logic/J7mvx4
+    SLICE_X51Y45         FDCE                                         r  u_logic/Jje3z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.432     0.432    u_logic/HCLK
+    SLICE_X51Y45         FDCE                                         r  u_logic/Jje3z4_reg/C
+                         clock pessimism              0.000     0.432    
+    SLICE_X51Y45         FDCE (Hold_fdce_C_D)         0.091     0.523    u_logic/Jje3z4_reg
+  -------------------------------------------------------------------
+                         required time                         -0.523    
+                         arrival time                           0.713    
+  -------------------------------------------------------------------
+                         slack                                  0.191    
+
+Slack (MET) :             0.191ns  (arrival time - required time)
+  Source:                 u_logic/I6w2z4_reg/C
+                            (rising edge-triggered cell FDCE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/I6w2z4_reg/D
+                            (rising edge-triggered cell FDCE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (HCLK rise@0.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        0.303ns  (logic 0.186ns (61.311%)  route 0.117ns (38.689%))
+  Logic Levels:           1  (LUT6=1)
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.410     0.410    u_logic/HCLK
+    SLICE_X37Y47         FDCE                                         r  u_logic/I6w2z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X37Y47         FDCE (Prop_fdce_C_Q)         0.141     0.551 r  u_logic/I6w2z4_reg/Q
+                         net (fo=2, routed)           0.117     0.669    u_logic/I6w2z4
+    SLICE_X37Y47         LUT6 (Prop_lut6_I1_O)        0.045     0.714 r  u_logic/I6w2z4_i_1/O
+                         net (fo=1, routed)           0.000     0.714    u_logic/X7mvx4
+    SLICE_X37Y47         FDCE                                         r  u_logic/I6w2z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.432     0.432    u_logic/HCLK
+    SLICE_X37Y47         FDCE                                         r  u_logic/I6w2z4_reg/C
+                         clock pessimism              0.000     0.432    
+    SLICE_X37Y47         FDCE (Hold_fdce_C_D)         0.091     0.523    u_logic/I6w2z4_reg
+  -------------------------------------------------------------------
+                         required time                         -0.523    
+                         arrival time                           0.714    
+  -------------------------------------------------------------------
+                         slack                                  0.191    
+
+Slack (MET) :             0.195ns  (arrival time - required time)
+  Source:                 u_logic/W7z2z4_reg/C
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/K9z2z4_reg/D
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (HCLK rise@0.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        0.307ns  (logic 0.186ns (60.563%)  route 0.121ns (39.437%))
+  Logic Levels:           1  (LUT6=1)
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.410     0.410    u_logic/HCLK
+    SLICE_X26Y47         FDPE                                         r  u_logic/W7z2z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X26Y47         FDPE (Prop_fdpe_C_Q)         0.141     0.551 r  u_logic/W7z2z4_reg/Q
+                         net (fo=9, routed)           0.121     0.672    u_logic/W7z2z4
+    SLICE_X27Y47         LUT6 (Prop_lut6_I1_O)        0.045     0.717 r  u_logic/K9z2z4_i_1/O
+                         net (fo=1, routed)           0.000     0.717    u_logic/Wfhvx4
+    SLICE_X27Y47         FDPE                                         r  u_logic/K9z2z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.432     0.432    u_logic/HCLK
+    SLICE_X27Y47         FDPE                                         r  u_logic/K9z2z4_reg/C
+                         clock pessimism              0.000     0.432    
+    SLICE_X27Y47         FDPE (Hold_fdpe_C_D)         0.091     0.523    u_logic/K9z2z4_reg
+  -------------------------------------------------------------------
+                         required time                         -0.523    
+                         arrival time                           0.717    
+  -------------------------------------------------------------------
+                         slack                                  0.195    
+
+Slack (MET) :             0.197ns  (arrival time - required time)
+  Source:                 u_logic/L7a3z4_reg/C
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Destination:            u_logic/Iua3z4_reg/D
+                            (rising edge-triggered cell FDPE clocked by HCLK  {rise@0.000ns fall@10.000ns period=20.000ns})
+  Path Group:             HCLK
+  Path Type:              Hold (Min at Fast Process Corner)
+  Requirement:            0.000ns  (HCLK rise@0.000ns - HCLK rise@0.000ns)
+  Data Path Delay:        0.338ns  (logic 0.186ns (54.991%)  route 0.152ns (45.009%))
+  Logic Levels:           1  (LUT6=1)
+  Clock Path Skew:        0.022ns (DCD - SCD - CPR)
+    Destination Clock Delay (DCD):    0.432ns
+    Source Clock Delay      (SCD):    0.410ns
+    Clock Pessimism Removal (CPR):    -0.000ns
+
+    Location             Delay type                Incr(ns)  Path(ns)    Netlist Resource(s)
+  -------------------------------------------------------------------    -------------------
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.410     0.410    u_logic/HCLK
+    SLICE_X47Y47         FDPE                                         r  u_logic/L7a3z4_reg/C
+  -------------------------------------------------------------------    -------------------
+    SLICE_X47Y47         FDPE (Prop_fdpe_C_Q)         0.141     0.551 r  u_logic/L7a3z4_reg/Q
+                         net (fo=2, routed)           0.152     0.703    u_logic/L7a3z4
+    SLICE_X46Y47         LUT6 (Prop_lut6_I1_O)        0.045     0.748 r  u_logic/Iua3z4_i_1/O
+                         net (fo=1, routed)           0.000     0.748    u_logic/Ypmvx4
+    SLICE_X46Y47         FDPE                                         r  u_logic/Iua3z4_reg/D
+  -------------------------------------------------------------------    -------------------
+
+                         (clock HCLK rise edge)       0.000     0.000 r  
+                                                      0.000     0.000 r  HCLK (IN)
+                         net (fo=842, unset)          0.432     0.432    u_logic/HCLK
+    SLICE_X46Y47         FDPE                                         r  u_logic/Iua3z4_reg/C
+                         clock pessimism              0.000     0.432    
+    SLICE_X46Y47         FDPE (Hold_fdpe_C_D)         0.120     0.552    u_logic/Iua3z4_reg
+  -------------------------------------------------------------------
+                         required time                         -0.552    
+                         arrival time                           0.748    
+  -------------------------------------------------------------------
+                         slack                                  0.197    
+
+
+
+
+
+Pulse Width Checks
+--------------------------------------------------------------------------------------
+Clock Name:         HCLK
+Waveform(ns):       { 0.000 10.000 }
+Period(ns):         20.000
+Sources:            { HCLK }
+
+Check Type        Corner  Lib Pin  Reference Pin  Required(ns)  Actual(ns)  Slack(ns)  Location      Pin
+Min Period        n/a     FDCE/C   n/a            1.000         20.000      19.000     SLICE_X38Y50  u_logic/A4t2z4_reg/C
+Min Period        n/a     FDPE/C   n/a            1.000         20.000      19.000     SLICE_X35Y71  u_logic/A8h3z4_reg/C
+Min Period        n/a     FDPE/C   n/a            1.000         20.000      19.000     SLICE_X37Y70  u_logic/A933z4_reg/C
+Min Period        n/a     FDPE/C   n/a            1.000         20.000      19.000     SLICE_X42Y72  u_logic/A9p2z4_reg/C
+Min Period        n/a     FDCE/C   n/a            1.000         20.000      19.000     SLICE_X40Y45  u_logic/Adt2z4_reg/C
+Min Period        n/a     FDPE/C   n/a            1.000         20.000      19.000     SLICE_X44Y46  u_logic/Aea3z4_reg/C
+Min Period        n/a     FDPE/C   n/a            1.000         20.000      19.000     SLICE_X36Y65  u_logic/Aez2z4_reg/C
+Min Period        n/a     FDPE/C   n/a            1.000         20.000      19.000     SLICE_X42Y67  u_logic/Aff3z4_reg/C
+Min Period        n/a     FDPE/C   n/a            1.000         20.000      19.000     SLICE_X30Y41  u_logic/Ahw2z4_reg/C
+Min Period        n/a     FDCE/C   n/a            1.000         20.000      19.000     SLICE_X33Y46  u_logic/Aii3z4_reg/C
+Low Pulse Width   Slow    FDCE/C   n/a            0.500         10.000      9.500      SLICE_X38Y50  u_logic/A4t2z4_reg/C
+Low Pulse Width   Slow    FDPE/C   n/a            0.500         10.000      9.500      SLICE_X35Y71  u_logic/A8h3z4_reg/C
+Low Pulse Width   Slow    FDPE/C   n/a            0.500         10.000      9.500      SLICE_X37Y70  u_logic/A933z4_reg/C
+Low Pulse Width   Slow    FDPE/C   n/a            0.500         10.000      9.500      SLICE_X42Y72  u_logic/A9p2z4_reg/C
+Low Pulse Width   Slow    FDCE/C   n/a            0.500         10.000      9.500      SLICE_X40Y45  u_logic/Adt2z4_reg/C
+Low Pulse Width   Slow    FDPE/C   n/a            0.500         10.000      9.500      SLICE_X44Y46  u_logic/Aea3z4_reg/C
+Low Pulse Width   Slow    FDPE/C   n/a            0.500         10.000      9.500      SLICE_X36Y65  u_logic/Aez2z4_reg/C
+Low Pulse Width   Slow    FDPE/C   n/a            0.500         10.000      9.500      SLICE_X42Y67  u_logic/Aff3z4_reg/C
+Low Pulse Width   Slow    FDPE/C   n/a            0.500         10.000      9.500      SLICE_X30Y41  u_logic/Ahw2z4_reg/C
+Low Pulse Width   Slow    FDCE/C   n/a            0.500         10.000      9.500      SLICE_X33Y46  u_logic/Aii3z4_reg/C
+High Pulse Width  Slow    FDCE/C   n/a            0.500         10.000      9.500      SLICE_X38Y50  u_logic/A4t2z4_reg/C
+High Pulse Width  Fast    FDCE/C   n/a            0.500         10.000      9.500      SLICE_X38Y50  u_logic/A4t2z4_reg/C
+High Pulse Width  Slow    FDPE/C   n/a            0.500         10.000      9.500      SLICE_X35Y71  u_logic/A8h3z4_reg/C
+High Pulse Width  Fast    FDPE/C   n/a            0.500         10.000      9.500      SLICE_X35Y71  u_logic/A8h3z4_reg/C
+High Pulse Width  Slow    FDPE/C   n/a            0.500         10.000      9.500      SLICE_X37Y70  u_logic/A933z4_reg/C
+High Pulse Width  Fast    FDPE/C   n/a            0.500         10.000      9.500      SLICE_X37Y70  u_logic/A933z4_reg/C
+High Pulse Width  Slow    FDPE/C   n/a            0.500         10.000      9.500      SLICE_X42Y72  u_logic/A9p2z4_reg/C
+High Pulse Width  Fast    FDPE/C   n/a            0.500         10.000      9.500      SLICE_X42Y72  u_logic/A9p2z4_reg/C
+High Pulse Width  Slow    FDCE/C   n/a            0.500         10.000      9.500      SLICE_X40Y45  u_logic/Adt2z4_reg/C
+High Pulse Width  Fast    FDCE/C   n/a            0.500         10.000      9.500      SLICE_X40Y45  u_logic/Adt2z4_reg/C
+
+
+
