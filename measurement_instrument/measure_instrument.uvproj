@@ -124,7 +124,7 @@
             <Oh166RecLen>16</Oh166RecLen>
           </OPTHX>
           <Simulator>
-            <UseSimulator>1</UseSimulator>
+            <UseSimulator>0</UseSimulator>
             <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
             <RunToMain>1</RunToMain>
             <RestoreBreakpoints>1</RestoreBreakpoints>
@@ -136,7 +136,7 @@
             <RestoreSysVw>1</RestoreSysVw>
           </Simulator>
           <Target>
-            <UseTarget>0</UseTarget>
+            <UseTarget>1</UseTarget>
             <LoadApplicationAtStartup>1</LoadApplicationAtStartup>
             <RunToMain>0</RunToMain>
             <RestoreBreakpoints>1</RestoreBreakpoints>
@@ -382,6 +382,36 @@
               <FileName>typedef.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\Source\typedef.h</FilePath>
+            </File>
+            <File>
+              <FileName>amplitude_measurement.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\amplitude_measurement.c</FilePath>
+            </File>
+            <File>
+              <FileName>dc_measurement.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\dc_measurement.c</FilePath>
+            </File>
+            <File>
+              <FileName>displayControl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\displayControl.c</FilePath>
+            </File>
+            <File>
+              <FileName>frequency_measurement.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\frequency_measurement.c</FilePath>
+            </File>
+            <File>
+              <FileName>heartbeat.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\heartbeat.c</FilePath>
+            </File>
+            <File>
+              <FileName>iir_filter.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Source\iir_filter.c</FilePath>
             </File>
           </Files>
         </Group>
