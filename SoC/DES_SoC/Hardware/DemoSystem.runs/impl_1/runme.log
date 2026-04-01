@@ -1,5 +1,0 @@
-
-*** Running vivado
-    with args -log AHBliteTop.vdi -applog -m64 -messageDb vivado.pb -mode batch -source AHBliteTop.tcl -notrace
-
-WARNING: Default location for XILINX_VIVADO_HLS not found: 
