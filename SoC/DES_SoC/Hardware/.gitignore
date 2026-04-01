@@ -1,0 +1,5 @@
+DemoSystem.runs
+DemoSystem.cache
+*.log
+*.jou
+*.wcfg
