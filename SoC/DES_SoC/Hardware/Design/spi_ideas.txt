@@ -1,0 +1,98 @@
+32-bit address space
+
+8 bits select the SPI slave
+24 bits left
+
+Use 8 for address
+
+
+
+SPI Configuration:
+	- Clock speed
+	- Number of bytes
+	- Write address with data?
+		If enabled, the 8 LSBs of the address will precede the data
+	- Num bytes
+		Number of bytes from the HWDATA to forward to the SPI (1-4)
+
+First draft:
+- Strictly one byte read/write at a time
+- Write:
+	- Set state machine to 'writing' 
+
+
+Copy the UART design, it will be very similar
+
+For READING we first have to WRITE a READ instruction, followed by the ADDRESS, then we should read by pulsing SCLK and shifting MISO into a shift reg and writing HRDATA to that
+
+
+
+Slave registers:
+	SPI DATA + side effects (one per SPI slave)
+		Writes will write into the shift register and immediately trigger
+		Reads will trigger and then read from the shift register
+
+	SPI DATA + without side effects (one shared)
+		Writes will write into the shift register
+		Reads will read from the shift register
+
+	SPI CONFIG (one per slave + one shared)
+		SCLK speed
+		Chip select polarity
+		Num bits to write
+		IRQ flag (w1c)
+		CPHA
+		CPOL
+		"hold CS low" control? Somehow? For multi-byte bursts
+		FIFO support?
+		Interrupt enable?
+			For empty FIFO? or end of transaction? or completed read?
+
+Parameters:
+	Interrupt behaviour - sticky or pulse? Transitional?
+
+Design:
+	State machine states:
+		Idle
+		Transaction in flight
+		Transaction complete
+
+	5-bit register to count the number of bits transmitted so far
+		Decrements by one on each SCLK
+		Set to the configured number of bits for shifting when a new transaction starts
+		State transitions to "complete" when it reaches zero
+
+	Clock divider for SCLK:
+		Divide main clock down a bunch
+		Multiplex different speeds according to the SCLK speed configuration
+
+	AHB register map
+		Decode AHB and store configuration
+		Gets complicated if a transaction is in flight already:
+			For a data AHB transaction, we should stall AHB until current SPI transaction completes
+			For a config AHB transaction, probably the same (?)
+
+	FIFO (maybe)
+
+	Main shift register
+		Connect to MISO and MOSI
+		"step" signal controlled by the FSM
+		Side load option
+		Side read option
+
+	Slave config multiplexer
+		Need to multiplex the config (e.g. SCLK speed) depending on the current slave
+		So we need to store what the current slave is when the FSM starts up and retain it until the FSM is done
+
+Problem with this configuration: we can only write 32 bits at a time
+	Usually this will be enough
+	but our slave supports writing as many bits as we like in one go, but only if we keep ~CS low
+	Could implement a FIFO to keep writing until its empty
+	or just ignore the ~CS and use a GPIO pin for it
+
+Alternative concept: SPI "bridge"
+	Treat the SPI block as a 'bridge' where the LSBs of the address get sent on
+	This means the CPU can view it as an extension of the memory map
+	but it also means the slave behaviour w.r.t. addressing and interpretation of the SPI data is fixed
+	We could make it configurable but it's difficult to predict every possible slave use case
+	I suppose we could include a 'maximum flexibility' configuration where the addressing is disabled and you can write whatever you want to the shift register
