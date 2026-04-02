@@ -17,22 +17,14 @@ module AHBspi(
 	// SPI signals
 	output wire MOSI,		// master out slave in serial data 
 	input  wire MISO,		// master in slave out serial data
-	output wire SCLK,		// SPI clock (driven by master, clock stretching not supported TODO)
-	output wire CS,			// chip select signals
+	output wire SCLK		// SPI clock (driven by master, clock stretching not supported TODO)
 );
 	
 	// Registers to hold signals from address phase
 	reg [3:0] rHADDR;			// only need 4 bits of address
 	reg [1:0] rHSIZE;			// only need 2 bits of size
-	reg rWrite;                // store one bit to indicate write transaction 
+	reg rWrite;                // store one bit to indicate write transaction
 	
-	// Registers for input and output ports
-	reg [15:0] in0A, in0B, in1A, in1B;		// double registers for sync.
-	reg [7:0] out0L, out0H, out1L, out1H;	// byte registers - two per port
-	assign gpio_out0 = {out0H, out0L};		// concatenate two bytes to get 16-bit output
-	assign gpio_out1 = {out1H, out1L};
-	
-
 	// Internal control signals
 	reg [1:0] byteWrite;	// individual byte write enable signals
 	wire  nextWrite = HSEL & HWRITE & HTRANS[1];	// slave selected for write transfer

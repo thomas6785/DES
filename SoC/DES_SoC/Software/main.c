@@ -94,7 +94,7 @@ int main(void)
 	
 	delay(FLASH_DELAY);												// wait a short time
 	
-	printf("\n\nWelcome to Cortex-M0 SoC\n");		// print a welcome message
+	printf("\n\nWelcome to Cortex-M0 SoC version 2\n");		// print a welcome message
 	
 
 // ========================  Working Loop ==========================================
@@ -136,7 +136,10 @@ int main(void)
 			else {
 				TxBuf[i] = RxBuf[i];            // not a letter so do not change case
 			}
-		} 
+		}
+		
+		printf("\nReturned %d characters\n",counter);
+		printf("\nSwitches in state %d\n",GPIO_SW);
 		
 		// Reset the counter and the flag, ready for the next time
 		counter  = 0; 		// reset the counter	
