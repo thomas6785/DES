@@ -1,0 +1,7 @@
+TODO List:
+	SPI bridge
+	SPI testbench
+
+	Double dabble hardware inside of AHBdisp.v (or wrapping it?)
+
+	Connect AHBdisp to 'segment' and 'display'
