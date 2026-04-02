@@ -7,8 +7,6 @@ static uint16 y_min = 0xFFFF; // For amplitude measurement, we also need to keep
 
 uint8 current_mode; // the mode we are in currently
 
-sfr16 ADCDATA = 0xD9; // TODO why???
-
 void setup_interrupts_and_timers() { // TODO can't we make all these functions 'inline'? Compiler seems not to like the 'inline' keyword
 	// Configure the interrupts we are using
 	IE =	(1 << EA_pos ) | // global interrupt enable bit
