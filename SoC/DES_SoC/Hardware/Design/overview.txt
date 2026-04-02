@@ -5,3 +5,26 @@ TODO List:
 	Double dabble hardware inside of AHBdisp.v (or wrapping it?)
 
 	Connect AHBdisp to 'segment' and 'display'
+
+
+Config registers:
+	SCLK rate
+	Number of bytes to transmit
+	IRQ flag (w1c)
+	CPHA
+	CPOL
+	Trigger on read?
+
+Data register:
+	On write, side effect trigger the FSM shift register
+	On read, side effect trigger the FSM shift register IF trigger_on_read bitfield high
+
+Addresses:
+	00:	Data
+	01: Config
+	10: IRQ
+	11: Reserved
+
+FSM:
+	IDLE -> ACTIVE -> DONE
+	+ register to track number of bits sent
