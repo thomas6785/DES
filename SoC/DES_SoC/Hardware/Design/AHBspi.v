@@ -15,9 +15,9 @@ module AHBspi(
 	output wire        HREADYOUT,	// ready output from slave
 
 	// SPI signals
-	output wire MOSI,		// 
-	input  wire MISO,		// 
-	output wire SCLK,		// 
+	output wire MOSI,		// master out slave in serial data 
+	input  wire MISO,		// master in slave out serial data
+	output wire SCLK,		// SPI clock (driven by master, clock stretching not supported TODO)
 	output wire CS,			// chip select signals
 );
 	
