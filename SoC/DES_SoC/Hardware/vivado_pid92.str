@@ -1,0 +1,364 @@
+/*
+
+AMD Vivado v2025.2 (64-bit) [Major: 2025, Minor: 2]
+SW Build: 6299465 on Fri Nov 14 12:34:56 MST 2025
+IP Build: 6300035 on Fri Nov 14 10:48:45 MST 2025
+IP Build: 6300035 on Fri Nov 14 10:48:45 MST 2025
+
+Process ID (PID): 92
+License: Customer
+Mode: GUI Mode
+
+Current time: 	Sun Apr 05 00:21:51 IST 2026
+Time zone: 	Greenwich Mean Time (Europe/Dublin)
+
+OS: Ubuntu
+OS Version: 5.15.167.4-microsoft-standard-WSL2
+OS Architecture: amd64
+Available processors (cores): 16
+LSB Release Description: Ubuntu 22.04.5 LTS
+
+Display: 0
+Screen size: 3440x1440
+Local screen bounds: x = 0, y = 0, width = 3440, height = 1440
+Screen resolution (DPI): 100
+Available screens: 3
+Default font: family=Dialog,name=Dialog,style=plain,size=12
+Scale size: 12
+OS font scaling: 100%
+Anti-Alias Enabled: false
+
+Java version: 	21.0.5 64-bit
+
+Java home: 	/opt/Xilinx/2025.2/tps/lnx64/jre21.0.5_11
+Java executable: 	/opt/Xilinx/2025.2/tps/lnx64/jre21.0.5_11/bin/java
+Java arguments: 	[-Dsun.java2d.pmoffscreen=false, -Dhttps.protocols=TLSv1,TLSv1.1,TLSv1.2, -Dsun.java2d.xrender=false, -Dsun.java2d.uiScale.enabled=false, -Dswing.aatext=true, -XX:-UsePerfData, -Djdk.map.althashing.threshold=512, -XX:StringTableSize=4072, -XX:+UseStringDeduplication, -XX:MaxGCPauseMillis=200, -XX:ParallelGCThreads=4, -XX:+ParallelRefProcEnabled, --add-opens=java.desktop/javax.swing.plaf.synth=ALL-UNNAMED, --add-opens=java.base/java.nio=ALL-UNNAMED, --add-opens=java.desktop/sun.swing=ALL-UNNAMED, --add-opens=java.desktop/javax.swing=ALL-UNNAMED, --add-opens=java.desktop/javax.swing.tree=ALL-UNNAMED, --add-opens=java.desktop/javax.swing.plaf.basic=ALL-UNNAMED, --add-opens=java.desktop/javax.swing.plaf.synth=ALL-UNNAMED, --add-opens=java.desktop/javax.swing.plaf.basic=ALL-UNNAMED, --add-opens=java.desktop/javax.swing=ALL-UNNAMED, --add-opens=java.desktop/javax.swing.tree=ALL-UNNAMED, --add-opens=java.desktop/java.awt.event=ALL-UNNAMED, --add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED, --add-exports=java.desktop/javax.swing.plaf.synth=ALL-UNNAMED, --add-exports=java.base/java.nio=ALL-UNNAMED, --add-exports=java.desktop/sun.swing=ALL-UNNAMED, --add-exports=java.desktop/javax.swing=ALL-UNNAMED, --add-exports=java.desktop/javax.swing.tree=ALL-UNNAMED, --add-exports=java.desktop/javax.swing.plaf.basic=ALL-UNNAMED, --add-exports=java.desktop/sun.swing=ALL-UNNAMED, --add-exports=java.desktop/sun.swing.table=ALL-UNNAMED, --add-exports=java.desktop/sun.swing.plaf.synth=ALL-UNNAMED, --add-exports=java.desktop/sun.awt.shell=ALL-UNNAMED, --add-exports=java.base/sun.security.action=ALL-UNNAMED, --add-exports=java.desktop/sun.font=ALL-UNNAMED, --add-opens=java.desktop/sun.awt.X11=ALL-UNNAMED, -XX:NewSize=80m, -XX:MaxNewSize=80m, -Xms812m, -Xmx6144m, -Xss10m, -Xrs]
+Java initial memory (-Xms): 	812 MB
+Java maximum memory (-Xmx):	 6 GB
+
+User name: 	thomas6785
+User home directory: /home/thomas6785
+User working directory: /home/thomas6785/DES/SoC/DES_SoC/Hardware
+User country: 	US
+User language: 	en
+User locale: 	en_US
+
+RDI_BASEROOT: /opt/Xilinx/2025.2
+HDI_APPROOT: /opt/Xilinx/2025.2/Vivado
+RDI_DATADIR: /home/thomas6785/DES/SoC/DES_SoC/Hardware/:/opt/Xilinx/2025.2/data
+RDI_BINDIR: /opt/Xilinx/2025.2/Vivado/bin
+
+Vivado preferences file: /home/thomas6785/.Xilinx/Vivado/2025.2/vivado.xml
+Vivado preferences directory: /home/thomas6785/.Xilinx/Vivado/2025.2/
+Vivado layouts directory: /home/thomas6785/.Xilinx/Vivado/2025.2/data/layouts
+PlanAhead jar file: 	/opt/Xilinx/2025.2/Vivado/lib/classes/planAhead.jar
+Vivado log file: 	/home/thomas6785/DES/SoC/DES_SoC/Hardware/vivado.log
+Vivado journal file: 	/home/thomas6785/DES/SoC/DES_SoC/Hardware/vivado.jou
+Engine tmp dir: 	./.Xil/Vivado-92-ThomasYoga
+Non-Default Parameters:	[]
+
+Xilinx & AMD Environment Variables
+--------------------------------------------------------------------------------------------
+RDI_APPROOT: /opt/Xilinx/2025.2/Vivado
+RDI_BASEROOT: /opt/Xilinx/2025.2
+RDI_BINROOT: /opt/Xilinx/2025.2/Vivado/bin
+RDI_BUILD: yes
+RDI_DATADIR: :/opt/Xilinx/2025.2/data
+RDI_INSTALLROOT: /opt/Xilinx
+RDI_INSTALLVER: Vivado
+RDI_JAVA_PLATFORM: 
+RDI_JAVA_VERSION: 21.0.5_11
+RDI_LIBDIR: /opt/Xilinx/2025.2/Vivado/lib/lnx64.o/Ubuntu/22:/opt/Xilinx/2025.2/Vivado/lib/lnx64.o/Ubuntu:/opt/Xilinx/2025.2/Vivado/lib/lnx64.o
+RDI_OPT_EXT: .o
+RDI_PATCHROOT: 
+RDI_PLATFORM: lnx64
+RDI_PREPEND_PATH: /opt/Xilinx/2025.2/Vitis/bin:/opt/Xilinx/2025.2/Vivado/ids_lite/ISE/bin/lin64
+RDI_PROG: /opt/Xilinx/2025.2/Vivado/bin/unwrapped/lnx64.o/vivado
+RDI_SESSION_INFO: /home/thomas6785/DES/SoC/DES_SoC/Hardware:ThomasYoga_1775344889_44
+RDI_SHARED_DATA: 
+RDI_TPS_ROOT: /opt/Xilinx/2025.2/Vivado/tps/lnx64
+RDI_USE_JDK21: True
+SHELL: /bin/bash
+XILINX: /opt/Xilinx/2025.2/Vivado/ids_lite/ISE
+XILINX_DSP: /opt/Xilinx/2025.2/Vivado/ids_lite/ISE
+XILINX_HLS: /opt/Xilinx/2025.2/Vitis
+XILINX_PLANAHEAD: /opt/Xilinx/2025.2/Vivado
+XILINX_SDK: /opt/Xilinx/2025.2/Vitis
+XILINX_VITIS: /opt/Xilinx/2025.2/Vitis
+XILINX_VIVADO: /opt/Xilinx/2025.2/Vivado
+
+
+GUI allocated memory:	812 MB
+GUI max memory:		6,144 MB
+Engine allocated memory: 2,083 MB
+
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+
+*/
+
+// TclEventType: START_GUI
+// Tcl Message: start_gui 
+// TclEventType: PROJECT_OPEN_DIALOG
+// Opening Vivado Project: DemoSystem.xpr. Version: Vivado v2025.2 
+// TclEventType: DEBUG_PROBE_SET_CHANGE
+// TclEventType: FLOW_ADDED
+// TclEventType: MSGMGR_MOVEMSG
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: FILE_SET_NEW
+// TclEventType: RUN_FAILED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_CURRENT
+// TclEventType: MSGMGR_REFRESH_MSG
+// TclEventType: PROJECT_DASHBOARD_NEW
+// TclEventType: PROJECT_DASHBOARD_GADGET_NEW
+// TclEventType: PROJECT_DASHBOARD_GADGET_CHANGE
+// TclEventType: PROJECT_DASHBOARD_GADGET_NEW
+// TclEventType: PROJECT_DASHBOARD_GADGET_CHANGE
+// TclEventType: PROJECT_DASHBOARD_GADGET_NEW
+// TclEventType: PROJECT_DASHBOARD_GADGET_CHANGE
+// TclEventType: PROJECT_DASHBOARD_GADGET_NEW
+// TclEventType: PROJECT_DASHBOARD_GADGET_CHANGE
+// TclEventType: PROJECT_DASHBOARD_GADGET_NEW
+// TclEventType: PROJECT_DASHBOARD_GADGET_CHANGE
+// TclEventType: PROJECT_DASHBOARD_GADGET_NEW
+// TclEventType: PROJECT_DASHBOARD_GADGET_CHANGE
+// TclEventType: PROJECT_NEW
+// [GUI Memory]: 136 MB (+139887kb) [00:00:13]
+// [Engine Memory]: 2,026 MB (+1972718kb) [00:00:13]
+// WARNING: HEventQueue.dispatchEvent() is taking  2108 ms.
+// [GUI Memory]: 151 MB (+9147kb) [00:00:14]
+// Tcl Message: open_project DemoSystem.xpr 
+// Tcl Message: Scanning sources... Finished scanning sources 
+// Tcl Message: INFO: [IP_Flow 19-234] Refreshing IP repositories INFO: [IP_Flow 19-1704] No user IP repositories specified INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/opt/Xilinx/2025.2/data/ip'. 
+// Project name: DemoSystem; location: /home/thomas6785/DES/SoC/DES_SoC/Hardware; part: xc7a100tcsg324-1
+// HMemoryUtils.trashcanNow. Engine heap size: 2,087 MB. GUI used memory: 83 MB. Current time: 4/5/26, 12:21:52 AM IST
+dismissDialog("Open Project"); // bk (Open Project Progress)
+// TclEventType: DG_GRAPH_GENERATED
+// [GUI Memory]: 161 MB (+2430kb) [00:00:19]
+// [Engine Memory]: 2,133 MB (+5707kb) [00:00:19]
+// TclEventType: DG_GRAPH_GENERATED
+// Elapsed time: 11 seconds
+selectButton(PAResourceAtoD.CmdMsgDialog_OK, "OK", "Critical Messages"); // f (PAResourceAtoD.CmdMsgDialog_OK)
+dismissDialog("Critical Messages"); // a (dialog0)
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "CORTEXM0DS_synth_1 ; CORTEXM0DS ; synth_design ERROR ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; Sat Apr 04 22:13:29 IST 2026 ; 00:01:34 ; Vivado Synthesis Defaults (Vivado Synthesis 2015) ; Vivado Synthesis Default Reports ; xc7a100tcsg324-1 ; ThomasYoga ; Vivado Synthesis Defaults", 3, "synth_design ERROR", 2, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE)
+// PAPropertyPanels.initPanels (CORTEXM0DS_synth_1) elapsed time: 0.3s
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "CORTEXM0DS_synth_1 ; CORTEXM0DS ; synth_design ERROR ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; Sat Apr 04 22:13:29 IST 2026 ; 00:01:34 ; Vivado Synthesis Defaults (Vivado Synthesis 2015) ; Vivado Synthesis Default Reports ; xc7a100tcsg324-1 ; ThomasYoga ; Vivado Synthesis Defaults", 3, "synth_design ERROR", 2, false, false, false, false, true, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE) - Popup Trigger
+// HMemoryUtils.trashcanNow. Engine heap size: 2,095 MB. GUI used memory: 87 MB. Current time: 4/5/26, 12:22:18 AM IST
+selectMenuItem(PAResourceEtoH.ExpRunMenu_RESET_AND_GENERATE_OUTPUT_PRODUCTS, "Regenerate Output Products"); // ap (PAResourceEtoH.ExpRunMenu_RESET_AND_GENERATE_OUTPUT_PRODUCTS, Launch Runs...)
+selectButton(RDIResource.BaseDialog_OK, "OK", "Launch Runs"); // f (RDIResource.BaseDialog_OK)
+// TclEventType: PAUSE_COMPOSITE_FILE_CHANGE_GUI
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// TclEventType: PAUSE_COMPOSITE_FILE_CHANGE_GUI
+// HMemoryUtils.trashcanNow. Engine heap size: 2,116 MB. GUI used memory: 88 MB. Current time: 4/5/26, 12:22:28 AM IST
+// Tcl Message: reset_run CORTEXM0DS_synth_1 
+// TclEventType: PAUSE_COMPOSITE_FILE_CHANGE_GUI
+// TclEventType: DG_GRAPH_GENERATED
+// TclEventType: RUN_LAUNCH
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: PAUSE_COMPOSITE_FILE_CHANGE_GUI
+// Tcl Message: launch_runs CORTEXM0DS_synth_1 -jobs 8 
+// Tcl Message: [Sun Apr  5 00:22:28 2026] Launched CORTEXM0DS_synth_1... Run output will be captured here: /home/thomas6785/DES/SoC/DES_SoC/Hardware/DemoSystem.runs/CORTEXM0DS_synth_1/runme.log 
+dismissDialog("Starting Design Runs"); // bk (Starting Design Runs Progress)
+// TclEventType: RUN_STATUS_CHANGE
+// HMemoryUtils.trashcanNow. Engine heap size: 2,148 MB. GUI used memory: 88 MB. Current time: 4/5/26, 12:22:59 AM IST
+// WARNING: HEventQueue.dispatchEvent() is taking  2473 ms.
+// WARNING: HEventQueue.dispatchEvent() is taking  2637 ms.
+// Elapsed time: 62 seconds
+selectButton(PAResourceCommand.PACommandNames_DESIGN_AHEAD, "Design Runs_design_ahead"); // C (PAResourceCommand.PACommandNames_DESIGN_AHEAD, Design Runs_design_ahead)
+// Run Command: PAResourceCommand.PACommandNames_DESIGN_AHEAD
+// HMemoryUtils.trashcanNow. Engine heap size: 2,180 MB. GUI used memory: 92 MB. Current time: 4/5/26, 12:23:33 AM IST
+selectButton("NEXT", "Next", "Create New Runs"); // JButton (NEXT)
+selectButton("NEXT", "Next", "Create New Runs"); // JButton (NEXT)
+// HMemoryUtils.trashcanNow. Engine heap size: 2,156 MB. GUI used memory: 93 MB. Current time: 4/5/26, 12:23:40 AM IST
+selectButton("NEXT", "Next", "Create New Runs"); // JButton (NEXT)
+selectButton("CANCEL", "Cancel", "Create New Runs"); // JButton (CANCEL)
+// 'e' command handler elapsed time: 16 seconds
+dismissDialog("Create New Runs"); // n (dialog2)
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "Out-of-Context Module Runs ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; ", 2, "Out-of-Context Module Runs", 0, true, false, false, false, true, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE) - Popup Trigger - Node
+selectMenuItem(PAResourceCommand.PACommandNames_DESIGN_AHEAD, "Create Runs..."); // ap (PAResourceCommand.PACommandNames_DESIGN_AHEAD, design_ahead_menu)
+// Run Command: PAResourceCommand.PACommandNames_DESIGN_AHEAD
+selectRadioButton(PAResourceAtoD.DesignAheadWizard_BOTH, "Both"); // a (PAResourceAtoD.DesignAheadWizard_BOTH)
+selectRadioButton(PAResourceAtoD.DesignAheadWizard_SYNTHESIS, "Synthesis"); // a (PAResourceAtoD.DesignAheadWizard_SYNTHESIS)
+selectButton("NEXT", "Next", "Create New Runs"); // JButton (NEXT)
+selectTable(PAResourceAtoD.ConfigRunTablePanel_CONFIG_RUN_TABLE, "synth_2 ; constrs_1 ; xc7a100tcsg324-1 ; Vivado Synthesis Defaults ; Vivado Synthesis Default Reports ; false", 0, "Vivado Synthesis Defaults", 3); // c (PAResourceAtoD.ConfigRunTablePanel_CONFIG_RUN_TABLE)
+selectButton("NEXT", "Next", "Create New Runs"); // JButton (NEXT)
+selectButton("NEXT", "Next", "Create New Runs"); // JButton (NEXT)
+// TclEventType: RUN_ADD
+// HMemoryUtils.trashcanNow. Engine heap size: 2,156 MB. GUI used memory: 93 MB. Current time: 4/5/26, 12:24:18 AM IST
+// Tcl Message: create_run synth_2 -flow {Vivado Synthesis 2025} -strategy Flow_AreaOptimized_high 
+// Tcl Message: Run is defaulting to part: xc7a100tcsg324-1 Run is defaulting to srcset: sources_1 Run is defaulting to constrset: constrs_1 
+dismissDialog("Create New Runs"); // n (dialog3)
+// TclEventType: PAUSE_COMPOSITE_FILE_CHANGE_GUI
+// Tcl Message: launch_runs synth_2 -jobs 8 
+// Tcl Message: INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'blk_mem_4Kword'... 
+// TclEventType: LOAD_FEATURE
+// HMemoryUtils.trashcanNow. Engine heap size: 2,171 MB. GUI used memory: 89 MB. Current time: 4/5/26, 12:24:20 AM IST
+// TclEventType: DG_GRAPH_STALE
+// TclEventType: COMPOSITE_FILE_CHANGE
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_ADD
+// TclEventType: FILE_SET_NEW
+// Tcl Message: INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'blk_mem_8Kword'... 
+// TclEventType: FILE_SET_NEW
+// TclEventType: FILE_SET_CHANGE
+// TclEventType: RUN_ADD
+// TclEventType: DG_GRAPH_GENERATED
+// TclEventType: RUN_LAUNCH
+// TclEventType: DG_GRAPH_GENERATED
+// TclEventType: RUN_LAUNCH
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_MODIFY
+// TclEventType: PAUSE_COMPOSITE_FILE_CHANGE_GUI
+// Tcl Message: [Sun Apr  5 00:24:22 2026] Launched CORTEXM0DS_synth_1, blk_mem_4Kword_synth_1, blk_mem_8Kword_synth_1... Run output will be captured here: CORTEXM0DS_synth_1: /home/thomas6785/DES/SoC/DES_SoC/Hardware/DemoSystem.runs/CORTEXM0DS_synth_1/runme.log blk_mem_4Kword_synth_1: /home/thomas6785/DES/SoC/DES_SoC/Hardware/DemoSystem.runs/blk_mem_4Kword_synth_1/runme.log blk_mem_8Kword_synth_1: /home/thomas6785/DES/SoC/DES_SoC/Hardware/DemoSystem.runs/blk_mem_8Kword_synth_1/runme.log [Sun Apr  5 00:24:23 2026] Launched synth_2... Run output will be captured here: /home/thomas6785/DES/SoC/DES_SoC/Hardware/DemoSystem.runs/synth_2/runme.log 
+selectButton("FINISH", "Finish", "Create New Runs"); // JButton (FINISH)
+// 'e' command handler elapsed time: 30 seconds
+dismissDialog("Starting Design Runs"); // bk (Starting Design Runs Progress)
+// TclEventType: DG_GRAPH_GENERATED
+// Elapsed Time for: 'PAResourceItoN.MsgLongTask_MESSAGE_LONG_TASK/M.f': 02m:33s
+// TclEventType: RUN_STATUS_CHANGE
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "synth_2 ; constrs_1 ; Queued... ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; 00:00:00 ; Flow_AreaOptimized_high (Vivado Synthesis 2025) ; Vivado Synthesis Default Reports (Vivado Synthesis 2025) ; xc7a100tcsg324-1 ;  ; Performs general area optimizations including changing the threshold for control set optimizations, forcing ternary adder implementation, applying lower thresholds for use of carry chain in comparators and also area optimized mux optimizations.", 2, "synth_2", 0, false, false, false, false, true, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE) - Popup Trigger
+// Elapsed Time for: 'PAResourceItoN.MsgLongTask_MESSAGE_LONG_TASK/M.f': 02m:39s
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "synth_2 ; constrs_1 ; Queued... ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; 00:00:00 ; Flow_AreaOptimized_high (Vivado Synthesis 2025) ; Vivado Synthesis Default Reports (Vivado Synthesis 2025) ; xc7a100tcsg324-1 ;  ; Performs general area optimizations including changing the threshold for control set optimizations, forcing ternary adder implementation, applying lower thresholds for use of carry chain in comparators and also area optimized mux optimizations.", 2, "constrs_1", 1, false, false, false, false, true, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE) - Popup Trigger
+selectMenuItem(PAResourceCommand.PACommandNames_RESET_RUNS, "Reset Runs"); // ap (PAResourceCommand.PACommandNames_RESET_RUNS, reset_runs_menu)
+// HOptionPane Warning: 'Run 'synth_2' appears to be running or queued. Reset anyway? (Reset Runs)'
+selectButton("OptionPane.button", "Yes", "Reset Runs"); // JButton (OptionPane.button)
+// TclEventType: PAUSE_COMPOSITE_FILE_CHANGE_GUI
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// TclEventType: PAUSE_COMPOSITE_FILE_CHANGE_GUI
+// Tcl Message: reset_run synth_2 
+selectButton(RDIResource.BaseDialog_OK, "Reset", "Reset Runs"); // f (RDIResource.BaseDialog_OK)
+dismissDialog("Resetting Runs"); // bk (Resetting Runs Progress)
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "Out-of-Context Module Runs ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; ", 3, "Out-of-Context Module Runs", 0, true); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE) - Node
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "synth_2 ; constrs_1 ; Not started ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; Flow_AreaOptimized_high (Vivado Synthesis 2025) ; Vivado Synthesis Default Reports (Vivado Synthesis 2025) ; xc7a100tcsg324-1 ;  ; Performs general area optimizations including changing the threshold for control set optimizations, forcing ternary adder implementation, applying lower thresholds for use of carry chain in comparators and also area optimized mux optimizations.", 2, "synth_2", 0, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE)
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "synth_2 ; constrs_1 ; Not started ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; Flow_AreaOptimized_high (Vivado Synthesis 2025) ; Vivado Synthesis Default Reports (Vivado Synthesis 2025) ; xc7a100tcsg324-1 ;  ; Performs general area optimizations including changing the threshold for control set optimizations, forcing ternary adder implementation, applying lower thresholds for use of carry chain in comparators and also area optimized mux optimizations.", 2, "synth_2", 0, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE)
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "synth_2 ; constrs_1 ; Not started ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; Flow_AreaOptimized_high (Vivado Synthesis 2025) ; Vivado Synthesis Default Reports (Vivado Synthesis 2025) ; xc7a100tcsg324-1 ;  ; Performs general area optimizations including changing the threshold for control set optimizations, forcing ternary adder implementation, applying lower thresholds for use of carry chain in comparators and also area optimized mux optimizations.", 2, "synth_2", 0, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE)
+// PAPropertyPanels.initPanels (impl_1) elapsed time: 0.2s
+// PAPropertyPanels.initPanels (synth_2) elapsed time: 0.3s
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "Out-of-Context Module Runs ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; ", 3, "Out-of-Context Module Runs", 0, true); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE) - Node
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "synth_2 ; constrs_1 ; Not started ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; Flow_AreaOptimized_high (Vivado Synthesis 2025) ; Vivado Synthesis Default Reports (Vivado Synthesis 2025) ; xc7a100tcsg324-1 ;  ; Performs general area optimizations including changing the threshold for control set optimizations, forcing ternary adder implementation, applying lower thresholds for use of carry chain in comparators and also area optimized mux optimizations.", 2, "synth_2", 0, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE)
+selectTab(PAResourceEtoH.FileSetView_TABBED_PANE, PAResourceEtoH.FileSetView_ADD_TAB, "IP Sources", 1); // g (PAResourceEtoH.FileSetView_TABBED_PANE, SourcesView)
+selectButton(PAResourceCommand.PACommandNames_ADD_SOURCES, "Sources_add_sources"); // C (PAResourceCommand.PACommandNames_ADD_SOURCES, Sources_add_sources)
+// Run Command: PAResourceCommand.PACommandNames_ADD_SOURCES
+// WARNING: HEventQueue.dispatchEvent() is taking  25181 ms.
+// WARNING: HSwingWorker (Refresh Filesets Swing Worker) is taking 24896 ms. Increasing delay to 74688 ms.
+// WARNING: HSwingWorker (Update Runs Swing Worker) is taking 24818 ms. Increasing delay to 3000 ms.
+// HMemoryUtils.trashcanNow. Engine heap size: 2,179 MB. GUI used memory: 93 MB. Current time: 4/5/26, 12:26:03 AM IST
+// WARNING: HSwingWorker (Update Runs Swing Worker) is taking 63154 ms. Increasing delay to 4000 ms.
+// WARNING: HSwingWorker (Monitor File Timestamp Swing Worker) is taking 917 ms to process. Increasing delay to 2000 ms.
+// WARNING: HSwingWorker (Update Runs Swing Worker) is taking 101265 ms. Increasing delay to 5000 ms.
+// WARNING: HSwingWorker (Refresh Filesets Swing Worker) is taking 108568 ms. Increasing delay to 325704 ms.
+// WARNING: HEventQueue.dispatchEvent() is taking  183421 ms.
+// WARNING: HSwingWorker (Update Runs Swing Worker) is taking 11545 ms. Increasing delay to 6000 ms.
+// WARNING: HTimer (WrapperUtils Delayed Delete Timer) is taking 813ms to process. Increasing delay to 2000 ms.
+// WARNING: HEventQueue.dispatchEvent() is taking  4708 ms.
+// WARNING: HTimer (ExpRunMonitor Update Timer) is taking 457ms to process. Increasing delay to 3000 ms.
+// WARNING: HTimer (ActiveMsgMonitor Process Messages Timer) is taking 250ms to process. Increasing delay to 2000 ms.
+// WARNING: HTimer (ActiveMsgMonitor Process Messages Timer) is taking 221ms to process. Increasing delay to 2000 ms.
+// WARNING: HTimer (FileMgr Design Graph Update Timer) is taking 721ms to process. Increasing delay to 3000 ms.
+// Elapsed time: 223 seconds
+selectButton("CANCEL", "Cancel", "Add Sources"); // JButton (CANCEL)
+// 'f' command handler elapsed time: 233 seconds
+// WARNING: HEventQueue.dispatchEvent() is taking  17758 ms.
+// WARNING: HEventQueue.dispatchEvent() is taking  1293 ms.
+// WARNING: HSwingWorker (Update Runs Swing Worker) is taking 34801 ms. Increasing delay to 7000 ms.
+// WARNING: HSwingWorker (Update Runs Swing Worker) is taking 10750 ms. Increasing delay to 8000 ms.
+// WARNING: HEventQueue.dispatchEvent() is taking  31917 ms.
+// Elapsed time: 52 seconds
+selectButton(PAResourceQtoS.SyntheticaStateMonitor_CANCEL, "Cancel"); // j (PAResourceQtoS.SyntheticaStateMonitor_CANCEL, Cancel)
+// TclEventType: RUN_FAILED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// WARNING: HEventQueue.dispatchEvent() is taking  1963 ms.
+dismissDialog("Add Sources"); // d (dialog5)
+// WARNING: HTimer (ExpRunMgr Pending Runs Timer) is taking 652ms to process. Increasing delay to 3000 ms.
+// HMemoryUtils.trashcanNow. Engine heap size: 2,184 MB. GUI used memory: 93 MB. Current time: 4/5/26, 12:29:30 AM IST
+// WARNING: HEventQueue.dispatchEvent() is taking  23188 ms.
+// Elapsed time: 29 seconds
+selectButton(PAResourceQtoS.SyntheticaStateMonitor_CANCEL, "Cancel"); // j (PAResourceQtoS.SyntheticaStateMonitor_CANCEL, Cancel)
+// HMemoryUtils.trashcanNow. Engine heap size: 2,260 MB. GUI used memory: 113 MB. Current time: 4/5/26, 12:29:54 AM IST
+// WARNING: HEventQueue.dispatchEvent() is taking  1147 ms.
+// [Engine Memory]: 2,260 MB (+21794kb) [00:08:18]
+selectButton("OptionPane.button", "Do Not Cancel Process", "Cancel Out-of-Context"); // JButton (OptionPane.button)
+// Elapsed time: 11 seconds
+selectTab(PAResourceEtoH.FileSetView_TABBED_PANE, PAResourceEtoH.FileSetView_INSERT_TAB, "Hierarchy", 0); // g (PAResourceEtoH.FileSetView_TABBED_PANE, SourcesView)
+// [GUI Memory]: 174 MB (+5148kb) [00:08:30]
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources]", 0); // E (PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE)
+// HMemoryUtils.trashcanNow. Engine heap size: 2,271 MB. GUI used memory: 113 MB. Current time: 4/5/26, 12:30:10 AM IST
+expandTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, AHBliteTop (AHBliteTop.v)]", 1); // E (PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE)
+// PAPropertyPanels.initPanels (AHBDCD.v) elapsed time: 0.4s
+// WARNING: HEventQueue.dispatchEvent() is taking  1304 ms.
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, AHBliteTop (AHBliteTop.v), decode : AHBDCD (AHBDCD.v)]", 6, false, false, false, false, true, false); // E (PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE) - Popup Trigger
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Design Sources, AHBliteTop (AHBliteTop.v), decode : AHBDCD (AHBDCD.v)]", 6, false); // E (PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE)
+selectButton(PAResourceQtoS.SyntheticaStateMonitor_CANCEL, "Cancel"); // j (PAResourceQtoS.SyntheticaStateMonitor_CANCEL, Cancel)
+// [GUI Memory]: 188 MB (+5498kb) [00:08:50]
+selectButton("OptionPane.button", "Cancel Process", "Cancel Out-of-Context"); // JButton (OptionPane.button)
+// TclEventType: PAUSE_COMPOSITE_FILE_CHANGE_GUI
+// TclEventType: RUN_MODIFY
+// Tcl Message: reset_run blk_mem_4Kword_synth_1 
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// TclEventType: RUN_FAILED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// TclEventType: PAUSE_COMPOSITE_FILE_CHANGE_GUI
+// Tcl Message: reset_runs: Time (s): cpu = 00:00:10 ; elapsed = 00:00:06 . Memory (MB): peak = 10987.445 ; gain = 0.000 ; free physical = 3332 ; free virtual = 5986 
+// TclEventType: PAUSE_COMPOSITE_FILE_CHANGE_GUI
+// TclEventType: RUN_MODIFY
+// TclEventType: RUN_RESET
+// Tcl Message: reset_run blk_mem_8Kword_synth_1 
+// TclEventType: RUN_RESET
+// TclEventType: RUN_FAILED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_STEP_COMPLETED
+// TclEventType: RUN_STATUS_CHANGE
+// TclEventType: RUN_RESET
+// TclEventType: RUN_MODIFY
+// TclEventType: PAUSE_COMPOSITE_FILE_CHANGE_GUI
+dismissDialog("Resetting Runs"); // bk (Resetting Runs Progress)
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "CORTEXM0DS_synth_1 ; CORTEXM0DS ; synth_design ERROR ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; Sun Apr 05 00:22:29 IST 2026 ; 00:06:55 ; Vivado Synthesis Defaults (Vivado Synthesis 2015) ; Vivado Synthesis Default Reports ; xc7a100tcsg324-1 ; ThomasYoga ; Vivado Synthesis Defaults", 4, "synth_design ERROR", 2, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE)
+selectTab(RDIResource.PropertiesView_TABBED_PANE, (HResource) null, "Log", 1); // g (RDIResource.PropertiesView_TABBED_PANE)
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "CORTEXM0DS_synth_1 ; CORTEXM0DS ; synth_design ERROR ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; Sun Apr 05 00:22:29 IST 2026 ; 00:06:55 ; Vivado Synthesis Defaults (Vivado Synthesis 2015) ; Vivado Synthesis Default Reports ; xc7a100tcsg324-1 ; ThomasYoga ; Vivado Synthesis Defaults", 4, "CORTEXM0DS_synth_1", 0, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE)
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "CORTEXM0DS_synth_1 ; CORTEXM0DS ; synth_design ERROR ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; Sun Apr 05 00:22:29 IST 2026 ; 00:06:55 ; Vivado Synthesis Defaults (Vivado Synthesis 2015) ; Vivado Synthesis Default Reports ; xc7a100tcsg324-1 ; ThomasYoga ; Vivado Synthesis Defaults", 4, "CORTEXM0DS", 1, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE)
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "CORTEXM0DS_synth_1 ; CORTEXM0DS ; synth_design ERROR ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; Sun Apr 05 00:22:29 IST 2026 ; 00:06:55 ; Vivado Synthesis Defaults (Vivado Synthesis 2015) ; Vivado Synthesis Default Reports ; xc7a100tcsg324-1 ; ThomasYoga ; Vivado Synthesis Defaults", 4, "CORTEXM0DS_synth_1", 0, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE)
+// HMemoryUtils.trashcanNow. Engine heap size: 2,261 MB. GUI used memory: 114 MB. Current time: 4/5/26, 12:30:51 AM IST
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Simulation Sources]", 17, true); // E (PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Constraints]", 16, true); // E (PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE) - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Constraints]", 16, true, false, false, false, false, true); // E (PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE) - Double Click - Node
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Constraints, constrs_1, Nexys4_SoC.xdc]", 18, false); // E (PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Constraints, constrs_1, Nexys4_SoC.xdc]", 18, false); // E (PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE)
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Constraints, constrs_1, Nexys4_SoC.xdc]", 18, false, false, false, false, false, true); // E (PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE) - Double Click
+selectTree(PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE, "[root, Constraints, constrs_1, Nexys4_SoC.xdc]", 18, false); // E (PAResourceEtoH.FileSetPanel_FILE_SET_PANEL_TREE)
+selectCodeEditor("Nexys4_SoC.xdc", 149, 244); // ae (Nexys4_SoC.xdc)
+selectCodeEditor("Nexys4_SoC.xdc", 143, 227); // ae (Nexys4_SoC.xdc)
+selectCodeEditor("Nexys4_SoC.xdc", 137, 242); // ae (Nexys4_SoC.xdc)
+selectCodeEditor("Nexys4_SoC.xdc", 132, 241); // ae (Nexys4_SoC.xdc)
+selectCodeEditor("Nexys4_SoC.xdc", 118, 241); // ae (Nexys4_SoC.xdc)
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "CORTEXM0DS_synth_1 ; CORTEXM0DS ; synth_design ERROR ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; Sun Apr 05 00:22:29 IST 2026 ; 00:06:55 ; Vivado Synthesis Defaults (Vivado Synthesis 2015) ; Vivado Synthesis Default Reports ; xc7a100tcsg324-1 ; ThomasYoga ; Vivado Synthesis Defaults", 4, "synth_design ERROR", 2, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE)
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "CORTEXM0DS_synth_1 ; CORTEXM0DS ; synth_design ERROR ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; Sun Apr 05 00:22:29 IST 2026 ; 00:06:55 ; Vivado Synthesis Defaults (Vivado Synthesis 2015) ; Vivado Synthesis Default Reports ; xc7a100tcsg324-1 ; ThomasYoga ; Vivado Synthesis Defaults", 4, "synth_design ERROR", 2, false, false, false, false, true, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE) - Popup Trigger
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "synth_2 ; constrs_1 ; Not started ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; Flow_AreaOptimized_high (Vivado Synthesis 2025) ; Vivado Synthesis Default Reports (Vivado Synthesis 2025) ; xc7a100tcsg324-1 ;  ; Performs general area optimizations including changing the threshold for control set optimizations, forcing ternary adder implementation, applying lower thresholds for use of carry chain in comparators and also area optimized mux optimizations.", 2, "constrs_1", 1, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE)
+selectTreeTable(PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE, "synth_2 ; constrs_1 ; Not started ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ;  ; Flow_AreaOptimized_high (Vivado Synthesis 2025) ; Vivado Synthesis Default Reports (Vivado Synthesis 2025) ; xc7a100tcsg324-1 ;  ; Performs general area optimizations including changing the threshold for control set optimizations, forcing ternary adder implementation, applying lower thresholds for use of carry chain in comparators and also area optimized mux optimizations.", 2, "constrs_1", 1, false, false, false, false, true, false); // ar (PAResourceEtoH.ExpRunTreePanel_EXP_RUN_TREE_TABLE) - Popup Trigger
+selectMenuItem(RDIResourceCommand.RDICommands_DELETE, "Delete"); // ap (RDIResourceCommand.RDICommands_DELETE, global_delete_menu)
+// Run Command: RDIResourceCommand.RDICommands_DELETE
+selectButton(RDIResource.BaseDialog_OK, "Delete", "Delete Runs"); // f (RDIResource.BaseDialog_OK)
+// TclEventType: PAUSE_COMPOSITE_FILE_CHANGE_GUI
+// TclEventType: RUN_DELETE_COLLECTION
+// TclEventType: RUN_DELETE
+// TclEventType: RUN_DELETE_COLLECTION
+// TclEventType: PAUSE_COMPOSITE_FILE_CHANGE_GUI
+// Tcl Message: delete_runs "synth_2" 
+dismissDialog("Deleting Runs"); // bk (Deleting Runs Progress)
