@@ -1,5 +1,14 @@
 `timescale 1ns / 1ns
 
+/*
+What is here currently is just copied from the UART and does not work
+
+It should in future instantiate three submodules:
+	- SPI configuration registers (which plugs into the AHB interface)
+	- SPI core bridge (which has the shift register, sclk divider, and control logic. Takes config signals from the config registers)
+	- Maybe a FIFO for queueing SPI transactions
+*/
+
 module AHBspi(
 	// Bus signals
 	input  wire        HCLK,	// bus clock
