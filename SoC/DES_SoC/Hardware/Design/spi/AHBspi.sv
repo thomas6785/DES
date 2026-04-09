@@ -3,26 +3,26 @@
 import spi_pkg::*;
 
 module AHBspi (
-	// AHB bus signals
-	input  wire        HCLK,	// bus clock
-	input  wire        HRESETn,	// bus reset, active low
-	input  wire        HSEL,	// selects this slave
-	input  wire        HREADY,	// indicates previous transaction completing
-	input  wire [31:0] HADDR,	// address
-	input  wire [1:0]  HTRANS,	// transaction type (only bit 1 used)
-	input  wire        HWRITE,	// write transaction
-	input  wire [31:0] HWDATA,	// write data
-	output wire [31:0] HRDATA,	// read data from slave
-	output wire        HREADYOUT,	// ready output from slave
-    output wire        HRESP,	// response output from slave
+    // AHB bus signals
+    input  wire        HCLK,        // bus clock
+    input  wire        HRESETn,     // bus reset, active low
+    input  wire        HSEL,        // selects this slave
+    input  wire        HREADY,      // indicates previous transaction completing
+    input  wire [31:0] HADDR,       // address
+    input  wire [1:0]  HTRANS,      // transaction type (only bit 1 used)
+    input  wire        HWRITE,      // write transaction
+    input  wire [31:0] HWDATA,      // write data
+    output wire [31:0] HRDATA,      // read data from slave
+    output wire        HREADYOUT,   // ready output from slave
+    output wire        HRESP,       // response output from slave
 
-	// SPI signals
-	output wire MOSI,		// master out slave in serial data 
-	input  wire MISO,		// master in slave out serial data
-	output wire SCLK,		// SPI clock (driven by master, clock stretching not supported TODO)
+    // SPI signals
+    output wire MOSI,               // master out slave in serial data 
+    input  wire MISO,               // master in slave out serial data
+    output wire SCLK,               // SPI clock (driven by master, clock stretching not supported TODO)
 
     // IRQ
-    output wire IRQ         // IRQ is sticky, indicates end of transaction. Write the status register to clear it.
+    output wire IRQ                 // IRQ is sticky, indicates end of transaction. Write the status register to clear it.
 );
     /*
     SPI bridge is broken into three components:

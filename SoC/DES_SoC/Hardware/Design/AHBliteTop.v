@@ -7,7 +7,7 @@
 // Design Name:   Cortex-M0 DesignStart system for Digilent Nexys4 board
 // Module Name:   AHBliteTop 
 // Description:   Top-level module.  Defines AHB Lite bus structure,
-//			instantiates and connects other modules in the system.
+//      instantiates and connects other modules in the system.
 //
 // Revision: March 2021 - Some module names changed, RAM included
 // Revision: March 2023 - Some comments and signal names changed
@@ -44,28 +44,28 @@ module AHBliteTop (
     wire        HCLK;       // 50 MHz clock 
     wire        HRESETn;    // active low reset
 // Signals from the processor to all the slaves
-    wire [31:0]	HWDATA;     // write data
-    wire [31:0]	HADDR;      // address
-    wire 		HWRITE;     // write signal
-    wire [1:0] 	HTRANS;     // transaction type
-    wire [3:0] 	HPROT;      // protection (not used here)
-    wire [2:0] 	HSIZE;      // transaction width
+    wire [31:0] HWDATA;     // write data
+    wire [31:0] HADDR;      // address
+    wire        HWRITE;     // write signal
+    wire [1:0]  HTRANS;     // transaction type
+    wire [3:0]  HPROT;      // protection (not used here)
+    wire [2:0]  HSIZE;      // transaction width
 // Signals to the processor from the multiplexers    
     wire [31:0] HRDATA;     // read data
-    wire		HREADY;     // ready signal from active slave
-    wire 		HRESP;      // error response
+    wire        HREADY;     // ready signal from active slave
+    wire        HRESP;      // error response
     
 // ====================== Signals to and from individual slaves ==================
 // Slave select signals (one per slave)
 // ## As you add more slaves, you will need more of these signals
-    wire        HSEL_rom, HSEL_ram, HSEL_dummy, HSEL_gpio, HSEL_uart;
+    wire        HSEL_rom, HSEL_ram, HSEL_dummy, HSEL_gpio, HSEL_uart, HSEL_spi;
     
 // Slave output signals (one per slave)
 // ## As you add more slaves, you will need more of these signals
-    wire [31:0] HRDATA_rom, HRDATA_ram, HRDATA_gpio, HRDATA_uart;     // read data from each slave
-    wire        HREADYOUT_rom, HREADYOUT_ram, HREADYOUT_dummy, HREADYOUT_gpio, HREADYOUT_uart;   // ready output from each slave
-    wire        HRESP_dummy, HRESP_uart;  // some slaves uses HRESP to signal an error response
- 
+    wire [31:0] HRDATA_rom, HRDATA_ram, HRDATA_gpio, HRDATA_uart, HRDATA_spi;     // read data from each slave
+    wire        HREADYOUT_rom, HREADYOUT_ram, HREADYOUT_dummy, HREADYOUT_gpio, HREADYOUT_uart, HREADYOUT_spi;   // ready output from each slave
+    wire        HRESP_dummy, HRESP_uart, HRESP_spi;  // some slaves uses HRESP to signal an error response
+
 
 // ======================== Other Interconnecting Signals =======================
     wire        PLL_locked;     // from clock generator, indicates clock is running
@@ -74,15 +74,20 @@ module AHBliteTop (
     wire        ROMload;        // rom loader is active
     wire [3:0]  muxSel;         // from address decoder to control the multiplexer
     wire [4:0]  buttons = {btnU, btnD, btnL, btnC, btnR};   // concatenate 5 pushbuttons
-    
+
     wire        IRQ_uart;
+    wire        IRQ_spi;
 
 // Define wires for Cortex-M0 DesignStart processor signals (not part of AHB-Lite)
-    wire 		RXEV, TXEV;  // event signals (not used here)
+    wire        RXEV, TXEV;  // event signals (not used here)
     wire        NMI;        // non-maskable interrupt (not used here)
-    wire [15:0]	IRQ;        // interrupt signals from up to 16 devices - active high
+    wire [15:0] IRQ;        // interrupt signals from up to 16 devices - active high
     wire        SYSRESETREQ;    // processor reset request output
-    
+
+// Wire for the GPIO output for chip select
+    wire [15:0]  gpio_out1;  // this is the GPIO output connected to address 4, used for SPI slave select
+    assign aclSSn = gpio_out1[0];   // use bit 0 of this GPIO output as the accelerometer slave select signal
+
 // Wires and multiplexer to drive LEDs from two different sources - needed for ROM loader
     wire [11:0] led_rom;        // status output from ROM loader
     wire [15:0] led_gpio;       // led output from GPIO block
@@ -139,7 +144,7 @@ module AHBliteTop (
 // Connect the interrupt signal from the slave to the appropriate bit of IRQ
 // Leave any unused interrupt inputs wired to 0 (inactive)
     assign IRQ = {
-        14'b0, IRQ_uart, 1'b0
+        13'b0, IRQ_spi, IRQ_uart, 1'b0
     };
     
     
@@ -156,10 +161,10 @@ module AHBliteTop (
         .HSIZE       (HSIZE),
         .HMASTLOCK   (),        // not used, not connected
         .HBURST      (),        // not used, not connected
-        // Inputs from the AHB-Lite bus	
-        .HRDATA      (HRDATA),			
-        .HREADY      (HREADY),					
-        .HRESP       (HRESP),					
+        // Inputs from the AHB-Lite bus
+        .HRDATA      (HRDATA),
+        .HREADY      (HREADY),
+        .HRESP       (HRESP),
         // Other signals
         .NMI         (NMI),
         .IRQ         (IRQ),
@@ -180,7 +185,7 @@ module AHBliteTop (
         .HSEL_S1    (HSEL_ram),
         .HSEL_S2    (HSEL_gpio),
         .HSEL_S3    (HSEL_uart),
-        .HSEL_S4    (),
+        .HSEL_S4    (HSEL_spi),
         .HSEL_S5    (),
         .HSEL_S6    (),
         .HSEL_S7    (),
@@ -204,7 +209,7 @@ module AHBliteTop (
         .HRDATA_S1      (HRDATA_ram),
         .HRDATA_S2      (HRDATA_gpio),
         .HRDATA_S3      (HRDATA_uart),
-        .HRDATA_S4      (BAD_DATA),
+        .HRDATA_S4      (HRDATA_spi),
         .HRDATA_S5      (BAD_DATA),
         .HRDATA_S6      (BAD_DATA),         // unused inputs give BAD_DATA
         .HRDATA_S7      (BAD_DATA),
@@ -218,7 +223,7 @@ module AHBliteTop (
         .HREADYOUT_S1   (HREADYOUT_ram),
         .HREADYOUT_S2   (HREADYOUT_gpio),
         .HREADYOUT_S3   (HREADYOUT_uart),
-        .HREADYOUT_S4   (1'b1),
+        .HREADYOUT_S4   (HREADYOUT_spi),
         .HREADYOUT_S5   (1'b1),
         .HREADYOUT_S6   (1'b1),             // unused inputs must be tied to 1
         .HREADYOUT_S7   (1'b1),
@@ -230,9 +235,9 @@ module AHBliteTop (
     // Connect the response signals to the response multiplexer
         .HRESP_S0    (OKAY),    // the ROM and RAM slaves do not have HRESP ports, as they 
         .HRESP_S1    (OKAY),    // never signal an error, so response is always OKAY
-		.HRESP_S2    (OKAY), 
+        .HRESP_S2    (OKAY),
         .HRESP_S3    (HRESP_uart),             
-        .HRESP_S4    (OKAY),
+        .HRESP_S4    (HRESP_spi),
         .HRESP_S5    (OKAY),
         .HRESP_S6    (OKAY),    // unused reponse inputs should also be OKAY
         .HRESP_S7    (OKAY),
@@ -258,11 +263,11 @@ module AHBliteTop (
         .HRDATA         (HRDATA_rom),       // read data output
         .HREADYOUT      (HREADYOUT_rom),    // ready output
         // Loader connections - to allow new program to be loaded into ROM
-        .resetHW        (resetHW),			// hardware reset
-        .loadButton     (btnU),		        // pushbutton to activate loader
-        .serialRx	    (serialRx),         // serial input
+        .resetHW        (resetHW),          // hardware reset
+        .loadButton     (btnU),             // pushbutton to activate loader
+        .serialRx       (serialRx),         // serial input
         .status         (led_rom),          // 12-bit word count for display on LEDs
-        .ROMload        (ROMload)			// loader active
+        .ROMload        (ROMload)           // loader active
         );
 
 // ======================== Data memory - block RAM ====================================
@@ -287,21 +292,21 @@ module AHBliteTop (
 
     AHBgpio GPIO(
                 // Bus signals
-                .HCLK   (HCLK),				// bus clock
-                .HRESETn (HRESETn),			// bus reset, active low
-                .HSEL (HSEL_gpio),				// selects this slave
-                .HREADY      (HREADY),              // indicates previous transaction completing
-                .HADDR       (HADDR),               // address
-                .HTRANS      (HTRANS),              // transaction type (only bit 1 used)
-                .HSIZE       (HSIZE),               // transaction width (max 32-bit supported)
-                .HWRITE      (HWRITE),              // write transaction
-                .HWDATA      (HWDATA),              // write data
-                .HRDATA      (HRDATA_gpio),          // read data output
-                .HREADYOUT   (HREADYOUT_gpio),        // ready output
-                .gpio_out0   (led_gpio),	// read-write address 0
-                .gpio_out1   (),	// read-write address 4
-                .gpio_in0    (sw),		// read only address 8
-                .gpio_in1    ({11'b0, buttons})		// read only address C
+                .HCLK   (HCLK),                 // bus clock
+                .HRESETn (HRESETn),             // bus reset, active low
+                .HSEL (HSEL_gpio),              // selects this slave
+                .HREADY      (HREADY),          // indicates previous transaction completing
+                .HADDR       (HADDR),           // address
+                .HTRANS      (HTRANS),          // transaction type (only bit 1 used)
+                .HSIZE       (HSIZE),           // transaction width (max 32-bit supported)
+                .HWRITE      (HWRITE),          // write transaction
+                .HWDATA      (HWDATA),          // write data
+                .HRDATA      (HRDATA_gpio),     // read data output
+                .HREADYOUT   (HREADYOUT_gpio),  // ready output
+                .gpio_out0   (led_gpio),        // read-write address 0
+                .gpio_out1   (gpio_out1),       // read-write address 4
+                .gpio_in0    (sw),              // read only address 8
+                .gpio_in1    ({11'b0, buttons}) // read only address C
         );
 
 
@@ -314,23 +319,23 @@ module AHBliteTop (
    
 
     AHBuart UART(
-			// Bus signals
-			.HCLK   (HCLK),				// bus clock
-            .HRESETn (HRESETn),            // bus reset, active low
-            .HSEL (HSEL_uart),                // selects this slave
-            .HREADY      (HREADY),              // indicates previous transaction completing
-            .HADDR       (HADDR),               // address
-            .HTRANS      (HTRANS),              // transaction type (only bit 1 used)
-            .HWRITE      (HWRITE),              // write transaction
-            .HWDATA      (HWDATA),              // write data
-            .HRDATA      (HRDATA_uart),          // read data output
-            .HREADYOUT   (HREADYOUT_uart),        // ready output
-			.HRESP(HRESP_uart),			// response output from slave
-			.serialRx(serialRx),			// serial receive, idles at 1
-			.serialTx(serialTx),		// serial transmit, idles at 1
-			.uart_IRQ(IRQ_uart)			// interrupt request
+            // Bus signals
+            .HCLK   (HCLK),                 // bus clock
+            .HRESETn (HRESETn),             // bus reset, active low
+            .HSEL (HSEL_uart),              // selects this slave
+            .HREADY      (HREADY),          // indicates previous transaction completing
+            .HADDR       (HADDR),           // address
+            .HTRANS      (HTRANS),          // transaction type (only bit 1 used)
+            .HWRITE      (HWRITE),          // write transaction
+            .HWDATA      (HWDATA),          // write data
+            .HRDATA      (HRDATA_uart),     // read data output
+            .HREADYOUT   (HREADYOUT_uart),  // ready output
+            .HRESP(HRESP_uart),             // response output from slave
+            .serialRx(serialRx),            // serial receive, idles at 1
+            .serialTx(serialTx),            // serial transmit, idles at 1
+            .uart_IRQ(IRQ_uart)             // interrupt request
     );
-	
+
 
 
 // ======================= Dummy Slave ======================================
@@ -347,5 +352,26 @@ module AHBliteTop (
        .HRESP       (HRESP_dummy)      // response output
        );
        
+// ======================= SPI Slave ======================================
+
+    AHBspi SPI(
+            .HCLK       (HCLK),           // bus clock
+            .HRESETn    (HRESETn),        // bus reset, active low
+            .HSEL       (HSEL_spi),       // selects this slave
+            .HREADY     (HREADY),         // indicates previous transaction completing
+            .HADDR      (HADDR),          // address
+            .HTRANS     (HTRANS),         // transaction type (only bit 1 used)
+            .HWRITE     (HWRITE),         // write transaction
+            .HWDATA     (HWDATA),         // write data
+            .HRDATA     (HRDATA_spi),     // read data output
+            .HREADYOUT  (HREADYOUT_spi),  // ready output
+            .HRESP      (HRESP_spi),      // response output from slave
+
+            .MOSI       (aclMOSI),        // master-out slave-in (serial)
+            .MISO       (aclMISO),        // master-in slave-out (serial)
+            .SCLK       (aclSCK),         // clock for synchronising SPI
+            
+            .IRQ        (IRQ_spi)         // interrupt request line
+    );
 
 endmodule

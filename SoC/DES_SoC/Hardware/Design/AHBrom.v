@@ -52,7 +52,7 @@ module AHBrom(
         .rxd        (serialRx),      // serial data in (idle at logic 1)
         .rxdout     (rxByte),        // 8-bit received data
         .rxnew      (newByte)       // one-cycle strobe signal
-        );   
+        );
 
 	// Instantiate the loader hardware
 	ram_loader # (.ADDR_WIDTH(ADDR_WIDTH)) loader (
@@ -79,6 +79,4 @@ module AHBrom(
         .addrb      (HADDR[ADDR_WIDTH-1:2]),      // read uses bus address
         .doutb      (HRDATA)            // read data goes directly to bus
         );
-
- 
 endmodule
