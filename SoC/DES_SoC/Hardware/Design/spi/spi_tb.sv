@@ -1,3 +1,5 @@
+import spi_pkg::*;
+
 module spi_core_TB;
     logic clk;
     initial begin

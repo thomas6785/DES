@@ -1,5 +1,7 @@
 `timescale 1ns/1ps
 
+import spi_pkg::*;
+
 module spi_controller (
     input clk,
     input rst_n,

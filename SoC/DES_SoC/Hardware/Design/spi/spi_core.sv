@@ -1,5 +1,7 @@
 `timescale 1ns/1ps
 
+import spi_pkg::*;
+
 module spi_core #(
     parameter DWIDTH = 32,
     parameter CLK_DIV_BITS = 4
@@ -84,10 +86,10 @@ module spi_core #(
     // Then counts down on each trailing edge until it hits zero
     logic [$clog2(DWIDTH)+1-1:0] bit_ctr; // needs to be wide enough to hold the value DWIDTH, so one extra bit
     always_ff @ (posedge clk or negedge rst_n) begin
-        if (!rst_n)                  bit_ctr = '0;
-        else if (trigger)            bit_ctr = n_tx_bits_internal; // new transaction, reload the counter
-        else if (sclk_trailing_edge) bit_ctr = bit_ctr - 1; // count down on trailing edge so we reach zero on the final trailing edge
-        else                         bit_ctr = bit_ctr; // hold value otherwise
+        if (!rst_n)                  bit_ctr <= '0;
+        else if (trigger)            bit_ctr <= n_tx_bits_internal; // new transaction, reload the counter
+        else if (sclk_trailing_edge) bit_ctr <= bit_ctr - 1; // count down on trailing edge so we reach zero on the final trailing edge
+        else                         bit_ctr <= bit_ctr; // hold value otherwise
     end
     assign busy = (bit_ctr != 0); // busy whenever there are bits left to transmit
 

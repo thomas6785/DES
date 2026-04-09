@@ -1,5 +1,7 @@
 `timescale 1ns/1ps
 
+import spi_pkg::*;
+
 module AHBspi (
 	// AHB bus signals
 	input  wire        HCLK,	// bus clock
