@@ -93,11 +93,6 @@ module AHBliteTop (
     wire [15:0] led_gpio;       // led output from GPIO block
     assign led = ROMload ? {4'b0,led_rom} : led_gpio;    // choose which to display
     
-// Temporary connections to the accelerometer signals, to avoid warnings in synthesis
-// ## If you use the accelerometer, you will need to delete these assignments
-    assign aclSCK = 1'b0;   // accelerometer SPI clock is always low
-    assign aclMOSI = 1'b0;  // acceleromoter SPI MOSI is always 0
-    assign aclSSn = 1'b1;   // accelerometer SPI slave select is inactive
 
 // ======================== Signals for display on oscilloscope ===================
 // ## Change these as needed to output any 8 signals in this module
