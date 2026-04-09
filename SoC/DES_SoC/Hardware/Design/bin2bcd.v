@@ -1,14 +1,15 @@
 // This is a module to convert binary to binary coded decimal values
 
 module bin2bcd #(
-    parameter INPUT_WIDTH = 8
+    parameter INPUT_WIDTH = 8,
+    parameter OUTPUT_WIDTH = INPUT_WIDTH + (INPUT_WIDTH-4)/3+1
 )(  input       [INPUT_WIDTH -1: 0] bin_in,
-    output reg  [INPUT_WIDTH + (INPUT_WIDTH -4)/3: 0] bcd_out);
+    output reg  [OUTPUT_WIDTH-1: 0] bcd_out);
 
 
     integer i, j;
     always @(bin_in) begin
-        bcd_out = '0;
+        bcd_out = {OUTPUT_WIDTH{1'b0}};
 
         bcd_out[INPUT_WIDTH-1:0]= bin_in;
 
