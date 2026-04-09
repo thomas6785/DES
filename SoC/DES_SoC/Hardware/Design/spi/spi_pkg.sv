@@ -1,3 +1,5 @@
+`timescale 1ns/1ps
+
 package spi_pkg;
     typedef enum bit [2:0] {
         TX_01_BIT = 3'h0,
