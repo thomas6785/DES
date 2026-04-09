@@ -152,8 +152,8 @@ typedef struct {
 #define pt2UART ((UART_block *)0x51000000)
 #define pt2GPIO ((GPIO_block *)0x50000000)
 
-#define pt2SPICON ((volatile uint32 *) 0x51000000)
-#define pt2SPIDAT ((volatile uint32 *)0x51000004)
+#define pt2SPICON ((volatile uint32 *) 0x52000000)
+#define pt2SPIDAT ((volatile uint32 *)0x52000004)
 	
 #define GPIO_ACC	(pt2GPIO->Out1)				// input port 1 is connected to 5 buttons
 
