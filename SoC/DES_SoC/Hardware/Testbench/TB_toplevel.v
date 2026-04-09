@@ -6,11 +6,11 @@
 module TB_toplevel(    );
      
     reg btnCpuResetn, clk100, btnU; 
-    reg [15:0] sw;		// switch inputs
+    reg [15:0] sw;          // switch inputs
     wire [15:0] LED;
-    wire serialRx = 1'b1;		// serial receive at idle
-    wire serialTx;        		// serial transmit
-     
+    wire serialRx = 1'b1;   // serial receive at idle
+    wire serialTx;          // serial transmit
+
     AHBliteTop dut(
         .clk100(clk100), 
         .btnCpuResetn(btnCpuResetn),
@@ -19,9 +19,9 @@ module TB_toplevel(    );
         .sw(sw),
         .led(LED), 
         .serialTx(serialTx)
-         );
-         
- 
+    );
+
+
     initial
         begin
             clk100 = 1'b0;
@@ -31,13 +31,13 @@ module TB_toplevel(    );
 
     initial
         begin
-            sw = 16'h5a4b;			// set a value on the switches
-            btnCpuResetn = 1'b1;		// start with reset inactive
-            btnU = 1'b0;				// loader button not pressed
-            #400;         // wait for cpu and bus clock to be stable 
-            btnCpuResetn = 1'b0;    // active low reset
+            sw = 16'h5a4b;              // set a value on the switches
+            btnCpuResetn = 1'b1;        // start with reset inactive
+            btnU = 1'b0;                // loader button not pressed
+            #400;                     // wait for cpu and bus clock to be stable 
+            btnCpuResetn = 1'b0;        // active low reset
             #30 btnCpuResetn = 1'b1;    // release reset
-            #20000;      // delay 20 us or 500 cpu clock cycles
+            #20000;                     // delay 20 us or 500 cpu clock cycles
             $stop;
         end
 
