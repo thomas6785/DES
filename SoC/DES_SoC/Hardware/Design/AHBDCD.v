@@ -94,6 +94,12 @@ always @ (HADDR)
                     HSEL_S3 = 1'b1;
                     MUX_SEL = 4'd3;
                 end
+                
+            8'h52:
+                begin
+                    HSEL_S4 = 1'b1;
+                    MUX_SEL = 4'd4;
+                end
              
          
             default: 			// Address not mapped to any slave

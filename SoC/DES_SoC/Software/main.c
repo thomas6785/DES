@@ -81,9 +81,9 @@ void delay (uint32 n)
 //////////////////////////////////////////////////////////////////
 int main(void) 
 {
-	uint8 i;		// used in for loop
+	uint32 i;		// used in for loop
 	uint8 TxBuf[ARRAY_SIZE(RxBuf)];		// serial transmit buffer
-
+	uint32 ACC;
 // ========================  Initialisation ==========================================
 
 	// Configure the UART - the control register decides which events cause interrupts
@@ -111,6 +111,8 @@ int main(void)
 
 		// Ask for user input
 		printf("\nType some characters: ");
+		GPIO_ACC = 0xFF;
+		* pt2SPICON = (0 << 6) | (7 <<3) | (0 << 2) | (3);
 		
 		while (BufReady == 0)	// loop until input is ready to process
 		{
@@ -118,38 +120,34 @@ int main(void)
 			// only get to this point if a character has been received
 			GPIO_LED = RxBuf[counter-1];  // display the code for the character
 		}
-
 		/* Get here when CR is entered or the buffer is full - data is ready for processing.
 			Copy the data with UART interrupts disabled, so data does not change.  
 			The interrupts should only be disabled for a short time, to avoid missing data,
 		  so the program only does the minimum necessary in the "critical section". */
 		
 		// ---- Start of critical section ----
+		while(1){
 		NVIC_Disable = (1 << NVIC_UART_BIT_POS);	// disable the UART interrupt
 
-		// Copy the received characters to another array, changing the case of letters
-		for (i=0; i<=counter; i++)		// step through all the bytes received
-		{
-			if (RxBuf[i] >= 'A') {						// if this character is a letter (roughly)
-				TxBuf[i] = RxBuf[i] ^ CASE_BIT; // copy to transmit buffer, changing case
-			}
-			else {
-				TxBuf[i] = RxBuf[i];            // not a letter so do not change case
-			}
-		}
+		// Begin transaction by turning on chip select
+		for (i = 0; i < 1000; i++){};
+		GPIO_ACC = 0x0;
 		
-		printf("\nReturned %d characters\n",counter);
-		printf("\nSwitches in state %d\n",GPIO_SW);
+		// Write to SPI
+		* pt2SPIDAT = 0x000b0b00;
+		// Read SPIDAT
+		ACC= * pt2SPIDAT;
 		
-		// Reset the counter and the flag, ready for the next time
-		counter  = 0; 		// reset the counter	
-		BufReady = 0;			// clear the flag
+		GPIO_ACC = 0xFF;
+
 		
 		NVIC_Enable = (1 << NVIC_UART_BIT_POS);		// Enable the UART interrupt
 		// ---- End of critical section ----	
 
 		// Print the result.  Printing can take a long time, so this is outside the critical section.
-		printf("\n:--> |%s|\n", TxBuf);  // print the results between bars
+		
+		printf("Accelorometer X Value %x\n", ACC);
+	}
 
 	} // end of infinite loop
 
