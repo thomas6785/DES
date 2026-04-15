@@ -132,11 +132,15 @@ int main(void)
 		// Begin transaction by turning on chip select
 		for (i = 0; i < 1000; i++){};
 		GPIO_ACC = 0x0;
+		printf("%x", *(pt2SPICON));
 		
 		// Write to SPI
-		* pt2SPIDAT = 0x000b0b00;
+		* pt2SPIDAT = 0x000b0800;
+			printf("%x", *(pt2SPICON));
 		// Read SPIDAT
+		while (*(pt2SPICON) & (1<<30));
 		ACC= * pt2SPIDAT;
+		printf("%x", *(pt2SPICON));
 		
 		GPIO_ACC = 0xFF;
 
