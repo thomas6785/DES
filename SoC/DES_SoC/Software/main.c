@@ -81,7 +81,7 @@ void delay (uint32 n)
 //////////////////////////////////////////////////////////////////
 int main(void) 
 {
-	uint32 i;		// used in for loop
+	uint32 i, j;		// used in for loop
 	uint8 TxBuf[ARRAY_SIZE(RxBuf)];		// serial transmit buffer
 	uint32 ACC;
 // ========================  Initialisation ==========================================
@@ -99,7 +99,7 @@ int main(void)
 
 // ========================  Working Loop ==========================================
 	
-	while(1)		// loop forever
+	//while(1)		// loop forever
 	{	
 		// Do some processing before entering Sleep Mode
 		GPIO_LED	= GPIO_SW; 			// copy 16 switches onto corresponding LEDs
@@ -110,9 +110,9 @@ int main(void)
 		delay(FLASH_DELAY);				// short delay
 
 		// Ask for user input
-		printf("\nType some characters: ");
+		printf("\nType some characters test: ");
 		GPIO_ACC = 0xFF;
-		* pt2SPICON = (0 << 6) | (7 <<3) | (0 << 2) | (3);
+		pt2SPICON = (0 << 6) | (7 <<3) | (0 << 2) | (3);
 		
 		while (BufReady == 0)	// loop until input is ready to process
 		{
@@ -126,32 +126,44 @@ int main(void)
 		  so the program only does the minimum necessary in the "critical section". */
 		
 		// ---- Start of critical section ----
-		while(1){
-		NVIC_Disable = (1 << NVIC_UART_BIT_POS);	// disable the UART interrupt
+		for (j = 0; j < 0x2e; j++) {
+			NVIC_Disable = (1 << NVIC_UART_BIT_POS);	// disable the UART interrupt
 
-		// Begin transaction by turning on chip select
-		for (i = 0; i < 1000; i++){};
-		GPIO_ACC = 0x0;
-		printf("%x", *(pt2SPICON));
-		
-		// Write to SPI
-		* pt2SPIDAT = 0x000b0800;
-			printf("%x", *(pt2SPICON));
-		// Read SPIDAT
-		while (*(pt2SPICON) & (1<<30));
-		ACC= * pt2SPIDAT;
-		printf("%x", *(pt2SPICON));
-		
-		GPIO_ACC = 0xFF;
+			// Begin transaction by turning on chip select
+			for (i = 0; i < 100000; i++){};
+			GPIO_ACC = 0x0;
+			
+			// Write to SPI
+			printf("Writing SPIDAT\n");
+			pt2SPIDAT = (0x000b0000 | (j<<16));
+			printf("SPIDAT written: %8x",pt2SPIDAT);
+			// Read SPIDAT
+			while(1) {
+				uint32 spicon_rd;
+				spicon_rd = pt2SPICON;
+				//printf("SPICON: %8x",spicon_rd);
+				if ((spicon_rd & 0x40000000)) {
+					printf("."); // busy
+				} else {
+					break;
+				}
+			}
+			printf("SPICON busy flag dropped\t");
+			pt2SPICON = ((0 << 6) | (7 <<3) | (0 << 2) | (3) | (0x80000000)); // write-to-clear IRQ
+			printf("IRQ cleared\t");
+			printf("SPICON: %8x\t",(pt2SPICON));
+			printf("Reading SPIDAT\t");
+			ACC = pt2SPIDAT;
+			
+			GPIO_ACC = 0xFF;
 
-		
-		NVIC_Enable = (1 << NVIC_UART_BIT_POS);		// Enable the UART interrupt
-		// ---- End of critical section ----	
+			
+			NVIC_Enable = (1 << NVIC_UART_BIT_POS);		// Enable the UART interrupt
+			// ---- End of critical section ----	
 
-		// Print the result.  Printing can take a long time, so this is outside the critical section.
-		
-		printf("Accelorometer X Value %x\n", ACC);
-	}
+			// Print the result.  Printing can take a long time, so this is outside the critical section.
+			printf("Address: %8x  SPIDAT: %8x\n", j, ACC);
+		}
 
 	} // end of infinite loop
 
