@@ -114,6 +114,8 @@ uint32 read_accelerometer_register(uint8 addr) {
 	printf("\tReading SPIDAT: [%8x] <= %8x\n",addr,write_val);
 	GPIO_ACC = 0x00; // chip select (active low)
 	pt2SPIDAT = write_val;
+	read_val = pt2SPIDAT; // TODO REMOVE THIS we shouldn't be reading back so quickly but it's usefulf or debugging
+	printf("\tImmediately read back %8x\n",read_val);
 	
 	printf("\tWrote SPIDAT, waiting for busy flag to clear\n");
 	while(1) {
