@@ -75,6 +75,25 @@ void delay (uint32 n)
 		for(i=0; i<n; i++);		// do nothing n times
 }
 
+///////////////////
+// Configure the accelerometer
+void configurate_accelerometer() { // ADXL362
+	volatile int i;
+	
+	GPIO_ACC = 0x00;
+	
+	pt2SPIDAT = 	((0x0A << 16) | // write instruction
+								 (0x1F <<  8) | // address 0x1f is SOFT_RESET
+								 ('R')); // write 'R' for reset
+	
+	for(i = 0; i<10000; i++); // "a latency of 0.5 ms is required after soft reset" I have no IDEA if this is the right duration TODO
+	
+	pt2SPIDAT = 	((0x0A << 16) | // write instruction
+								 (0x2D <<  8) | // address 0x2D is POWER_CTL
+								 (2)); // write config for measurement mod
+	
+	GPIO_ACC = 0xFF;
+}
 
 //////////////////////////////////////////////////////////////////
 // Main Function
@@ -97,6 +116,12 @@ int main(void)
 	printf("\n\nWelcome to Cortex-M0 SoC version 2\n");		// print a welcome message
 	
 
+	// Set up the SPI device
+	GPIO_ACC = 0xFF;
+	pt2SPICON = (0 << 6) | (7 <<3) | (0 << 2) | (3);
+
+	configurate_accelerometer();
+	
 // ========================  Working Loop ==========================================
 	
 	//while(1)		// loop forever
@@ -111,7 +136,7 @@ int main(void)
 
 		// Ask for user input
 		printf("\nType some characters test: ");
-		GPIO_ACC = 0xFF;
+		
 		pt2SPICON = (0 << 6) | (7 <<3) | (0 << 2) | (3);
 		
 		while (BufReady == 0)	// loop until input is ready to process
