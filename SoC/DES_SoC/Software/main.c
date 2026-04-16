@@ -75,24 +75,82 @@ void delay (uint32 n)
 		for(i=0; i<n; i++);		// do nothing n times
 }
 
+void write_accelerometer_register(uint8 addr, uint8 data) {
+	uint32 write_val;
+	
+	write_val = ((0x0A << 16) | // write instruction
+							 (addr <<  8) | // address
+							 (data));
+	
+	GPIO_ACC = 0x00; // chip select (active low)
+	
+	printf("\tWriting to SPIDAT: [%8x] <= %8x\n",addr,write_val);
+
+	pt2SPIDAT = write_val;
+	
+	printf("\tWrote SPIDAT, waiting for busy flag to clear\n");
+	while(1) {
+		uint32 spicon_rd;
+		spicon_rd = pt2SPICON; // read spicon
+		//printf("SPICON: %8x",spicon_rd);
+		if ((spicon_rd & 0x40000000)) { // while we are busy
+			printf("."); // busy
+		} else {
+			break; // break once the 'busy' flag drops
+		}
+	}
+	printf("\tSPICON 'busy' flag dropped\n");
+	
+	GPIO_ACC = 0xFF; // deselect chip
+}
+
+uint32 read_accelerometer_register(uint8 addr) {
+	uint32 read_val,write_val;
+	
+	write_val = ((0x0B << 16) | // read instruction
+							 (addr <<  8) | // address
+							 (0x00)); // just write zeros - we are interested in the return value only
+	
+	printf("\tReading SPIDAT: [%8x] <= %8x\n",addr,write_val);
+	GPIO_ACC = 0x00; // chip select (active low)
+	pt2SPIDAT = write_val;
+	
+	printf("\tWrote SPIDAT, waiting for busy flag to clear\n");
+	while(1) {
+		uint32 spicon_rd;
+		spicon_rd = pt2SPICON; // read spicon
+		//printf("SPICON: %8x",spicon_rd);
+		if ((spicon_rd & 0x40000000)) { // while we are busy
+			printf("."); // busy
+		} else {
+			break; // break once the 'busy' flag drops
+		}
+	}
+	printf("\tSPICON 'busy' flag dropped\n");
+	
+	GPIO_ACC = 0xFF; // deselect chip
+	
+	read_val = pt2SPIDAT; // read SPIDAT back TODO extract only relevant bits
+	printf("\tRead %8x from SPIDAT\n",read_val);
+	
+	return read_val; // read SPIDAT back
+}
+
 ///////////////////
 // Configure the accelerometer
-void configurate_accelerometer() { // ADXL362
+void configure_accelerometer() { // ADXL362
 	volatile int i;
+	printf("Configuring accelerometer\n");
 	
-	GPIO_ACC = 0x00;
+	write_accelerometer_register(0x1F,0x52); // 0x52 is the instruction to reset ('R' in ASCII)
+
+	printf("Sent reset to accelerometer - delaying\n");
+	for(i = 0; i<100000; i++); // "a latency of 0.5 ms is required after soft reset" I have no IDEA if this is the right duration TODO
+	printf("Delay complete\n");
 	
-	pt2SPIDAT = 	((0x0A << 16) | // write instruction
-								 (0x1F <<  8) | // address 0x1f is SOFT_RESET
-								 ('R')); // write 'R' for reset
-	
-	for(i = 0; i<10000; i++); // "a latency of 0.5 ms is required after soft reset" I have no IDEA if this is the right duration TODO
-	
-	pt2SPIDAT = 	((0x0A << 16) | // write instruction
-								 (0x2D <<  8) | // address 0x2D is POWER_CTL
-								 (2)); // write config for measurement mod
-	
-	GPIO_ACC = 0xFF;
+	printf("Sending config to accelerometer\n");
+	write_accelerometer_register(0x2D,2); // set mode to measurement mod
+	printf("Config sent\n");
 }
 
 //////////////////////////////////////////////////////////////////
@@ -103,13 +161,8 @@ int main(void)
 	uint32 i, j;		// used in for loop
 	uint8 TxBuf[ARRAY_SIZE(RxBuf)];		// serial transmit buffer
 	uint32 ACC;
-// ========================  Initialisation ==========================================
-
-	// Configure the UART - the control register decides which events cause interrupts
-	UART_CTL = (1 << UART_RX_FIFO_NOTEMPTY_BIT_POS);	// enable rx data available interrupt only
 	
-	// Configure the interrupt system in the processor (NVIC)
-	NVIC_Enable = (1 << NVIC_UART_BIT_POS);		// Enable the UART interrupt
+	NVIC_Disable = (0xFFFFFFFF);	// disable all interrupts
 	
 	delay(FLASH_DELAY);												// wait a short time
 	
@@ -120,48 +173,24 @@ int main(void)
 	GPIO_ACC = 0xFF;
 	pt2SPICON = (0 << 6) | (7 <<3) | (0 << 2) | (3);
 
-	configurate_accelerometer();
+	configure_accelerometer();
+		
 	
-// ========================  Working Loop ==========================================
-	
-	//while(1)		// loop forever
-	{	
-		// Do some processing before entering Sleep Mode
-		GPIO_LED	= GPIO_SW; 			// copy 16 switches onto corresponding LEDs
-		delay(FLASH_DELAY);				// short delay
-		INVERT_LEDS;							// invert the 8 rightmost LEDs
-		delay(FLASH_DELAY);				// short delay
-		INVERT_LEDS;							// invert the same LEDs again
-		delay(FLASH_DELAY);				// short delay
+	for (j=0; j<0xf; j++) {
+		printf("\nReading address %8x\n",j);
+		read_accelerometer_register(j);
+	}
 
-		// Ask for user input
-		printf("\nType some characters test: ");
+/*	for (j = 0; j < 0xf; j++) {
 		
-		pt2SPICON = (0 << 6) | (7 <<3) | (0 << 2) | (3);
-		
-		while (BufReady == 0)	// loop until input is ready to process
-		{
-			__wfi();  // Wait For Interrupt: enter Sleep Mode - wake on character received
-			// only get to this point if a character has been received
-			GPIO_LED = RxBuf[counter-1];  // display the code for the character
-		}
-		/* Get here when CR is entered or the buffer is full - data is ready for processing.
-			Copy the data with UART interrupts disabled, so data does not change.  
-			The interrupts should only be disabled for a short time, to avoid missing data,
-		  so the program only does the minimum necessary in the "critical section". */
-		
-		// ---- Start of critical section ----
-		for (j = 0; j < 0x2e; j++) {
-			NVIC_Disable = (1 << NVIC_UART_BIT_POS);	// disable the UART interrupt
-
-			// Begin transaction by turning on chip select
-			for (i = 0; i < 100000; i++){};
+		// Begin transaction by turning on chip select
+		for (i = 0; i < 100000; i++){};
 			GPIO_ACC = 0x0;
 			
 			// Write to SPI
-			printf("Writing SPIDAT\n");
+			printf("Writing SPIDAT with %8x\n",(0x000b0000|(j<<16)));
 			pt2SPIDAT = (0x000b0000 | (j<<16));
-			printf("SPIDAT written: %8x",pt2SPIDAT);
+			printf("SPIDAT written. Readback: %8x\n",pt2SPIDAT);
 			// Read SPIDAT
 			while(1) {
 				uint32 spicon_rd;
@@ -190,6 +219,6 @@ int main(void)
 			printf("Address: %8x  SPIDAT: %8x\n", j, ACC);
 		}
 
-	} // end of infinite loop
+	} // end of infinite loop*/
 
 }  // end of main
