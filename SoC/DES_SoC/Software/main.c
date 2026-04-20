@@ -84,22 +84,22 @@ void write_accelerometer_register(uint8 addr, uint8 data) {
 	
 	GPIO_ACC = 0x00; // chip select (active low)
 	
-	printf("\tWriting to SPIDAT: [%8x] <= %8x\n",addr,write_val);
+	//printf("\tWriting to SPIDAT: [%8x] <= %8x\n",addr,write_val);
 
 	pt2SPIDAT = write_val;
 	
-	printf("\tWrote SPIDAT, waiting for busy flag to clear\n");
+	//printf("\tWrote SPIDAT, waiting for busy flag to clear\n");
 	while(1) {
 		uint32 spicon_rd;
 		spicon_rd = pt2SPICON; // read spicon
 		//printf("SPICON: %8x",spicon_rd);
 		if ((spicon_rd & 0x40000000)) { // while we are busy
-			printf("."); // busy
+			//printf("."); // busy
 		} else {
 			break; // break once the 'busy' flag drops
 		}
 	}
-	printf("\tSPICON 'busy' flag dropped\n");
+	//printf("\tSPICON 'busy' flag dropped\n");
 	
 	GPIO_ACC = 0xFF; // deselect chip
 }
@@ -111,29 +111,29 @@ uint32 read_accelerometer_register(uint8 addr) {
 							 (addr <<  8) | // address
 							 (0x00)); // just write zeros - we are interested in the return value only
 	
-	printf("\tReading SPIDAT: [%8x] <= %8x\n",addr,write_val);
+	//printf("\tReading SPIDAT: [%8x] <= %8x\n",addr,write_val);
 	GPIO_ACC = 0x00; // chip select (active low)
 	pt2SPIDAT = write_val;
 	read_val = pt2SPIDAT; // TODO REMOVE THIS we shouldn't be reading back so quickly but it's usefulf or debugging
-	printf("\tImmediately read back %8x\n",read_val);
+	//printf("\tImmediately read back %8x\n",read_val);
 	
-	printf("\tWrote SPIDAT, waiting for busy flag to clear\n");
+	//printf("\tWrote SPIDAT, waiting for busy flag to clear\n");
 	while(1) {
 		uint32 spicon_rd;
 		spicon_rd = pt2SPICON; // read spicon
 		//printf("SPICON: %8x",spicon_rd);
 		if ((spicon_rd & 0x40000000)) { // while we are busy
-			printf("."); // busy
+			//printf("."); // busy
 		} else {
 			break; // break once the 'busy' flag drops
 		}
 	}
-	printf("\tSPICON 'busy' flag dropped\n");
+	//printf("\tSPICON 'busy' flag dropped\n");
 	
 	GPIO_ACC = 0xFF; // deselect chip
 	
 	read_val = pt2SPIDAT; // read SPIDAT back TODO extract only relevant bits
-	printf("\tRead %8x from SPIDAT\n",read_val);
+	//printf("\tRead %8x from SPIDAT\n",read_val);
 	
 	return read_val; // read SPIDAT back
 }
@@ -142,17 +142,18 @@ uint32 read_accelerometer_register(uint8 addr) {
 // Configure the accelerometer
 void configure_accelerometer() { // ADXL362
 	volatile int i;
-	printf("Configuring accelerometer\n");
+	//printf("Configuring accelerometer\n");
 	
 	write_accelerometer_register(0x1F,0x52); // 0x52 is the instruction to reset ('R' in ASCII)
 
-	printf("Sent reset to accelerometer - delaying\n");
-	for(i = 0; i<100000; i++); // "a latency of 0.5 ms is required after soft reset" I have no IDEA if this is the right duration TODO
-	printf("Delay complete\n");
+	//printf("Sent reset to accelerometer - delaying\n");
+	//for(i = 0; i<100000; i++); // "a latency of 0.5 ms is required after soft reset" I have no IDEA if this is the right duration TODO
+	//printf("Delay complete\n");
+	// TODO include these lines of code for synthesis
 	
-	printf("Sending config to accelerometer\n");
+	//printf("Sending config to accelerometer\n");
 	write_accelerometer_register(0x2D,2); // set mode to measurement mod
-	printf("Config sent\n");
+	//printf("Config sent\n");
 }
 
 //////////////////////////////////////////////////////////////////
@@ -160,67 +161,30 @@ void configure_accelerometer() { // ADXL362
 //////////////////////////////////////////////////////////////////
 int main(void) 
 {
-	uint32 i, j;		// used in for loop
-	uint8 TxBuf[ARRAY_SIZE(RxBuf)];		// serial transmit buffer
-	uint32 ACC;
+	uint32 j;		// used in for loop
+	
+	GPIO_LED = 0x1;
 	
 	NVIC_Disable = (0xFFFFFFFF);	// disable all interrupts
+	GPIO_LED = 0x2;
 	
-	delay(FLASH_DELAY);												// wait a short time
 	
-	printf("\n\nWelcome to Cortex-M0 SoC version 2\n");		// print a welcome message
+	//printf("\n\nWelcome to Cortex-M0 SoC version 2\n");	 // print a welcome message
+	// printf doesn't work in simulation because the UART isn't modelled correctly
 	
-
 	// Set up the SPI device
 	GPIO_ACC = 0xFF;
 	pt2SPICON = (0 << 6) | (7 <<3) | (0 << 2) | (3);
+	GPIO_LED = 0x4;
 
 	configure_accelerometer();
-		
+	GPIO_LED = 0x5;
 	
 	for (j=0; j<0xf; j++) {
-		printf("\nReading address %8x\n",j);
+		//printf("\nReading address %8x\n",j);
 		read_accelerometer_register(j);
+		GPIO_LED = 0x6;
 	}
 
-/*	for (j = 0; j < 0xf; j++) {
-		
-		// Begin transaction by turning on chip select
-		for (i = 0; i < 100000; i++){};
-			GPIO_ACC = 0x0;
-			
-			// Write to SPI
-			printf("Writing SPIDAT with %8x\n",(0x000b0000|(j<<16)));
-			pt2SPIDAT = (0x000b0000 | (j<<16));
-			printf("SPIDAT written. Readback: %8x\n",pt2SPIDAT);
-			// Read SPIDAT
-			while(1) {
-				uint32 spicon_rd;
-				spicon_rd = pt2SPICON;
-				//printf("SPICON: %8x",spicon_rd);
-				if ((spicon_rd & 0x40000000)) {
-					printf("."); // busy
-				} else {
-					break;
-				}
-			}
-			printf("SPICON busy flag dropped\t");
-			pt2SPICON = ((0 << 6) | (7 <<3) | (0 << 2) | (3) | (0x80000000)); // write-to-clear IRQ
-			printf("IRQ cleared\t");
-			printf("SPICON: %8x\t",(pt2SPICON));
-			printf("Reading SPIDAT\t");
-			ACC = pt2SPIDAT;
-			
-			GPIO_ACC = 0xFF;
-
-			
-			NVIC_Enable = (1 << NVIC_UART_BIT_POS);		// Enable the UART interrupt
-			// ---- End of critical section ----	
-
-			// Print the result.  Printing can take a long time, so this is outside the critical section.
-			printf("Address: %8x  SPIDAT: %8x\n", j, ACC);
-		}
-
-	} // end of infinite loop*/
 
 }  // end of main
