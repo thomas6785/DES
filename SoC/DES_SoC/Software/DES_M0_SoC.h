@@ -158,5 +158,17 @@ typedef struct {
 #define GPIO_ACC	(pt2GPIO->Out1)				// input port 1 is connected to 5 buttons
 
 
+#define pt2DISP0 (*(volatile uint32 *)0x53000000)
+#define pt2DISP1 (*(volatile uint32 *)0x53000001)
+#define pt2DISP2 (*(volatile uint32 *)0x53000002)
+#define pt2DISP3 (*(volatile uint32 *)0x53000003)
+#define pt2DISP4 (*(volatile uint32 *)0x53000004)
+#define pt2DISP5 (*(volatile uint32 *)0x53000005)
+#define pt2DISP6 (*(volatile uint32 *)0x53000006)
+#define pt2DISP7 (*(volatile uint32 *)0x53000007)
+
+#define pt2DISPMODE (*(volatile uint32 *)0x53000008)
+#define pt2DISPDIGEN (*(volatile uint32 *)0x53000009)
+
 
 #endif

@@ -1,0 +1,38 @@
+# compile verilog/system verilog design source files
+verilog xil_defaultlib  \
+"../../../../../ip/block_mem/blk_mem_4Kword/sim/blk_mem_4Kword.v" \
+"../../../../../ip/block_mem/blk_mem_8Kword/sim/blk_mem_8Kword.v" \
+"../../../../../rtl/AHBDCD.v" \
+"../../../../../rtl/AHBMUX.v" \
+"../../../../../rtl/AHBdisp.v" \
+"../../../../../rtl/AHBdummy.v" \
+"../../../../../rtl/AHBgpio.v" \
+"../../../../../rtl/AHBliteTop.v" \
+"../../../../../rtl/AHBram.v" \
+"../../../../../rtl/AHBrom.v" \
+"../../../../../rtl/AHBuart.v" \
+"../../../../../ip/cortex/CORTEXM0DS.v" \
+"../../../../../rtl/clock_gen.v" \
+"../../../../../ip/cortex/cortexm0ds_logic.v" \
+"../../../../../rtl/fifo.v" \
+"../../../../../rtl/ram_loader.v" \
+"../../../../../rtl/reset_gen.v" \
+"../../../../../rtl/status_ind.v" \
+"../../../../../rtl/uart.v" \
+"../../../../../rtl/uart_RXonly.v" \
+
+sv xil_defaultlib  \
+"../../../../../rtl/AHB_to_csr.sv" \
+"../../../../../rtl/spi/spi_pkg.sv" \
+"../../../../../rtl/spi/AHBspi.sv" \
+"../../../../../rtl/spi/spi_controller.sv" \
+"../../../../../rtl/spi/spi_core.sv" \
+
+verilog xil_defaultlib  \
+"../../../../../sim/TB_toplevel.v" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

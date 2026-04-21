@@ -143,8 +143,22 @@ uint32 read_accelerometer_register(uint8 addr) {
 void configure_accelerometer() { // ADXL362
 	volatile int i;
 	//printf("Configuring accelerometer\n");
-	
 	write_accelerometer_register(0x1F,0x52); // 0x52 is the instruction to reset ('R' in ASCII)
+	
+	//delay(FLASH_DELAY);
+	
+	//write_accelerometer_register(0x20, 250);
+	//write_accelerometer_register(0x21, 0);
+	//write_accelerometer_register(0x22, 2);
+	//write_accelerometer_register(0x23, 0x96);
+	//write_accelerometer_register(0x24, 0);
+	//write_accelerometer_register(0x25, 0x1e);
+	//write_accelerometer_register(0x26, 0);
+	//write_accelerometer_register(0x27, 0x3f);
+	//write_accelerometer_register(0x2b, 0x40);
+	write_accelerometer_register(0x2d, 0x2);
+	
+	
 
 	//printf("Sent reset to accelerometer - delaying\n");
 	//for(i = 0; i<100000; i++); // "a latency of 0.5 ms is required after soft reset" I have no IDEA if this is the right duration TODO
@@ -152,7 +166,7 @@ void configure_accelerometer() { // ADXL362
 	// TODO include these lines of code for synthesis
 	
 	//printf("Sending config to accelerometer\n");
-	write_accelerometer_register(0x2D,2); // set mode to measurement mod
+	//write_accelerometer_register(0x2D,2); // set mode to measurement mod
 	//printf("Config sent\n");
 }
 
@@ -162,6 +176,7 @@ void configure_accelerometer() { // ADXL362
 int main(void) 
 {
 	uint32 j;		// used in for loop
+	uint32 accelorometer_value;
 	
 	GPIO_LED = 0x1;
 	
@@ -174,16 +189,30 @@ int main(void)
 	
 	// Set up the SPI device
 	GPIO_ACC = 0xFF;
-	pt2SPICON = (0 << 6) | (7 <<3) | (0 << 2) | (3);
+	pt2SPICON = (0 << 6) | (6 <<3) | (0 << 2) | (3);
 	GPIO_LED = 0x4;
 
 	configure_accelerometer();
 	GPIO_LED = 0x5;
 	
-	for (j=0; j<0xf; j++) {
+	//pt2DISPMODE = 0xff;
+	//pt2DISPDIGEN = 0xff;
+
+	while(1) {
 		//printf("\nReading address %8x\n",j);
-		read_accelerometer_register(j);
-		GPIO_LED = 0x6;
+		uint16 sw;
+		sw = GPIO_SW;
+		accelorometer_value = read_accelerometer_register(sw);
+		GPIO_LED = accelorometer_value;
+		pt2DISP0 = accelorometer_value & 0xf;
+		pt2DISP1 = accelorometer_value & 0xf0;
+		pt2DISP2 = accelorometer_value & 0xf00;
+		pt2DISP3 = accelorometer_value & 0xf000;
+		pt2DISP4 = accelorometer_value & 0xf0000;
+		pt2DISP5 = accelorometer_value & 0xf00000;
+		pt2DISP6 = accelorometer_value & 0xf000000;
+		pt2DISP7 = accelorometer_value & 0xf0000000;
+		delay(10000);
 	}
 
 
