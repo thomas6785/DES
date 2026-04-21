@@ -37,8 +37,7 @@ module TB_toplevel(    );
             #400;                     // wait for cpu and bus clock to be stable 
             btnCpuResetn = 1'b0;        // active low reset
             #30 btnCpuResetn = 1'b1;    // release reset
-            #20000;                     // delay 20 us or 500 cpu clock cycles
-            $stop;
+            #20000;      // delay 20 us or 500 cpu clock cycles
         end
 
 endmodule
