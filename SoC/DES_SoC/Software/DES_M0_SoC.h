@@ -63,6 +63,7 @@ struct TwoByte		// this combines two 8-bit values
 	volatile uint8 Hi;
 };
 
+
 typedef struct 		// matches the registers in GPIO hardware
 {
 	union 					// union occupies 4 bytes in the address map
@@ -144,31 +145,45 @@ typedef struct {
 
 #define NVIC_UART_BIT_POS		1      // bit position of UART in ARM's interrupt control register
 
+// ===================================================================
+// Registers for SPI
+typedef struct {
+	volatile uint32 SPICON;
+	volatile uint32 SPIDAT;
+} SPI_block;
+
+// ===================================================
+// Registers for display
+
+typedef struct{
+	volatile uint8 digit0;
+	volatile uint8 digit1;
+	volatile uint8 digit2;
+	volatile uint8 digit3;
+	volatile uint8 digit4;
+	volatile uint8 digit5;
+	volatile uint8 digit6;
+	volatile uint8 digit7;
+	volatile uint8 dispMode;
+	volatile uint8 digitEnable;
+} DISP_block;
+
+#define pt2DISPMODE     (pt2DISP->dispMode)
+#define pt2DIGITENABLE  (pt2DISP->digitEnable)
 
 // =================================================================
 // Use the typedefs above to define the memory map
-#define pt2NVIC ((NVIC_block *)0xE000E100)
-#define pt2SysTick  ((SysTick_block *) 0xE000E010)
-#define pt2UART ((UART_block *)0x51000000)
-#define pt2GPIO ((GPIO_block *)0x50000000)
 
-#define pt2SPICON (*(volatile uint32 *)0x52000000)
-#define pt2SPIDAT (*(volatile uint32 *)0x52000004)
-	
+#define pt2NVIC    ((NVIC_block *)0xE000E100)
+#define pt2SysTick ((SysTick_block *) 0xE000E010)
+#define pt2GPIO    ((GPIO_block *)0x50000000)
+#define pt2UART    ((UART_block *)0x51000000)
+#define pt2SPI     ((SPI_block  *)0x52000000)
+#define pt2DISP    ((DISP_block *)0x53000000)
+
+// Short names for some common registers
+#define pt2SPICON (pt2SPI -> SPICON)
+#define pt2SPIDAT (pt2SPI -> SPIDAT)
 #define GPIO_ACC	(pt2GPIO->Out1)				// input port 1 is connected to 5 buttons
-
-
-#define pt2DISP0 (*(volatile uint32 *)0x53000000)
-#define pt2DISP1 (*(volatile uint32 *)0x53000001)
-#define pt2DISP2 (*(volatile uint32 *)0x53000002)
-#define pt2DISP3 (*(volatile uint32 *)0x53000003)
-#define pt2DISP4 (*(volatile uint32 *)0x53000004)
-#define pt2DISP5 (*(volatile uint32 *)0x53000005)
-#define pt2DISP6 (*(volatile uint32 *)0x53000006)
-#define pt2DISP7 (*(volatile uint32 *)0x53000007)
-
-#define pt2DISPMODE (*(volatile uint32 *)0x53000008)
-#define pt2DISPDIGEN (*(volatile uint32 *)0x53000009)
-
 
 #endif

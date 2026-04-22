@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1776783848" LaunchIncrCheckpoint="$PSRCDIR/utils_1/imports/synth_1/AHBliteTop.dcp">
+<GenRun Id="synth_1" LaunchPart="xc7a100tcsg324-1" LaunchTime="1776874514" LaunchIncrCheckpoint="$PSRCDIR/utils_1/imports/synth_1/AHBliteTop.dcp">
   <File Type="PA-TCL" Name="AHBliteTop.tcl"/>
   <File Type="RDS-PROPCONSTRS" Name="AHBliteTop_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="AHBliteTop_reports.tcl"/>
@@ -181,6 +181,14 @@
     </File>
     <File Path="$PPRDIR/../rtl/AHBliteTop.v">
       <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PSRCDIR/sources_1/new/imem_model.sv">
+      <FileInfo>
+        <Attr Name="AutoDisabled" Val="1"/>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
         <Attr Name="UsedIn" Val="simulation"/>

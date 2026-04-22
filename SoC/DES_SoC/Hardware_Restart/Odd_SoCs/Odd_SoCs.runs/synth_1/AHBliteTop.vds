@@ -3,8 +3,8 @@
 # SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Tue Apr 21 16:04:10 2026
-# Process ID: 9236
+# Start of session at: Wed Apr 22 17:15:16 2026
+# Process ID: 1092
 # Current directory: C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.runs/synth_1
 # Command line: vivado.exe -log AHBliteTop.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source AHBliteTop.tcl
 # Log file: C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.runs/synth_1/AHBliteTop.vds
@@ -12,7 +12,6 @@
 # Running On: Eleclab59, OS: Windows, CPU Frequency: 2112 MHz, CPU Physical cores: 20, Host memory: 34031 MB
 #-----------------------------------------------------------
 source AHBliteTop.tcl -notrace
-create_project: Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 543.895 ; gain = 218.109
 Command: read_checkpoint -auto_incremental -incremental C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.srcs/utils_1/imports/synth_1/AHBliteTop.dcp
 INFO: [Vivado 12-5825] Read reference checkpoint from C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.srcs/utils_1/imports/synth_1/AHBliteTop.dcp for incremental synthesis
 INFO: [Vivado 12-7989] Please ensure there are no constraint changes
@@ -25,9 +24,9 @@ INFO: [Designutils 20-5440] No compile time benefit to using incremental synthes
 INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 18768
+INFO: [Synth 8-7075] Helper process launched with PID 22796
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1402.734 ; gain = 440.141
+Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1402.887 ; gain = 440.090
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-11241] undeclared symbol 'clk_in1_clk_wiz_0', assumed default net type 'wire' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/clock_gen.v:70]
 INFO: [Synth 8-11241] undeclared symbol 'clk_out1_clk_wiz_0', assumed default net type 'wire' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/clock_gen.v:109]
@@ -257,7 +256,7 @@ INFO: [Synth 8-6155] done synthesizing module 'AHBspi' (0#1) [C:/Users/lab/Docum
 INFO: [Synth 8-6157] synthesizing module 'AHBdisp' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBdisp.v:32]
 INFO: [Synth 8-6155] done synthesizing module 'AHBdisp' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBdisp.v:32]
 INFO: [Synth 8-6155] done synthesizing module 'AHBliteTop' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBliteTop.v:17]
-WARNING: [Synth 8-3848] Net HRESP_disp in module/entity AHBliteTop does not have driver. [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBliteTop.v:69]
+WARNING: [Synth 8-3848] Net HRESP_disp in module/entity AHBliteTop does not have driver. [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBliteTop.v:68]
 WARNING: [Synth 8-7129] Port HADDR[31] in module AHBdisp is either unconnected or has no load
 WARNING: [Synth 8-7129] Port HADDR[30] in module AHBdisp is either unconnected or has no load
 WARNING: [Synth 8-7129] Port HADDR[29] in module AHBdisp is either unconnected or has no load
@@ -360,18 +359,18 @@ WARNING: [Synth 8-7129] Port HWDATA[17] in module AHBuart is either unconnected 
 WARNING: [Synth 8-7129] Port HWDATA[16] in module AHBuart is either unconnected or has no load
 INFO: [Common 17-14] Message 'Synth 8-7129' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:22 ; elapsed = 00:00:41 . Memory (MB): peak = 1963.973 ; gain = 1001.379
+Finished RTL Elaboration : Time (s): cpu = 00:00:23 ; elapsed = 00:00:42 . Memory (MB): peak = 1961.891 ; gain = 999.094
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:22 ; elapsed = 00:00:42 . Memory (MB): peak = 1963.973 ; gain = 1001.379
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:23 ; elapsed = 00:00:42 . Memory (MB): peak = 1961.891 ; gain = 999.094
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:22 ; elapsed = 00:00:42 . Memory (MB): peak = 1963.973 ; gain = 1001.379
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:23 ; elapsed = 00:00:42 . Memory (MB): peak = 1961.891 ; gain = 999.094
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.050 . Memory (MB): peak = 1963.973 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.050 . Memory (MB): peak = 1961.891 ; gain = 0.000
 INFO: [Netlist 29-17] Analyzing 13 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
@@ -387,22 +386,22 @@ Finished Parsing XDC File [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/Aida
 INFO: [Timing 38-2] Deriving generated clocks
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 2011.230 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 2008.883 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.030 . Memory (MB): peak = 2011.230 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.030 . Memory (MB): peak = 2008.883 ; gain = 0.000
 INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
 INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:28 ; elapsed = 00:00:48 . Memory (MB): peak = 2011.230 ; gain = 1048.637
+Finished Constraint Validation : Time (s): cpu = 00:00:29 ; elapsed = 00:00:49 . Memory (MB): peak = 2008.883 ; gain = 1046.086
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a100tcsg324-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:28 ; elapsed = 00:00:48 . Memory (MB): peak = 2011.230 ; gain = 1048.637
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:29 ; elapsed = 00:00:49 . Memory (MB): peak = 2008.883 ; gain = 1046.086
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
@@ -410,7 +409,7 @@ Start Applying 'set_property' XDC Constraints
 Applied set_property KEEP_HIERARCHY = SOFT for RAM/bram0. (constraint file  auto generated constraint).
 Applied set_property KEEP_HIERARCHY = SOFT for ROM/bram1. (constraint file  auto generated constraint).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:28 ; elapsed = 00:00:48 . Memory (MB): peak = 2011.230 ; gain = 1048.637
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:29 ; elapsed = 00:00:49 . Memory (MB): peak = 2008.883 ; gain = 1046.086
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-802] inferred FSM for state register 'loadState_reg' in module 'ram_loader'
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'spi_controller'
@@ -432,7 +431,7 @@ INFO: [Synth 8-3354] encoded FSM with state register 'loadState_reg' using encod
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'one-hot' in module 'spi_controller'
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:32 ; elapsed = 00:00:53 . Memory (MB): peak = 2011.230 ; gain = 1048.637
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:34 ; elapsed = 00:00:53 . Memory (MB): peak = 2008.883 ; gain = 1046.086
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
@@ -509,7 +508,7 @@ WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
 WARNING: [Synth 8-3917] design AHBliteTop has port rgbLED[4] driven by constant 0
 WARNING: [Synth 8-3917] design AHBliteTop has port rgbLED[1] driven by constant 0
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:53 ; elapsed = 00:01:14 . Memory (MB): peak = 2011.230 ; gain = 1048.637
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:54 ; elapsed = 00:01:14 . Memory (MB): peak = 2008.883 ; gain = 1046.086
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start ROM, RAM, DSP, Shift Register and Retiming Reporting
@@ -530,19 +529,19 @@ Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:56 ; elapsed = 00:01:17 . Memory (MB): peak = 2011.230 ; gain = 1048.637
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:57 ; elapsed = 00:01:17 . Memory (MB): peak = 2008.883 ; gain = 1046.086
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:01:11 ; elapsed = 00:01:32 . Memory (MB): peak = 2011.230 ; gain = 1048.637
+Finished Timing Optimization : Time (s): cpu = 00:01:13 ; elapsed = 00:01:33 . Memory (MB): peak = 2008.883 ; gain = 1046.086
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:01:13 ; elapsed = 00:01:34 . Memory (MB): peak = 2011.230 ; gain = 1048.637
+Finished Technology Mapping : Time (s): cpu = 00:01:15 ; elapsed = 00:01:35 . Memory (MB): peak = 2008.883 ; gain = 1046.086
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -560,37 +559,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:01:16 ; elapsed = 00:01:36 . Memory (MB): peak = 2011.230 ; gain = 1048.637
+Finished IO Insertion : Time (s): cpu = 00:01:17 ; elapsed = 00:01:37 . Memory (MB): peak = 2008.883 ; gain = 1046.086
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:01:16 ; elapsed = 00:01:36 . Memory (MB): peak = 2011.230 ; gain = 1048.637
+Finished Renaming Generated Instances : Time (s): cpu = 00:01:17 ; elapsed = 00:01:37 . Memory (MB): peak = 2008.883 ; gain = 1046.086
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:16 ; elapsed = 00:01:37 . Memory (MB): peak = 2011.230 ; gain = 1048.637
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:17 ; elapsed = 00:01:37 . Memory (MB): peak = 2008.883 ; gain = 1046.086
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:01:16 ; elapsed = 00:01:37 . Memory (MB): peak = 2011.230 ; gain = 1048.637
+Finished Renaming Generated Ports : Time (s): cpu = 00:01:17 ; elapsed = 00:01:37 . Memory (MB): peak = 2008.883 ; gain = 1046.086
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:01:16 ; elapsed = 00:01:37 . Memory (MB): peak = 2011.230 ; gain = 1048.637
+Finished Handling Custom Attributes : Time (s): cpu = 00:01:17 ; elapsed = 00:01:37 . Memory (MB): peak = 2008.883 ; gain = 1046.086
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:01:16 ; elapsed = 00:01:37 . Memory (MB): peak = 2011.230 ; gain = 1048.637
+Finished Renaming Generated Nets : Time (s): cpu = 00:01:17 ; elapsed = 00:01:37 . Memory (MB): peak = 2008.883 ; gain = 1046.086
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -626,18 +625,18 @@ Report Cell Usage:
 |26    |OBUF      |    50|
 +------+----------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:01:16 ; elapsed = 00:01:37 . Memory (MB): peak = 2011.230 ; gain = 1048.637
+Finished Writing Synthesis Report : Time (s): cpu = 00:01:17 ; elapsed = 00:01:37 . Memory (MB): peak = 2008.883 ; gain = 1046.086
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 379 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:52 ; elapsed = 00:01:35 . Memory (MB): peak = 2011.230 ; gain = 1001.379
-Synthesis Optimization Complete : Time (s): cpu = 00:01:16 ; elapsed = 00:01:37 . Memory (MB): peak = 2011.230 ; gain = 1048.637
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:51 ; elapsed = 00:01:35 . Memory (MB): peak = 2008.883 ; gain = 999.094
+Synthesis Optimization Complete : Time (s): cpu = 00:01:17 ; elapsed = 00:01:38 . Memory (MB): peak = 2008.883 ; gain = 1046.086
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.027 . Memory (MB): peak = 2011.230 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.026 . Memory (MB): peak = 2008.883 ; gain = 0.000
 INFO: [Netlist 29-17] Analyzing 142 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2011.230 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 2008.883 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
@@ -645,8 +644,9 @@ Synth Design complete | Checksum: 7c67adbd
 INFO: [Common 17-83] Releasing license: Synthesis
 92 Infos, 104 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:01:20 ; elapsed = 00:01:42 . Memory (MB): peak = 2011.230 ; gain = 1454.398
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 2011.230 ; gain = 0.000
+INFO: [Common 17-600] The following parameters have non-default value.
+tcl.statsThreshold
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.004 . Memory (MB): peak = 2008.883 ; gain = 0.000
 INFO: [Common 17-1381] The checkpoint 'C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.runs/synth_1/AHBliteTop.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file AHBliteTop_utilization_synth.rpt -pb AHBliteTop_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Tue Apr 21 16:06:01 2026...
+INFO: [Common 17-206] Exiting Vivado at Wed Apr 22 17:17:08 2026...

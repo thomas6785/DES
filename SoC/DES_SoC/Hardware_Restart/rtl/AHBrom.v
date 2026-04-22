@@ -69,6 +69,7 @@ module AHBrom(
 	
 	// Instantiate the block ram - created by Xilinx IP generator (in VHDL)
     blk_mem_8Kword bram1 (
+    //imem_model bram1 (
         .clka       (HCLK),             // port A is write port
         .ena        (ROMload),          // port A enabled during rom load only
         .wea        (wNow),        // write enable

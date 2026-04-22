@@ -39,7 +39,6 @@ module AHBliteTop (
   localparam  BAD_DATA = 32'hdeadbeef;  // value read from invalid slave
   localparam  OKAY = 1'b0, ERROR = 1'b1;  // values for the HRESP signal
 
-
 // ========================= Bus Signals =====================================
 // Define AHB Lite bus signals - do not change any of these
 // Note that signals HMASTLOCK and HBURST are omitted - not used by processor
