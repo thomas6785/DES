@@ -28,7 +28,7 @@ module TB_toplevel(    );
          );
 
     initial begin
-        $readmemh("C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Software/ROMcode.txt",dut.ROM.bram1.mem);
+        $readmemh("C:\\Users\\Student\\VivadoProjects\\DES\\SoC\\DES_SoC\\Software\\ROMcode.txt",dut.ROM.bram1.mem);
     end
 
     always @ (posedge clk100) begin

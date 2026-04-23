@@ -32,8 +32,8 @@ module AHBliteTop (
     output aclMOSI,     // accelerometer SPI MOSI signal
     output aclSCK,      // accelerometer SPI clock signal
     output aclSSn,       // accelerometer slave select signal, active low
-    output [0:7]digit,
-    output [0:7]segment
+    output [7:0]digit,
+    output [7:0]segment
     );  // end of module port list
  
   localparam  BAD_DATA = 32'hdeadbeef;  // value read from invalid slave
