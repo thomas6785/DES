@@ -103,13 +103,13 @@ void configure_accelerometer() { // ADXL362
 coords read_accelerometer() {
     coords c;
 
-    // c.x = (read_accelerometer_register(0x0F) << 8) | read_accelerometer_register(0x0E); // read the x value (high byte first)
-    // c.y = (read_accelerometer_register(0x11) << 8) | read_accelerometer_register(0x10);
-    // c.z = (read_accelerometer_register(0x13) << 8) | read_accelerometer_register(0x12);
+    c.x = (read_accelerometer_register(0x0F) << 8) | read_accelerometer_register(0x0E); // read the x value (high byte first)
+    c.y = (read_accelerometer_register(0x11) << 8) | read_accelerometer_register(0x10);
+    c.z = (read_accelerometer_register(0x13) << 8) | read_accelerometer_register(0x12);
 
-	c.x = ((int16) ((int8) read_accelerometer_register(0x08))) << 4;
-	c.y = ((int16) ((int8) read_accelerometer_register(0x09))) << 4;
-	c.z = ((int16) ((int8) read_accelerometer_register(0x0A))) << 4;
+	//c.x = ((int16) ((int8) read_accelerometer_register(0x08))) << 4;
+	//c.y = ((int16) ((int8) read_accelerometer_register(0x09))) << 4;
+	//c.z = ((int16) ((int8) read_accelerometer_register(0x0A))) << 4;
 
     return c;
 }
@@ -162,6 +162,7 @@ void write_lower_half_to_display(int16 value) {
     //pt2DISP->digit1 = (value >> 4) & 0xF;
     //pt2DISP->digit2 = (value >> 8) & 0xF;
     //pt2DISP->digit3 = (value >> 12) & 0xF;
+    pt2DISP->right_disp = value;
 }
 
 void write_upper_half_to_display(int16 value) {
@@ -171,6 +172,7 @@ void write_upper_half_to_display(int16 value) {
     //pt2DISP->digit6 = (value >> 8) & 0xF;
     //pt2DISP->digit7 = (value >> 12) & 0xF;
     // TODO accommodate signs
+    pt2DISP->left_disp = value;
 }
 
 coords get_calibrated_offsets() {
@@ -181,16 +183,16 @@ coords get_calibrated_offsets() {
     offsets.y = 0;
     offsets.z = 0;
 
-    for(i=0;i<64;i++) { // take 8 samples and average them to get the offsets
+    for(i=0;i<8;i++) { // take 8 samples and average them to get the offsets
         coords sample = read_accelerometer();
         offsets.x += sample.x;
         offsets.y += sample.y;
         offsets.z += sample.z;
         delay(100000); // add a delay between samples to avoid issues with sampling too quickly TODO tune this delay and all others
     }
-    offsets.x = offsets.x >> 6;
-    offsets.y = offsets.y >> 6;
-    offsets.z = offsets.z >> 6;
+    offsets.x = offsets.x >> 3;
+    offsets.y = offsets.y >> 3;
+    offsets.z = offsets.z >> 3;
 
     return offsets;
 }
@@ -202,15 +204,10 @@ int main(void) {
     coords cal_offsets;
 
     uint8 i;
-		i=0;
+    i=0;
 
     NVIC_Disable = 0xFFFFFFFF; // disable all interrupts
     NVIC_Enable = (1<<15);
-	
-		pt2DISP -> left_disp  =  123;
-		pt2DISP -> right_disp = -123;
-		return 0;
-	
 
     // Set systick to give ISR every 50 Hz
     SysTick_Reload   = 1000000; // set the reload value for the SysTick timer to generate an interrupt at 50 Hz (assuming a 50MHz clock)
@@ -252,7 +249,8 @@ int main(void) {
 			// Display the y tilt on the LEDs
 			LED_from_middle(filtered_data.y>>7); // shift the value down to fit in the 8 LEDs, and display from the middle
 			// Display the x tilt directly on the 7 segment display
-			write_lower_half_to_display(filtered_data.x);
+			write_lower_half_to_display(filtered_data.x >> 3); // todo justify right shift amoutn
+            write_upper_half_to_display(filtered_data.z >> 3); // todo justify right shift amoutn
 		}
 		sw = GPIO_SW; // read the switches again to check if we need to change mode
 		mode = sw >> 15;

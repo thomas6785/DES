@@ -70,10 +70,6 @@ proc create_report { reportName command } {
   }
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
-set_param tcl.statsThreshold 360
-set_param chipscope.maxJobs 7
-set_param xicom.use_bs_reader 1
-set_msg_config -id {Common 17-41} -limit 10000000
 OPTRACE "Creating in-memory project" START { }
 create_project -in_memory -part xc7a100tcsg324-1
 
@@ -90,11 +86,13 @@ set_property ip_output_repo c:/Users/lab/Documents/EmbeddedSystems/Wednesday/Aid
 set_property ip_cache_permissions {read write} [current_project]
 OPTRACE "Creating in-memory project" END { }
 OPTRACE "Adding files" START { }
-add_files C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Software/ROMcode_converted_to_coe.coe
+add_files -quiet C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.runs/CORTEXM0DS_synth_1/CORTEXM0DS.dcp
+set_property used_in_implementation false [get_files C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.runs/CORTEXM0DS_synth_1/CORTEXM0DS.dcp]
 read_verilog -library xil_defaultlib -sv {
   C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHB_to_csr.sv
   C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/spi/spi_pkg.sv
   C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/spi/AHBspi.sv
+  C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/imem_model.sv
   C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/spi/spi_controller.sv
   C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/spi/spi_core.sv
 }
@@ -107,9 +105,8 @@ read_verilog -library xil_defaultlib {
   C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBram.v
   C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBrom.v
   C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBuart.v
-  C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/cortex/CORTEXM0DS.v
+  C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/bin2bcd.v
   C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/clock_gen.v
-  C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/cortex/cortexm0ds_logic.v
   C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/fifo.v
   C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/ram_loader.v
   C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/reset_gen.v
@@ -120,9 +117,6 @@ read_verilog -library xil_defaultlib {
 }
 read_ip -quiet C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/block_mem/blk_mem_4Kword/blk_mem_4Kword.xci
 set_property used_in_implementation false [get_files -all c:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/block_mem/blk_mem_4Kword/blk_mem_4Kword_ooc.xdc]
-
-read_ip -quiet C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/block_mem/blk_mem_8Kword/blk_mem_8Kword.xci
-set_property used_in_implementation false [get_files -all c:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/block_mem/blk_mem_8Kword/blk_mem_8Kword_ooc.xdc]
 
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -136,11 +130,7 @@ foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
 read_xdc C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/constraints/Nexys4_SoC.xdc
 set_property used_in_implementation false [get_files C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/constraints/Nexys4_SoC.xdc]
 
-read_xdc dont_touch.xdc
-set_property used_in_implementation false [get_files dont_touch.xdc]
 set_param ips.enableIPCacheLiteLoad 1
-
-read_checkpoint -auto_incremental -incremental C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.srcs/utils_1/imports/synth_1/AHBliteTop.dcp
 close [open __synthesis_is_running__ w]
 
 OPTRACE "synth_design" START { }

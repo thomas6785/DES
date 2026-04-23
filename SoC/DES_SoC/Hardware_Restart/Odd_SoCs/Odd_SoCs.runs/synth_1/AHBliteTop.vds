@@ -3,8 +3,8 @@
 # SW Build 4029153 on Fri Oct 13 20:14:34 MDT 2023
 # IP Build 4028589 on Sat Oct 14 00:45:43 MDT 2023
 # SharedData Build 4025554 on Tue Oct 10 17:18:54 MDT 2023
-# Start of session at: Wed Apr 22 17:15:16 2026
-# Process ID: 1092
+# Start of session at: Thu Apr 23 13:59:10 2026
+# Process ID: 18996
 # Current directory: C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.runs/synth_1
 # Command line: vivado.exe -log AHBliteTop.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source AHBliteTop.tcl
 # Log file: C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.runs/synth_1/AHBliteTop.vds
@@ -12,22 +12,21 @@
 # Running On: Eleclab59, OS: Windows, CPU Frequency: 2112 MHz, CPU Physical cores: 20, Host memory: 34031 MB
 #-----------------------------------------------------------
 source AHBliteTop.tcl -notrace
-Command: read_checkpoint -auto_incremental -incremental C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.srcs/utils_1/imports/synth_1/AHBliteTop.dcp
-INFO: [Vivado 12-5825] Read reference checkpoint from C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.srcs/utils_1/imports/synth_1/AHBliteTop.dcp for incremental synthesis
-INFO: [Vivado 12-7989] Please ensure there are no constraint changes
+create_project: Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 545.168 ; gain = 218.727
 Command: synth_design -top AHBliteTop -part xc7a100tcsg324-1
 Starting synth_design
 Attempting to get a license for feature 'Synthesis' and/or device 'xc7a100t'
 INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a100t'
 INFO: [Device 21-403] Loading part xc7a100tcsg324-1
-INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
-INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 22796
+INFO: [Synth 8-7075] Helper process launched with PID 6392
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1402.887 ; gain = 440.090
+Starting RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:03 . Memory (MB): peak = 1400.590 ; gain = 439.586
 ---------------------------------------------------------------------------------
+WARNING: [Synth 8-10929] literal value 'd4 truncated to fit in 2 bits [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBdisp.v:92]
+WARNING: [Synth 8-10929] literal value 'hff truncated to fit in 5 bits [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBdisp.v:108]
+WARNING: [Synth 8-10929] literal value 'hff truncated to fit in 5 bits [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBdisp.v:121]
 INFO: [Synth 8-11241] undeclared symbol 'clk_in1_clk_wiz_0', assumed default net type 'wire' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/clock_gen.v:70]
 INFO: [Synth 8-11241] undeclared symbol 'clk_out1_clk_wiz_0', assumed default net type 'wire' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/clock_gen.v:109]
 INFO: [Synth 8-6157] synthesizing module 'AHBliteTop' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBliteTop.v:17]
@@ -53,10 +52,8 @@ INFO: [Synth 8-6157] synthesizing module 'reset_gen' [C:/Users/lab/Documents/Emb
 INFO: [Synth 8-6155] done synthesizing module 'reset_gen' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/reset_gen.v:20]
 INFO: [Synth 8-6157] synthesizing module 'status_ind' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/status_ind.v:20]
 INFO: [Synth 8-6155] done synthesizing module 'status_ind' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/status_ind.v:20]
-INFO: [Synth 8-6157] synthesizing module 'CORTEXM0DS' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/cortex/CORTEXM0DS.v:28]
-INFO: [Synth 8-6157] synthesizing module 'cortexm0ds_logic' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/cortex/cortexm0ds_logic.v:28]
-INFO: [Synth 8-6155] done synthesizing module 'cortexm0ds_logic' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/cortex/cortexm0ds_logic.v:28]
-INFO: [Synth 8-6155] done synthesizing module 'CORTEXM0DS' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/cortex/CORTEXM0DS.v:28]
+INFO: [Synth 8-6157] synthesizing module 'CORTEXM0DS' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.runs/synth_1/.Xil/Vivado-18996-Eleclab59/realtime/CORTEXM0DS_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'CORTEXM0DS' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.runs/synth_1/.Xil/Vivado-18996-Eleclab59/realtime/CORTEXM0DS_stub.v:6]
 INFO: [Synth 8-6157] synthesizing module 'AHBDCD' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBDCD.v:39]
 INFO: [Synth 8-6155] done synthesizing module 'AHBDCD' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBDCD.v:39]
 INFO: [Synth 8-6157] synthesizing module 'AHBMUX' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBMUX.v:39]
@@ -68,164 +65,12 @@ INFO: [Synth 8-6157] synthesizing module 'ram_loader' [C:/Users/lab/Documents/Em
 	Parameter ADDR_WIDTH bound to: 15 - type: integer 
 INFO: [Synth 8-226] default block is never used [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/ram_loader.v:76]
 INFO: [Synth 8-6155] done synthesizing module 'ram_loader' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/ram_loader.v:19]
-INFO: [Synth 8-638] synthesizing module 'blk_mem_8Kword' [c:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/block_mem/blk_mem_8Kword/synth/blk_mem_8Kword.vhd:73]
-	Parameter C_FAMILY bound to: artix7 - type: string 
-	Parameter C_XDEVICEFAMILY bound to: artix7 - type: string 
-	Parameter C_ELABORATION_DIR bound to: ./ - type: string 
-	Parameter C_INTERFACE_TYPE bound to: 0 - type: integer 
-	Parameter C_AXI_TYPE bound to: 1 - type: integer 
-	Parameter C_AXI_SLAVE_TYPE bound to: 0 - type: integer 
-	Parameter C_USE_BRAM_BLOCK bound to: 0 - type: integer 
-	Parameter C_ENABLE_32BIT_ADDRESS bound to: 0 - type: integer 
-	Parameter C_CTRL_ECC_ALGO bound to: NONE - type: string 
-	Parameter C_HAS_AXI_ID bound to: 0 - type: integer 
-	Parameter C_AXI_ID_WIDTH bound to: 4 - type: integer 
-	Parameter C_MEM_TYPE bound to: 1 - type: integer 
-	Parameter C_BYTE_SIZE bound to: 9 - type: integer 
-	Parameter C_ALGORITHM bound to: 0 - type: integer 
-	Parameter C_PRIM_TYPE bound to: 2 - type: integer 
-	Parameter C_LOAD_INIT_FILE bound to: 1 - type: integer 
-	Parameter C_INIT_FILE_NAME bound to: blk_mem_8Kword.mif - type: string 
-	Parameter C_INIT_FILE bound to: blk_mem_8Kword.mem - type: string 
-	Parameter C_USE_DEFAULT_DATA bound to: 0 - type: integer 
-	Parameter C_DEFAULT_DATA bound to: 0 - type: string 
-	Parameter C_HAS_RSTA bound to: 0 - type: integer 
-	Parameter C_RST_PRIORITY_A bound to: CE - type: string 
-	Parameter C_RSTRAM_A bound to: 0 - type: integer 
-	Parameter C_INITA_VAL bound to: 0 - type: string 
-	Parameter C_HAS_ENA bound to: 1 - type: integer 
-	Parameter C_HAS_REGCEA bound to: 0 - type: integer 
-	Parameter C_USE_BYTE_WEA bound to: 0 - type: integer 
-	Parameter C_WEA_WIDTH bound to: 1 - type: integer 
-	Parameter C_WRITE_MODE_A bound to: WRITE_FIRST - type: string 
-	Parameter C_WRITE_WIDTH_A bound to: 32 - type: integer 
-	Parameter C_READ_WIDTH_A bound to: 32 - type: integer 
-	Parameter C_WRITE_DEPTH_A bound to: 8192 - type: integer 
-	Parameter C_READ_DEPTH_A bound to: 8192 - type: integer 
-	Parameter C_ADDRA_WIDTH bound to: 13 - type: integer 
-	Parameter C_HAS_RSTB bound to: 0 - type: integer 
-	Parameter C_RST_PRIORITY_B bound to: CE - type: string 
-	Parameter C_RSTRAM_B bound to: 0 - type: integer 
-	Parameter C_INITB_VAL bound to: 0 - type: string 
-	Parameter C_HAS_ENB bound to: 1 - type: integer 
-	Parameter C_HAS_REGCEB bound to: 0 - type: integer 
-	Parameter C_USE_BYTE_WEB bound to: 0 - type: integer 
-	Parameter C_WEB_WIDTH bound to: 1 - type: integer 
-	Parameter C_WRITE_MODE_B bound to: WRITE_FIRST - type: string 
-	Parameter C_WRITE_WIDTH_B bound to: 32 - type: integer 
-	Parameter C_READ_WIDTH_B bound to: 32 - type: integer 
-	Parameter C_WRITE_DEPTH_B bound to: 8192 - type: integer 
-	Parameter C_READ_DEPTH_B bound to: 8192 - type: integer 
-	Parameter C_ADDRB_WIDTH bound to: 13 - type: integer 
-	Parameter C_HAS_MEM_OUTPUT_REGS_A bound to: 0 - type: integer 
-	Parameter C_HAS_MEM_OUTPUT_REGS_B bound to: 0 - type: integer 
-	Parameter C_HAS_MUX_OUTPUT_REGS_A bound to: 0 - type: integer 
-	Parameter C_HAS_MUX_OUTPUT_REGS_B bound to: 0 - type: integer 
-	Parameter C_MUX_PIPELINE_STAGES bound to: 0 - type: integer 
-	Parameter C_HAS_SOFTECC_INPUT_REGS_A bound to: 0 - type: integer 
-	Parameter C_HAS_SOFTECC_OUTPUT_REGS_B bound to: 0 - type: integer 
-	Parameter C_USE_SOFTECC bound to: 0 - type: integer 
-	Parameter C_USE_ECC bound to: 0 - type: integer 
-	Parameter C_EN_ECC_PIPE bound to: 0 - type: integer 
-	Parameter C_READ_LATENCY_A bound to: 1 - type: integer 
-	Parameter C_READ_LATENCY_B bound to: 1 - type: integer 
-	Parameter C_HAS_INJECTERR bound to: 0 - type: integer 
-	Parameter C_SIM_COLLISION_CHECK bound to: NONE - type: string 
-	Parameter C_COMMON_CLK bound to: 0 - type: integer 
-	Parameter C_DISABLE_WARN_BHV_COLL bound to: 0 - type: integer 
-	Parameter C_EN_SLEEP_PIN bound to: 0 - type: integer 
-	Parameter C_USE_URAM bound to: 0 - type: integer 
-	Parameter C_EN_RDADDRA_CHG bound to: 0 - type: integer 
-	Parameter C_EN_RDADDRB_CHG bound to: 0 - type: integer 
-	Parameter C_EN_DEEPSLEEP_PIN bound to: 0 - type: integer 
-	Parameter C_EN_SHUTDOWN_PIN bound to: 0 - type: integer 
-	Parameter C_EN_SAFETY_CKT bound to: 0 - type: integer 
-	Parameter C_DISABLE_WARN_BHV_RANGE bound to: 0 - type: integer 
-	Parameter C_COUNT_36K_BRAM bound to: 8 - type: string 
-	Parameter C_COUNT_18K_BRAM bound to: 0 - type: string 
-	Parameter C_EST_POWER_SUMMARY bound to: Estimated Power for IP     :     38.253 mW - type: string 
-INFO: [Synth 8-3491] module 'blk_mem_gen_v8_4_7' declared at 'c:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/block_mem/blk_mem_4Kword/hdl/blk_mem_gen_v8_4_vhsyn_rfs.vhd:195208' bound to instance 'U0' of component 'blk_mem_gen_v8_4_7' [c:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/block_mem/blk_mem_8Kword/synth/blk_mem_8Kword.vhd:243]
-INFO: [Synth 8-256] done synthesizing module 'blk_mem_8Kword' (0#1) [c:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/block_mem/blk_mem_8Kword/synth/blk_mem_8Kword.vhd:73]
+INFO: [Synth 8-6157] synthesizing module 'imem_model' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/imem_model.sv:3]
+INFO: [Synth 8-6155] done synthesizing module 'imem_model' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/imem_model.sv:3]
 INFO: [Synth 8-6155] done synthesizing module 'AHBrom' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBrom.v:17]
 INFO: [Synth 8-6157] synthesizing module 'AHBram' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBram.v:17]
-INFO: [Synth 8-638] synthesizing module 'blk_mem_4Kword' [c:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/block_mem/blk_mem_4Kword/synth/blk_mem_4Kword.vhd:71]
-	Parameter C_FAMILY bound to: artix7 - type: string 
-	Parameter C_XDEVICEFAMILY bound to: artix7 - type: string 
-	Parameter C_ELABORATION_DIR bound to: ./ - type: string 
-	Parameter C_INTERFACE_TYPE bound to: 0 - type: integer 
-	Parameter C_AXI_TYPE bound to: 1 - type: integer 
-	Parameter C_AXI_SLAVE_TYPE bound to: 0 - type: integer 
-	Parameter C_USE_BRAM_BLOCK bound to: 0 - type: integer 
-	Parameter C_ENABLE_32BIT_ADDRESS bound to: 0 - type: integer 
-	Parameter C_CTRL_ECC_ALGO bound to: NONE - type: string 
-	Parameter C_HAS_AXI_ID bound to: 0 - type: integer 
-	Parameter C_AXI_ID_WIDTH bound to: 4 - type: integer 
-	Parameter C_MEM_TYPE bound to: 1 - type: integer 
-	Parameter C_BYTE_SIZE bound to: 8 - type: integer 
-	Parameter C_ALGORITHM bound to: 0 - type: integer 
-	Parameter C_PRIM_TYPE bound to: 3 - type: integer 
-	Parameter C_LOAD_INIT_FILE bound to: 0 - type: integer 
-	Parameter C_INIT_FILE_NAME bound to: no_coe_file_loaded - type: string 
-	Parameter C_INIT_FILE bound to: blk_mem_4Kword.mem - type: string 
-	Parameter C_USE_DEFAULT_DATA bound to: 1 - type: integer 
-	Parameter C_DEFAULT_DATA bound to: 0 - type: string 
-	Parameter C_HAS_RSTA bound to: 0 - type: integer 
-	Parameter C_RST_PRIORITY_A bound to: CE - type: string 
-	Parameter C_RSTRAM_A bound to: 0 - type: integer 
-	Parameter C_INITA_VAL bound to: 0 - type: string 
-	Parameter C_HAS_ENA bound to: 0 - type: integer 
-	Parameter C_HAS_REGCEA bound to: 0 - type: integer 
-	Parameter C_USE_BYTE_WEA bound to: 1 - type: integer 
-	Parameter C_WEA_WIDTH bound to: 4 - type: integer 
-	Parameter C_WRITE_MODE_A bound to: WRITE_FIRST - type: string 
-	Parameter C_WRITE_WIDTH_A bound to: 32 - type: integer 
-	Parameter C_READ_WIDTH_A bound to: 32 - type: integer 
-	Parameter C_WRITE_DEPTH_A bound to: 4096 - type: integer 
-	Parameter C_READ_DEPTH_A bound to: 4096 - type: integer 
-	Parameter C_ADDRA_WIDTH bound to: 12 - type: integer 
-	Parameter C_HAS_RSTB bound to: 0 - type: integer 
-	Parameter C_RST_PRIORITY_B bound to: CE - type: string 
-	Parameter C_RSTRAM_B bound to: 0 - type: integer 
-	Parameter C_INITB_VAL bound to: 0 - type: string 
-	Parameter C_HAS_ENB bound to: 0 - type: integer 
-	Parameter C_HAS_REGCEB bound to: 0 - type: integer 
-	Parameter C_USE_BYTE_WEB bound to: 1 - type: integer 
-	Parameter C_WEB_WIDTH bound to: 4 - type: integer 
-	Parameter C_WRITE_MODE_B bound to: WRITE_FIRST - type: string 
-	Parameter C_WRITE_WIDTH_B bound to: 32 - type: integer 
-	Parameter C_READ_WIDTH_B bound to: 32 - type: integer 
-	Parameter C_WRITE_DEPTH_B bound to: 4096 - type: integer 
-	Parameter C_READ_DEPTH_B bound to: 4096 - type: integer 
-	Parameter C_ADDRB_WIDTH bound to: 12 - type: integer 
-	Parameter C_HAS_MEM_OUTPUT_REGS_A bound to: 0 - type: integer 
-	Parameter C_HAS_MEM_OUTPUT_REGS_B bound to: 0 - type: integer 
-	Parameter C_HAS_MUX_OUTPUT_REGS_A bound to: 0 - type: integer 
-	Parameter C_HAS_MUX_OUTPUT_REGS_B bound to: 0 - type: integer 
-	Parameter C_MUX_PIPELINE_STAGES bound to: 0 - type: integer 
-	Parameter C_HAS_SOFTECC_INPUT_REGS_A bound to: 0 - type: integer 
-	Parameter C_HAS_SOFTECC_OUTPUT_REGS_B bound to: 0 - type: integer 
-	Parameter C_USE_SOFTECC bound to: 0 - type: integer 
-	Parameter C_USE_ECC bound to: 0 - type: integer 
-	Parameter C_EN_ECC_PIPE bound to: 0 - type: integer 
-	Parameter C_READ_LATENCY_A bound to: 1 - type: integer 
-	Parameter C_READ_LATENCY_B bound to: 1 - type: integer 
-	Parameter C_HAS_INJECTERR bound to: 0 - type: integer 
-	Parameter C_SIM_COLLISION_CHECK bound to: NONE - type: string 
-	Parameter C_COMMON_CLK bound to: 0 - type: integer 
-	Parameter C_DISABLE_WARN_BHV_COLL bound to: 0 - type: integer 
-	Parameter C_EN_SLEEP_PIN bound to: 0 - type: integer 
-	Parameter C_USE_URAM bound to: 0 - type: integer 
-	Parameter C_EN_RDADDRA_CHG bound to: 0 - type: integer 
-	Parameter C_EN_RDADDRB_CHG bound to: 0 - type: integer 
-	Parameter C_EN_DEEPSLEEP_PIN bound to: 0 - type: integer 
-	Parameter C_EN_SHUTDOWN_PIN bound to: 0 - type: integer 
-	Parameter C_EN_SAFETY_CKT bound to: 0 - type: integer 
-	Parameter C_DISABLE_WARN_BHV_RANGE bound to: 0 - type: integer 
-	Parameter C_COUNT_36K_BRAM bound to: 4 - type: string 
-	Parameter C_COUNT_18K_BRAM bound to: 0 - type: string 
-	Parameter C_EST_POWER_SUMMARY bound to: Estimated Power for IP     :     19.550798 mW - type: string 
-INFO: [Synth 8-3491] module 'blk_mem_gen_v8_4_7' declared at 'c:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/block_mem/blk_mem_4Kword/hdl/blk_mem_gen_v8_4_vhsyn_rfs.vhd:195208' bound to instance 'U0' of component 'blk_mem_gen_v8_4_7' [c:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/block_mem/blk_mem_4Kword/synth/blk_mem_4Kword.vhd:239]
-INFO: [Synth 8-256] done synthesizing module 'blk_mem_4Kword' (0#1) [c:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/block_mem/blk_mem_4Kword/synth/blk_mem_4Kword.vhd:71]
+INFO: [Synth 8-6157] synthesizing module 'blk_mem_4Kword' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.runs/synth_1/.Xil/Vivado-18996-Eleclab59/realtime/blk_mem_4Kword_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'blk_mem_4Kword' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.runs/synth_1/.Xil/Vivado-18996-Eleclab59/realtime/blk_mem_4Kword_stub.v:6]
 INFO: [Synth 8-6155] done synthesizing module 'AHBram' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBram.v:17]
 INFO: [Synth 8-6157] synthesizing module 'AHBgpio' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBgpio.v:20]
 INFO: [Synth 8-6155] done synthesizing module 'AHBgpio' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBgpio.v:20]
@@ -254,6 +99,12 @@ INFO: [Synth 8-294] found qualifier unique on case statement: implementing as pa
 INFO: [Synth 8-6155] done synthesizing module 'spi_core' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/spi/spi_core.sv:5]
 INFO: [Synth 8-6155] done synthesizing module 'AHBspi' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/spi/AHBspi.sv:5]
 INFO: [Synth 8-6157] synthesizing module 'AHBdisp' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBdisp.v:32]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBdisp.v:81]
+WARNING: [Synth 8-151] case item 4'b0000 is unreachable [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBdisp.v:90]
+INFO: [Synth 8-6157] synthesizing module 'bin2bcd' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/bin2bcd.v:5]
+INFO: [Synth 8-6155] done synthesizing module 'bin2bcd' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/bin2bcd.v:5]
+WARNING: [Synth 8-689] width (12) of port connection 'bcd_out' does not match port width (13) of module 'bin2bcd' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBdisp.v:104]
+WARNING: [Synth 8-689] width (12) of port connection 'bcd_out' does not match port width (13) of module 'bin2bcd' [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBdisp.v:117]
 INFO: [Synth 8-6155] done synthesizing module 'AHBdisp' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBdisp.v:32]
 INFO: [Synth 8-6155] done synthesizing module 'AHBliteTop' (0#1) [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBliteTop.v:17]
 WARNING: [Synth 8-3848] Net HRESP_disp in module/entity AHBliteTop does not have driver. [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/rtl/AHBliteTop.v:68]
@@ -286,6 +137,28 @@ WARNING: [Synth 8-7129] Port HADDR[6] in module AHBdisp is either unconnected or
 WARNING: [Synth 8-7129] Port HADDR[5] in module AHBdisp is either unconnected or has no load
 WARNING: [Synth 8-7129] Port HADDR[4] in module AHBdisp is either unconnected or has no load
 WARNING: [Synth 8-7129] Port HTRANS[0] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[31] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[30] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[29] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[28] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[27] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[26] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[25] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[24] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[23] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[22] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[21] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[20] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[19] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[18] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[17] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[16] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[15] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[14] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[13] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[12] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[11] in module AHBdisp is either unconnected or has no load
+WARNING: [Synth 8-7129] Port HWDATA[10] in module AHBdisp is either unconnected or has no load
 WARNING: [Synth 8-7129] Port HTRANS[0] in module ahb_to_csr is either unconnected or has no load
 WARNING: [Synth 8-7129] Port HADDR[31] in module AHBspi is either unconnected or has no load
 WARNING: [Synth 8-7129] Port HADDR[30] in module AHBspi is either unconnected or has no load
@@ -335,81 +208,58 @@ WARNING: [Synth 8-7129] Port HADDR[10] in module AHBuart is either unconnected o
 WARNING: [Synth 8-7129] Port HADDR[9] in module AHBuart is either unconnected or has no load
 WARNING: [Synth 8-7129] Port HADDR[8] in module AHBuart is either unconnected or has no load
 WARNING: [Synth 8-7129] Port HADDR[7] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HADDR[6] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HADDR[5] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HADDR[4] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HADDR[1] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HADDR[0] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HTRANS[0] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HWDATA[31] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HWDATA[30] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HWDATA[29] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HWDATA[28] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HWDATA[27] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HWDATA[26] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HWDATA[25] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HWDATA[24] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HWDATA[23] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HWDATA[22] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HWDATA[21] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HWDATA[20] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HWDATA[19] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HWDATA[18] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HWDATA[17] in module AHBuart is either unconnected or has no load
-WARNING: [Synth 8-7129] Port HWDATA[16] in module AHBuart is either unconnected or has no load
 INFO: [Common 17-14] Message 'Synth 8-7129' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:23 ; elapsed = 00:00:42 . Memory (MB): peak = 1961.891 ; gain = 999.094
+Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 1523.945 ; gain = 562.941
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:23 ; elapsed = 00:00:42 . Memory (MB): peak = 1961.891 ; gain = 999.094
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 1523.945 ; gain = 562.941
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:23 ; elapsed = 00:00:42 . Memory (MB): peak = 1961.891 ; gain = 999.094
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:04 . Memory (MB): peak = 1523.945 ; gain = 562.941
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.050 . Memory (MB): peak = 1961.891 ; gain = 0.000
-INFO: [Netlist 29-17] Analyzing 13 Unisim elements for replacement
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.014 . Memory (MB): peak = 1523.945 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 1 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 
 Processing XDC Constraints
 Initializing timing engine
+Parsing XDC File [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.runs/CORTEXM0DS_synth_1/CORTEXM0DS/CORTEXM0DS_in_context.xdc] for cell 'cpu'
+Finished Parsing XDC File [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.runs/CORTEXM0DS_synth_1/CORTEXM0DS/CORTEXM0DS_in_context.xdc] for cell 'cpu'
+Parsing XDC File [c:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/block_mem/blk_mem_4Kword/blk_mem_4Kword/blk_mem_4Kword_in_context.xdc] for cell 'RAM/bram0'
+Finished Parsing XDC File [c:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/ip/block_mem/blk_mem_4Kword/blk_mem_4Kword/blk_mem_4Kword_in_context.xdc] for cell 'RAM/bram0'
 Parsing XDC File [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/constraints/Nexys4_SoC.xdc]
 Finished Parsing XDC File [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/constraints/Nexys4_SoC.xdc]
 INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/constraints/Nexys4_SoC.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/AHBliteTop_propImpl.xdc].
 Resolution: To avoid this warning, move constraints listed in [.Xil/AHBliteTop_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
-Parsing XDC File [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.runs/synth_1/dont_touch.xdc]
-Finished Parsing XDC File [C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.runs/synth_1/dont_touch.xdc]
 INFO: [Timing 38-2] Deriving generated clocks
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 2008.883 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1618.391 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.030 . Memory (MB): peak = 2008.883 ; gain = 0.000
-INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
-INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.006 . Memory (MB): peak = 1618.391 ; gain = 0.000
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:29 ; elapsed = 00:00:49 . Memory (MB): peak = 2008.883 ; gain = 1046.086
+Finished Constraint Validation : Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 1618.391 ; gain = 657.387
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a100tcsg324-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:29 ; elapsed = 00:00:49 . Memory (MB): peak = 2008.883 ; gain = 1046.086
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 1618.391 ; gain = 657.387
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 Applied set_property KEEP_HIERARCHY = SOFT for RAM/bram0. (constraint file  auto generated constraint).
-Applied set_property KEEP_HIERARCHY = SOFT for ROM/bram1. (constraint file  auto generated constraint).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:29 ; elapsed = 00:00:49 . Memory (MB): peak = 2008.883 ; gain = 1046.086
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 1618.391 ; gain = 657.387
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-802] inferred FSM for state register 'loadState_reg' in module 'ram_loader'
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'spi_controller'
@@ -431,52 +281,52 @@ INFO: [Synth 8-3354] encoded FSM with state register 'loadState_reg' using encod
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'state_reg' using encoding 'one-hot' in module 'spi_controller'
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:34 ; elapsed = 00:00:53 . Memory (MB): peak = 2008.883 ; gain = 1046.086
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:08 ; elapsed = 00:00:09 . Memory (MB): peak = 1618.391 ; gain = 657.387
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
 ---------------------------------------------------------------------------------
 Detailed RTL Component Info : 
 +---Adders : 
-	   2 Input   34 Bit       Adders := 2     
 	   2 Input   32 Bit       Adders := 1     
-	   2 Input   31 Bit       Adders := 1     
-	   2 Input   30 Bit       Adders := 1     
-	   2 Input   24 Bit       Adders := 1     
 	   2 Input   21 Bit       Adders := 2     
-	   2 Input    9 Bit       Adders := 1     
+	   2 Input   10 Bit       Adders := 2     
 	   2 Input    7 Bit       Adders := 2     
 	   2 Input    6 Bit       Adders := 1     
-	   2 Input    4 Bit       Adders := 12    
+	   2 Input    4 Bit       Adders := 36    
 	   2 Input    3 Bit       Adders := 1     
 +---XORs : 
-	   2 Input      1 Bit         XORs := 62    
+	   2 Input      1 Bit         XORs := 3     
 +---Registers : 
-	               32 Bit    Registers := 2     
+	               32 Bit    Registers := 3     
 	               21 Bit    Registers := 2     
 	               16 Bit    Registers := 4     
 	               14 Bit    Registers := 1     
-	               10 Bit    Registers := 1     
+	               10 Bit    Registers := 3     
 	                9 Bit    Registers := 2     
-	                8 Bit    Registers := 49    
+	                8 Bit    Registers := 39    
 	                7 Bit    Registers := 2     
 	                6 Bit    Registers := 1     
 	                5 Bit    Registers := 1     
 	                4 Bit    Registers := 21    
 	                3 Bit    Registers := 3     
 	                2 Bit    Registers := 8     
-	                1 Bit    Registers := 864   
+	                1 Bit    Registers := 19    
++---RAMs : 
+	             256K Bit	(8192 X 32 bit)          RAMs := 1     
 +---Muxes : 
-	   2 Input   32 Bit        Muxes := 8     
+	   2 Input   32 Bit        Muxes := 2     
 	   4 Input   16 Bit        Muxes := 1     
 	   2 Input   16 Bit        Muxes := 1     
-	   2 Input    8 Bit        Muxes := 6     
+	   2 Input   10 Bit        Muxes := 3     
+	   2 Input    8 Bit        Muxes := 4     
 	   4 Input    8 Bit        Muxes := 1     
 	   8 Input    8 Bit        Muxes := 1     
 	   8 Input    6 Bit        Muxes := 1     
 	   2 Input    6 Bit        Muxes := 1     
+	   2 Input    5 Bit        Muxes := 2     
 	   7 Input    4 Bit        Muxes := 1     
-	   2 Input    4 Bit        Muxes := 7     
+	   2 Input    4 Bit        Muxes := 31    
 	   6 Input    4 Bit        Muxes := 1     
 	   8 Input    4 Bit        Muxes := 1     
 	   4 Input    4 Bit        Muxes := 1     
@@ -485,10 +335,10 @@ Detailed RTL Component Info :
 	   4 Input    2 Bit        Muxes := 4     
 	   2 Input    2 Bit        Muxes := 11    
 	   5 Input    2 Bit        Muxes := 1     
-	   2 Input    1 Bit        Muxes := 314   
 	   7 Input    1 Bit        Muxes := 7     
+	   2 Input    1 Bit        Muxes := 56    
 	   4 Input    1 Bit        Muxes := 19    
-	  10 Input    1 Bit        Muxes := 10    
+	   3 Input    1 Bit        Muxes := 2     
 ---------------------------------------------------------------------------------
 Finished RTL Component Statistics 
 ---------------------------------------------------------------------------------
@@ -508,20 +358,28 @@ WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
 WARNING: [Synth 8-3917] design AHBliteTop has port rgbLED[4] driven by constant 0
 WARNING: [Synth 8-3917] design AHBliteTop has port rgbLED[1] driven by constant 0
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:54 ; elapsed = 00:01:14 . Memory (MB): peak = 2008.883 ; gain = 1046.086
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 1618.391 ; gain = 657.387
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start ROM, RAM, DSP, Shift Register and Retiming Reporting
 ---------------------------------------------------------------------------------
 
 ROM: Preliminary Mapping Report
-+------------+-----------------+---------------+----------------+
-|Module Name | RTL Object      | Depth x Width | Implemented As | 
-+------------+-----------------+---------------+----------------+
-|AHBdisp     | hexPattern      | 32x7          | LUT            | 
-|AHBliteTop  | DISP/hexPattern | 32x7          | LUT            | 
-+------------+-----------------+---------------+----------------+
++------------+------------+---------------+----------------+
+|Module Name | RTL Object | Depth x Width | Implemented As | 
++------------+------------+---------------+----------------+
+|AHBdisp     | pattern0   | 32x7          | LUT            | 
++------------+------------+---------------+----------------+
 
+
+Block RAM: Preliminary Mapping Report (see note below)
++------------+-------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name | RTL Object        | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++------------+-------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|AHBliteTop  | ROM/bram1/mem_reg | 8 K x 32(READ_FIRST)   | W |   | 8 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 8      | 
++------------+-------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+Note: The table above is a preliminary report that shows the Block RAMs at the current stage of the synthesis flow. Some Block RAMs may be reimplemented as non Block RAM primitives later in the synthesis flow. Multiple instantiated Block RAMs are reported only once. 
 ---------------------------------------------------------------------------------
 Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
 ---------------------------------------------------------------------------------
@@ -529,19 +387,41 @@ Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:57 ; elapsed = 00:01:17 . Memory (MB): peak = 2008.883 ; gain = 1046.086
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 1618.391 ; gain = 657.387
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:01:13 ; elapsed = 00:01:33 . Memory (MB): peak = 2008.883 ; gain = 1046.086
+Finished Timing Optimization : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 1618.391 ; gain = 657.387
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+Block RAM: Final Mapping Report
++------------+-------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|Module Name | RTL Object        | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
++------------+-------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+|AHBliteTop  | ROM/bram1/mem_reg | 8 K x 32(READ_FIRST)   | W |   | 8 K x 32(WRITE_FIRST)  |   | R | Port A and B     | 0      | 8      | 
++------------+-------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
+
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
+INFO: [Synth 8-7052] The timing for the instance ROM/bram1/mem_reg_0 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance ROM/bram1/mem_reg_1 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance ROM/bram1/mem_reg_2 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance ROM/bram1/mem_reg_3 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance ROM/bram1/mem_reg_4 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance ROM/bram1/mem_reg_5 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance ROM/bram1/mem_reg_6 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
+INFO: [Synth 8-7052] The timing for the instance ROM/bram1/mem_reg_7 (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:01:15 ; elapsed = 00:01:35 . Memory (MB): peak = 2008.883 ; gain = 1046.086
+Finished Technology Mapping : Time (s): cpu = 00:00:16 ; elapsed = 00:00:17 . Memory (MB): peak = 1618.391 ; gain = 657.387
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -559,94 +439,97 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:01:17 ; elapsed = 00:01:37 . Memory (MB): peak = 2008.883 ; gain = 1046.086
+Finished IO Insertion : Time (s): cpu = 00:00:18 ; elapsed = 00:00:19 . Memory (MB): peak = 1618.391 ; gain = 657.387
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:01:17 ; elapsed = 00:01:37 . Memory (MB): peak = 2008.883 ; gain = 1046.086
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:18 ; elapsed = 00:00:19 . Memory (MB): peak = 1618.391 ; gain = 657.387
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:17 ; elapsed = 00:01:37 . Memory (MB): peak = 2008.883 ; gain = 1046.086
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:18 ; elapsed = 00:00:19 . Memory (MB): peak = 1618.391 ; gain = 657.387
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:01:17 ; elapsed = 00:01:37 . Memory (MB): peak = 2008.883 ; gain = 1046.086
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:18 ; elapsed = 00:00:19 . Memory (MB): peak = 1618.391 ; gain = 657.387
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:01:17 ; elapsed = 00:01:37 . Memory (MB): peak = 2008.883 ; gain = 1046.086
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:18 ; elapsed = 00:00:19 . Memory (MB): peak = 1618.391 ; gain = 657.387
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:01:17 ; elapsed = 00:01:37 . Memory (MB): peak = 2008.883 ; gain = 1046.086
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:18 ; elapsed = 00:00:19 . Memory (MB): peak = 1618.391 ; gain = 657.387
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
 ---------------------------------------------------------------------------------
 
 Report BlackBoxes: 
-+-+--------------+----------+
-| |BlackBox name |Instances |
-+-+--------------+----------+
-+-+--------------+----------+
++------+---------------+----------+
+|      |BlackBox name  |Instances |
++------+---------------+----------+
+|1     |CORTEXM0DS     |         1|
+|2     |blk_mem_4Kword |         1|
++------+---------------+----------+
 
 Report Cell Usage: 
-+------+----------+------+
-|      |Cell      |Count |
-+------+----------+------+
-|1     |BUFG      |     2|
-|2     |CARRY4    |    69|
-|3     |LUT1      |    60|
-|4     |LUT2      |   245|
-|5     |LUT3      |   297|
-|6     |LUT4      |   336|
-|7     |LUT5      |   618|
-|8     |LUT6      |  1887|
-|9     |MUXF7     |    48|
-|10    |MUXF8     |    12|
-|11    |PLLE2_ADV |     1|
-|12    |RAMB36E1  |    12|
-|21    |FDCE      |   188|
-|22    |FDPE      |   715|
-|23    |FDRE      |   683|
-|24    |FDSE      |     7|
-|25    |IBUF      |    25|
-|26    |OBUF      |    50|
-+------+----------+------+
++------+---------------+------+
+|      |Cell           |Count |
++------+---------------+------+
+|1     |CORTEXM0DS     |     1|
+|2     |blk_mem_4Kword |     1|
+|3     |BUFG           |     2|
+|4     |CARRY4         |    29|
+|5     |LUT1           |    25|
+|6     |LUT2           |    36|
+|7     |LUT3           |    91|
+|8     |LUT4           |    54|
+|9     |LUT5           |   144|
+|10    |LUT6           |   234|
+|11    |MUXF7          |    40|
+|12    |MUXF8          |    15|
+|13    |PLLE2_ADV      |     1|
+|14    |RAMB36E1       |     8|
+|15    |FDCE           |    64|
+|16    |FDPE           |     9|
+|17    |FDRE           |   624|
+|18    |FDSE           |     7|
+|19    |IBUF           |    25|
+|20    |OBUF           |    50|
++------+---------------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:01:17 ; elapsed = 00:01:37 . Memory (MB): peak = 2008.883 ; gain = 1046.086
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:18 ; elapsed = 00:00:19 . Memory (MB): peak = 1618.391 ; gain = 657.387
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 0 critical warnings and 379 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:51 ; elapsed = 00:01:35 . Memory (MB): peak = 2008.883 ; gain = 999.094
-Synthesis Optimization Complete : Time (s): cpu = 00:01:17 ; elapsed = 00:01:38 . Memory (MB): peak = 2008.883 ; gain = 1046.086
+Synthesis finished with 0 errors, 0 critical warnings and 221 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:13 ; elapsed = 00:00:18 . Memory (MB): peak = 1618.391 ; gain = 562.941
+Synthesis Optimization Complete : Time (s): cpu = 00:00:18 ; elapsed = 00:00:20 . Memory (MB): peak = 1618.391 ; gain = 657.387
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.026 . Memory (MB): peak = 2008.883 ; gain = 0.000
-INFO: [Netlist 29-17] Analyzing 142 Unisim elements for replacement
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.011 . Memory (MB): peak = 1618.391 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 93 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 2008.883 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1618.391 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Synth Design complete | Checksum: 7c67adbd
+Synth Design complete | Checksum: 8bd5dff2
 INFO: [Common 17-83] Releasing license: Synthesis
-92 Infos, 104 Warnings, 0 Critical Warnings and 0 Errors encountered.
+93 Infos, 110 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-INFO: [Common 17-600] The following parameters have non-default value.
-tcl.statsThreshold
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.004 . Memory (MB): peak = 2008.883 ; gain = 0.000
+synth_design: Time (s): cpu = 00:00:21 ; elapsed = 00:00:24 . Memory (MB): peak = 1618.391 ; gain = 1062.254
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1618.391 ; gain = 0.000
 INFO: [Common 17-1381] The checkpoint 'C:/Users/lab/Documents/EmbeddedSystems/Wednesday/AidanThomasTinu/SoC/DES_SoC/Hardware_Restart/Odd_SoCs/Odd_SoCs.runs/synth_1/AHBliteTop.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file AHBliteTop_utilization_synth.rpt -pb AHBliteTop_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Wed Apr 22 17:17:08 2026...
+INFO: [Common 17-206] Exiting Vivado at Thu Apr 23 13:59:42 2026...

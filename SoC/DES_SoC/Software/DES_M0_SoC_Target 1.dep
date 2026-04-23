@@ -1,5 +1,5 @@
 Dependencies for Project 'DES_M0_SoC', Target 'Target 1': (DO NOT MODIFY !)
-F (.\main.c)(0x69EA109F)(-c --cpu Cortex-M0 -D__EVAL --li -g -O0 --apcs=interwork -I C:\Keil_v4\ARM\RV31\INC-I C:\Keil_v4\ARM\CMSIS\Include-o .\temp_files\main.o --omf_browse .\temp_files\main.crf --depend .\temp_files\main.d)
+F (.\main.c)(0x69EA1990)(-c --cpu Cortex-M0 -D__EVAL --li -g -O0 --apcs=interwork -I C:\Keil_v4\ARM\RV31\INC-I C:\Keil_v4\ARM\CMSIS\Include-o .\temp_files\main.o --omf_browse .\temp_files\main.crf --depend .\temp_files\main.d)
 I (C:\Keil_v4\ARM\ARMCC\include\stdio.h)(0x51C827C4)
 I (DES_M0_SoC.h)(0x69EA0885)
 F (.\main-SysTick.c)(0x69E9F695)()

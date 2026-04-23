@@ -105,15 +105,15 @@ module  AHBdisp #(D_WIDTH = 20) (
         .negative_flag(left_neg_flag)
     );
 
-    assign displayReg[3] = left_neg_flag ? 5'h11 : 5'hff;
-    assign displayReg[2] = left_bcd[11:8];
-    assign displayReg[1] = left_bcd[7:4];
-    assign displayReg[0] = left_bcd[3:0];
+    assign displayReg[7] = left_neg_flag ? 5'h11 : 5'hff;
+    assign displayReg[6] = left_bcd[11:8];
+    assign displayReg[5] = left_bcd[7:4];
+    assign displayReg[4] = left_bcd[3:0];
 
     wire right_neg_flag;
     wire [11:0] right_bcd;
     bin2bcd double_dabble_right (
-        .bin_in(valuesToDisplay[1]),
+        .bin_in(valuesToDisplay[0]),
         .bcd_out(right_bcd),
         .negative_flag(right_neg_flag)
     );
@@ -153,7 +153,7 @@ module  AHBdisp #(D_WIDTH = 20) (
         endcase  // no need for default, as all possibilities covered
 
 // Multiplexer to select the data from the display register
-    assign raw = 8'b0;
+    assign raw = displayReg[digitSel];
     
 // Multiplexer to select the mode signal
     assign mode = 1'b1;

@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2023 Advanced Micro Devices, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2023.2 (win64) Build 4029153 Fri Oct 13 20:14:34 MDT 2023
-| Date             : Wed Apr 22 17:18:08 2026
+| Date             : Thu Apr 23 14:00:51 2026
 | Host             : Eleclab59 running 64-bit major release  (build 9200)
 | Command          : report_power -file AHBliteTop_power_routed.rpt -pb AHBliteTop_power_summary_routed.pb -rpx AHBliteTop_power_routed.rpx
 | Design           : AHBliteTop
@@ -52,14 +52,14 @@ Table of Contents
 +----------------+-----------+----------+-----------+-----------------+
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
-| Clocks         |     0.004 |        5 |       --- |             --- |
-| Slice Logic    |     0.002 |     5227 |       --- |             --- |
-|   LUT as Logic |     0.002 |     2962 |     63400 |            4.67 |
+| Clocks         |     0.005 |        5 |       --- |             --- |
+| Slice Logic    |     0.002 |     5191 |       --- |             --- |
+|   LUT as Logic |     0.002 |     3016 |     63400 |            4.76 |
 |   CARRY4       |    <0.001 |       69 |     15850 |            0.44 |
-|   Register     |    <0.001 |     1595 |    126800 |            1.26 |
-|   F7/F8 Muxes  |    <0.001 |       60 |     63400 |            0.09 |
-|   Others       |     0.000 |       74 |       --- |             --- |
-| Signals        |     0.006 |     4826 |       --- |             --- |
+|   Register     |    <0.001 |     1539 |    126800 |            1.21 |
+|   F7/F8 Muxes  |    <0.001 |       62 |     63400 |            0.10 |
+|   Others       |     0.000 |       47 |       --- |             --- |
+| Signals        |     0.005 |     4804 |       --- |             --- |
 | Block RAM      |     0.009 |       12 |       135 |            8.89 |
 | PLL            |     0.097 |        1 |         6 |           16.67 |
 | I/O            |     0.012 |       75 |       210 |           35.71 |
@@ -74,7 +74,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.045 |       0.029 |      0.016 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.044 |       0.028 |      0.016 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.068 |       0.049 |      0.018 |       NA    | Unspecified | NA         |
 | Vcco33    |       3.300 |     0.007 |       0.003 |      0.004 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
@@ -151,10 +151,9 @@ Table of Contents
 |       U0    |     0.004 |
 |   ROM       |     0.005 |
 |     bram1   |     0.005 |
-|       U0    |     0.005 |
 |   clockGen  |     0.097 |
-|   cpu       |     0.009 |
-|     u_logic |     0.009 |
+|   cpu       |     0.008 |
+|     u_logic |     0.008 |
 +-------------+-----------+
 
 
