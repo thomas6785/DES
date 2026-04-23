@@ -182,24 +182,42 @@ coords get_calibrated_offsets() {
     offsets.x = 0;
     offsets.y = 0;
     offsets.z = 0;
-
+    delay(1000000);
     for(i=0;i<8;i++) { // take 8 samples and average them to get the offsets
         coords sample = read_accelerometer();
         offsets.x += sample.x;
         offsets.y += sample.y;
         offsets.z += sample.z;
-        delay(100000); // add a delay between samples to avoid issues with sampling too quickly TODO tune this delay and all others
+        delay(1000000); // add a delay between samples to avoid issues with sampling too quickly TODO tune this delay and all others
+
+        // Print to show progress
+        printf(".");
     }
     offsets.x = offsets.x >> 3;
     offsets.y = offsets.y >> 3;
     offsets.z = offsets.z >> 3;
 
+
+
     return offsets;
+}
+
+void print_accel_info(void){
+
+    uint8 dev_id = read_accelerometer_register(0x02);
+    uint8 rev_id = read_accelerometer_register(0x03);
+    // Print welcome message
+    printf("Welcome to Accelorometer CLI\n");
+    printf("Device ID: %x\n", dev_id);
+    printf("Revision ID: %x\n", rev_id);
+
+
+    printf("----------------\n");
+
 }
 
 int main(void) {
     uint16 sw; // variable to store the value of the switches
-    uint8 mode; // variable to store the mode of operation (tilt or position)
 
     coords cal_offsets;
 
@@ -217,9 +235,14 @@ int main(void) {
     pt2SPICON       = (0 << 6) | (6 << 3) | (0 << 2) | (3);
     configure_accelerometer();
 
+    print_accel_info();
+
     delay(FLASH_DELAY); // TODO tighten this delay
+    printf("Calibrating: [");
     cal_offsets = get_calibrated_offsets();
-    printf("Calibration offsets - x: %d, y: %d, z: %d\n",cal_offsets.x,cal_offsets.y,cal_offsets.z);
+    printf("]\n");
+    
+    printf("\nCalibration offsets - x: %d, y: %d, z: %d\n",cal_offsets.x,cal_offsets.y,cal_offsets.z);
 
     for(i=0;i<20;i++) {
         filter_coords(cal_offsets); // initialize the filter state
@@ -228,9 +251,6 @@ int main(void) {
     while(1) {
         // Read the state of the switches
         sw = GPIO_SW;
-        mode = sw >> 15; //Mode can either be in tilt mode or position mode, determined by the MSB of the switch value
-        printf("Switch value: %4x, Mode: %d\n",sw,mode);
-
 		if (fresh_data_flag) { // check if new data is ready for processing
 			coords filtered_data;
 
@@ -247,12 +267,18 @@ int main(void) {
 
 
 			// Display the y tilt on the LEDs
-			LED_from_middle(filtered_data.y>>7); // shift the value down to fit in the 8 LEDs, and display from the middle
-			// Display the x tilt directly on the 7 segment display
-			write_lower_half_to_display(filtered_data.x >> 3); // todo justify right shift amoutn
-            write_upper_half_to_display(filtered_data.z >> 3); // todo justify right shift amoutn
+            if (sw && 0x1) {
+			    LED_from_middle(filtered_data.y>>7); // shift the value down to fit in the 8 LEDs, and display from the middle
+    
+			    write_lower_half_to_display(filtered_data.x >> 3); // todo justify right shift amount
+
+
+                write_upper_half_to_display(filtered_data.z >> 3); // todo justify right shift amount
+            
+
+                printf("\r x: %4d  y:%4d  z:%4d ", filtered_data.x, filtered_data.y, filtered_data.z);
+            }
+
 		}
-		sw = GPIO_SW; // read the switches again to check if we need to change mode
-		mode = sw >> 15;
     }
 }
