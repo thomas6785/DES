@@ -66,43 +66,63 @@ module  AHBdisp #(D_WIDTH = 20) (
         else if (HREADY)    // previous bus transaction is completing
             begin
                 rHADDR <= HADDR[3:0];  // capture address bits for for use in data phase
-                rWrite <= HSEL & HWRITE & HTRANS[1]; // this slave selected for write transfer       
+                rWrite <= HSEL & HWRITE & HTRANS[1]; // this slave selected for write transfer
             end
 
 // Ten registers visible on the AHB-Lite bus, as described above
-    reg [7:0] displayReg [0:9];
+    reg [9:0] valuesToDisplay [1:0]; // two values (left half of display, right half of display, each a 10-bit signed value (-512 to +511))
+    wire [7:0] displayReg [0:9];
     integer i;
-    always @ (posedge HCLK)
-        if (!HRESETn)                       // reset is active
-            for (i = 0; i < 10; i = i + 1)  // for each register
-                displayReg[i] <= 8'b0;      // set it to 0
-        else if (rWrite)                    // writing to a register
+    always @ (posedge HCLK) begin
+        if (!HRESETn) begin                       // reset is active
+            valuesToDisplay[0] <= 10'b0;
+            valuesToDisplay[1] <= 10'b0;
+        end else if (rWrite) begin                    // writing to a register
             case (rHADDR)                   // choose which register to change
-                4'd0:     displayReg[0] <= HWDATA[7:0];   // get data from correct byte lane
-                4'd1:     displayReg[1] <= HWDATA[15:8];
-                4'd2:     displayReg[2] <= HWDATA[23:16];
-                4'd3:     displayReg[3] <= HWDATA[31:24];
-                4'd4:     displayReg[4] <= HWDATA[7:0];
-                4'd5:     displayReg[5] <= HWDATA[15:8];
-                4'd6:     displayReg[6] <= HWDATA[23:16];
-                4'd7:     displayReg[7] <= HWDATA[31:24];
-                4'd8:     displayReg[8] <= HWDATA[7:0];
-                default:  displayReg[9] <= HWDATA[15:8];  // address 9 to 15 selects register 9
+                4'h0:     valuesToDisplay[0] <= HWDATA[9:0];
+                4'h4:     valuesToDisplay[1] <= HWDATA[9:0];
             endcase
+        end
+    end
 
 // Bus read multiplexer - output a full word and let the bus master select the byte
-    always @(rHADDR, displayReg[0], displayReg[1], displayReg[2], displayReg[3], displayReg[4], 
-               displayReg[5], displayReg[6], displayReg[7], displayReg[8], displayReg[9])
-        case (rHADDR[3:2])      // select on word address (stored from address phase)
-            2'd0:     readData = {displayReg[3], displayReg[2], displayReg[1], displayReg[0]};
-            2'd1:     readData = {displayReg[7], displayReg[6], displayReg[5], displayReg[4]};
-            default:  readData = {16'b0, displayReg[9], displayReg[8]};
+    always @(rHADDR, valuesToDisplay[0], valuesToDisplay[1])
+        case (rHADDR)      // select on word address (stored from address phase)
+            2'd0:     readData = {23'b0, valuesToDisplay[0]};
+            2'd4:     readData = {23'b0, valuesToDisplay[1]};
+            default:  readData = {32'b0};
         endcase
         
     assign HRDATA = readData;   
     assign HREADYOUT = 1'b1;    // always ready - transaction is never delayed
 
     
+    wire left_neg_flag;
+    wire [11:0] left_bcd;
+    bin2bcd double_dabble_left (
+        .bin_in(valuesToDisplay[1]),
+        .bcd_out(left_bcd),
+        .negative_flag(left_neg_flag)
+    );
+
+    assign displayReg[3] = left_neg_flag ? 5'h11 : 5'hff;
+    assign displayReg[2] = left_bcd[11:8];
+    assign displayReg[1] = left_bcd[7:4];
+    assign displayReg[0] = left_bcd[3:0];
+
+    wire right_neg_flag;
+    wire [11:0] right_bcd;
+    bin2bcd double_dabble_right (
+        .bin_in(valuesToDisplay[1]),
+        .bcd_out(right_bcd),
+        .negative_flag(right_neg_flag)
+    );
+
+    assign displayReg[3] = right_neg_flag ? 5'h11 : 5'hff;
+    assign displayReg[2] = right_bcd[11:8];
+    assign displayReg[1] = right_bcd[7:4];
+    assign displayReg[0] = right_bcd[3:0];
+
 //================================  Display Interface ===============================
 
     reg [D_WIDTH-1:0] clkCount; // counter to scan digits
@@ -133,13 +153,13 @@ module  AHBdisp #(D_WIDTH = 20) (
         endcase  // no need for default, as all possibilities covered
 
 // Multiplexer to select the data from the display register
-    assign raw = displayReg[digitSel];
+    assign raw = 8'b0;
     
 // Multiplexer to select the mode signal
-    assign mode = displayReg[8] [digitSel];
+    assign mode = 1'b1;
     
 // Multiplexer to select the enable signal
-    assign enable = displayReg[9] [digitSel];
+    assign enable = 1'b1;
     
 // Multiplexer to select the segment pattern for the selected digit (active low)
 // either a combination of dot from raw and pattern from table, or inverted raw

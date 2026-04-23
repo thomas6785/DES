@@ -3,14 +3,11 @@
 
 
 module bin2bcd #(
-    parameter INPUT_WIDTH = 8,
-    parameter OUTPUT_WIDTH = INPUT_WIDTH + (INPUT_WIDTH-4)/3+1
-)(  input       [INPUT_WIDTH -1: 0] bin_in,
-    input                           enable,
-    input                           clk, 
-    output reg  [OUTPUT_WIDTH-1: 0] bcd_out,
+    localparam INPUT_WIDTH = 10, // including a sign bit
+    localparam OUTPUT_WIDTH = INPUT_WIDTH+(INPUT_WIDTH-4)/3+1
+)(  input wire signed [INPUT_WIDTH-1: 0] bin_in,
+    output reg  [OUTPUT_WIDTH-1:0] bcd_out,
     output reg                      negative_flag);
-
 
     integer i, j;
     always @(bin_in) begin
@@ -32,7 +29,5 @@ module bin2bcd #(
                     bcd_out[INPUT_WIDTH-i+4*j -: 4] = bcd_out[INPUT_WIDTH-i+4*j -: 4] + 4'd3;
             end
         end
-
     end
-
 endmodule
