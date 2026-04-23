@@ -2,7 +2,7 @@
 	Definitions and structs for System on Chip design assignment.
 	This version works without CMSIS.  */
 
-	
+
 #ifndef DES_M0_HDR_ALREADY_INCLUDED
 #define DES_M0_HDR_ALREADY_INCLUDED
 
@@ -19,7 +19,7 @@ typedef   signed       int   int32;
 
 // =================================================================
 // Struct for registers in UART hardware
-typedef struct 
+typedef struct
 {
 	union  // this union occupies 4 bytes in the address map
 	{
@@ -31,12 +31,12 @@ typedef struct
 		volatile uint8   TxData;
 		volatile uint32  reserved1;
 	};
-	union 
+	union
 	{
 		volatile uint8   Status;
 		volatile uint32  reserved2;
 	};
-	union 
+	union
 	{
 		volatile uint8   Control;
 		volatile uint32  reserved3;
@@ -72,19 +72,19 @@ typedef struct 		// matches the registers in GPIO hardware
 		struct TwoByte OUT0;			// can also access as two 8-bit registers
 		volatile uint32  reserved0;		// overlapping 4-byte value
 	};
-	union 
+	union
 	{
 		volatile uint16  Out1;
 		struct TwoByte OUT1;
 		volatile uint32  reserved1;
 	};
-	union 
+	union
 	{
 		volatile uint16  In0;
 		struct TwoByte IN0;
 		volatile uint32  reserved2;
 	};
-	union 
+	union
 	{
 		volatile uint16  In1;
 		struct TwoByte IN1;
@@ -182,8 +182,8 @@ typedef struct{
 #define pt2DISP    ((DISP_block *)0x53000000)
 
 // Short names for some common registers
-#define pt2SPICON (pt2SPI -> SPICON)
-#define pt2SPIDAT (pt2SPI -> SPIDAT)
+#define pt2SPICON   (pt2SPI->SPICON)
+#define pt2SPIDAT   (pt2SPI->SPIDAT)
 #define GPIO_ACC	(pt2GPIO->Out1)				// input port 1 is connected to 5 buttons
 
 #endif
