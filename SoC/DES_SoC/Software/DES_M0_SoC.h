@@ -156,20 +156,9 @@ typedef struct {
 // Registers for display
 
 typedef struct{
-	volatile uint8 digit0;
-	volatile uint8 digit1;
-	volatile uint8 digit2;
-	volatile uint8 digit3;
-	volatile uint8 digit4;
-	volatile uint8 digit5;
-	volatile uint8 digit6;
-	volatile uint8 digit7;
-	volatile uint8 dispMode;
-	volatile uint8 digitEnable;
+	volatile int32 left_disp;
+	volatile int32 right_disp;
 } DISP_block;
-
-#define pt2DISPMODE     (pt2DISP->dispMode)
-#define pt2DIGITENABLE  (pt2DISP->digitEnable)
 
 // =================================================================
 // Use the typedefs above to define the memory map

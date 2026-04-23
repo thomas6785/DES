@@ -58,7 +58,7 @@ void write_accelerometer_register(uint8 addr, uint8 data) {
 	GPIO_ACC = 0xFF; // deselect chip
 }
 
-uint32 read_accelerometer_register(uint8 addr) {
+uint8 read_accelerometer_register(uint8 addr) {
 	uint32 read_val,write_val;
 
 	write_val = ((0x0B << 16) | // read instruction
@@ -89,7 +89,7 @@ uint32 read_accelerometer_register(uint8 addr) {
 	read_val = pt2SPIDAT; // read SPIDAT back TODO extract only relevant bits
 	//printf("\tRead %8x from SPIDAT\n",read_val);
 
-	return read_val; // read SPIDAT back
+	return read_val & 0xFF; // read SPIDAT back
 }
 
 ///////////////////
@@ -103,9 +103,13 @@ void configure_accelerometer() { // ADXL362
 coords read_accelerometer() {
     coords c;
 
-    c.x = (read_accelerometer_register(0x0F) << 8) | read_accelerometer_register(0x0E); // read the x value (high byte first)
-    c.y = (read_accelerometer_register(0x11) << 8) | read_accelerometer_register(0x10);
-    c.z = (read_accelerometer_register(0x13) << 8) | read_accelerometer_register(0x12);
+    // c.x = (read_accelerometer_register(0x0F) << 8) | read_accelerometer_register(0x0E); // read the x value (high byte first)
+    // c.y = (read_accelerometer_register(0x11) << 8) | read_accelerometer_register(0x10);
+    // c.z = (read_accelerometer_register(0x13) << 8) | read_accelerometer_register(0x12);
+
+	c.x = ((int16) ((int8) read_accelerometer_register(0x08))) << 4;
+	c.y = ((int16) ((int8) read_accelerometer_register(0x09))) << 4;
+	c.z = ((int16) ((int8) read_accelerometer_register(0x0A))) << 4;
 
     return c;
 }
@@ -154,18 +158,18 @@ void LED_from_middle(int8 value) {
 
 void write_lower_half_to_display(int16 value) {
     // Write the value to the display, by writing to the pointers. This doesn't need to worry about encoding, as this is handled by the block
-    pt2DISP->digit0 = value & 0xF; // write the lower nibble of the value to the first digit of the display
-    pt2DISP->digit1 = (value >> 4) & 0xF;
-    pt2DISP->digit2 = (value >> 8) & 0xF;
-    pt2DISP->digit3 = (value >> 12) & 0xF;
+    //pt2DISP->digit0 = value & 0xF; // write the lower nibble of the value to the first digit of the display
+    //pt2DISP->digit1 = (value >> 4) & 0xF;
+    //pt2DISP->digit2 = (value >> 8) & 0xF;
+    //pt2DISP->digit3 = (value >> 12) & 0xF;
 }
 
 void write_upper_half_to_display(int16 value) {
     // Write the value to the display, by writing to the pointers. This doesn't need to worry about encoding, as this is handled by the block
-    pt2DISP->digit4 = value & 0xF; // write the lower nibble of the value to the third digit of the display
-    pt2DISP->digit5 = (value >> 4) & 0xF;
-    pt2DISP->digit6 = (value >> 8) & 0xF;
-    pt2DISP->digit7 = (value >> 12) & 0xF;
+    //pt2DISP->digit4 = value & 0xF; // write the lower nibble of the value to the third digit of the display
+    //pt2DISP->digit5 = (value >> 4) & 0xF;
+    //pt2DISP->digit6 = (value >> 8) & 0xF;
+    //pt2DISP->digit7 = (value >> 12) & 0xF;
     // TODO accommodate signs
 }
 
@@ -195,28 +199,24 @@ int main(void) {
     uint16 sw; // variable to store the value of the switches
     uint8 mode; // variable to store the mode of operation (tilt or position)
 
-    int32 x_pos = 0;
-    int32 y_pos = 0;
-    int32 z_pos = 0;
-    int32 x_vel = 0;
-    int32 y_vel = 0;
-    int32 z_vel = 0;
-
     coords cal_offsets;
 
     uint8 i;
-    i=0;
+		i=0;
 
     NVIC_Disable = 0xFFFFFFFF; // disable all interrupts
     NVIC_Enable = (1<<15);
+	
+		pt2DISP -> left_disp  =  123;
+		pt2DISP -> right_disp = -123;
+		return 0;
+	
 
     // Set systick to give ISR every 50 Hz
     SysTick_Reload   = 1000000; // set the reload value for the SysTick timer to generate an interrupt at 50 Hz (assuming a 50MHz clock)
     SysTick_Control  = 0x7;
 
     // Firstly, do all the configuring of the device here
-    pt2DISPMODE     = 0xFF;
-    pt2DIGITENABLE  = 0xFF;
     pt2SPICON       = (0 << 6) | (6 << 3) | (0 << 2) | (3);
     configure_accelerometer();
 
@@ -234,59 +234,27 @@ int main(void) {
         mode = sw >> 15; //Mode can either be in tilt mode or position mode, determined by the MSB of the switch value
         printf("Switch value: %4x, Mode: %d\n",sw,mode);
 
-        if (mode == 0) { // This is tilt mode
-            while(mode ==0) { // stay in this mode until the mode switch is toggled
-                if (fresh_data_flag) { // check if new data is ready for processing
-                    fresh_data_flag = 0; // reset the flag
+		if (fresh_data_flag) { // check if new data is ready for processing
+			coords filtered_data;
 
-                    // In this mode, we show the tilt around the y axis on the LEDs, and the tilt on the x axis numerically on the display
-                    // The y tilt is a value between 0 and 255
 
-                    // Display the y tilt on the LEDs
-                    LED_from_middle(measured_coords.y>>8); // shift the value down to fit in the 8 LEDs, and display from the middle
-                    // Display the x tilt directly on the 7 segment display
-                    write_lower_half_to_display(measured_coords.x);
-                }
-                sw = GPIO_SW; // read the switches again to check if we need to change mode
-                mode = sw >> 15;
-            }
-        } else {
-            while(mode == 1) { // This is position mode, stay in this mode until the mode switch is toggled
-                if (fresh_data_flag) { // check if new data is ready for processing
-                    coords new_filters_coords;
-                    fresh_data_flag = 0; // reset the flag
+			fresh_data_flag = 0; // reset the flag
+			// In this mode, we show the tilt around the y axis on the LEDs, and the tilt on the x axis numerically on the display
+			// The y tilt is a value between 0 and 255
 
-                    new_filters_coords = filter_coords(measured_coords);
-                    printf("x_value: %d, y_value: %d, z_value: %d\n",new_filters_coords.x,new_filters_coords.y,new_filters_coords.z);
+			filtered_data = filter_coords(measured_coords);
 
-                    // In this mode, the user can select the measurement for the LEDs and both halves of the display using the switches.
-                    // The value should be double integrated to get position
-                    x_vel += new_filters_coords.x - cal_offsets.x;
-                    y_vel += new_filters_coords.y - cal_offsets.y;
-                    z_vel += new_filters_coords.z - cal_offsets.z;
-                    printf("x_vel: %d, y_vel: %d, z_vel: %d\n",x_vel,y_vel,z_vel);
+			filtered_data.x = filtered_data.x - cal_offsets.x;
+			filtered_data.y = filtered_data.y - cal_offsets.y;
+			filtered_data.z = filtered_data.z - cal_offsets.z;
 
-                    x_pos += x_vel; // integrate velocity to get position
-                    y_pos += y_vel;
-                    z_pos += z_vel;
-                    printf("x_pos: %d, y_pos: %d, z_pos: %d\n",x_pos,y_pos,z_pos);
-                    // Display the selected value on the LEDs and display
-                    // For now just display the x to the LEDs, y to the lower half of the display and z to the upper half of the display, but this could be changed to allow the user to select which value goes where using the switches
-                    LED_from_middle((new_filters_coords.x - cal_offsets.x)>>12); // shift the value down to fit in the 8 LEDs, and display from the middle
-                    write_lower_half_to_display(new_filters_coords.y - cal_offsets.y); // right 4 digits
-                    write_upper_half_to_display(new_filters_coords.z - cal_offsets.z); // left 4 digits
-                }
-                sw = GPIO_SW; // read the switches again to check if we need to change mode
-                mode = sw >> 15;
-                //delay(1000); // add a delay to avoid bouncing issues with the switch
-                i = i+1;
-                if (i==100) { // recalibrate every 100 loops
-                    cal_offsets = get_calibrated_offsets();
-                    x_vel = 0;
-                    y_vel = 0;
-                    z_vel = 0;
-                }
-            }
-        }
+
+			// Display the y tilt on the LEDs
+			LED_from_middle(filtered_data.y>>7); // shift the value down to fit in the 8 LEDs, and display from the middle
+			// Display the x tilt directly on the 7 segment display
+			write_lower_half_to_display(filtered_data.x);
+		}
+		sw = GPIO_SW; // read the switches again to check if we need to change mode
+		mode = sw >> 15;
     }
 }
