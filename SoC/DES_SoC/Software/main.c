@@ -138,6 +138,7 @@ void SysTick_ISR()
 
 void LED_from_middle(int8 value) {
     uint8 i;
+    // TODO it would be better if GPIO_LED were only written at the end so the compiler can use a register for all these operations and save a lot of memory accesses
 
     GPIO_LED = 0; // clear all LEDs
 
@@ -197,8 +198,6 @@ coords get_calibrated_offsets() {
     offsets.y = offsets.y >> 3;
     offsets.z = offsets.z >> 3;
 
-
-
     return offsets;
 }
 
@@ -241,7 +240,7 @@ int main(void) {
     printf("Calibrating: [");
     cal_offsets = get_calibrated_offsets();
     printf("]\n");
-    
+
     printf("\nCalibration offsets - x: %d, y: %d, z: %d\n",cal_offsets.x,cal_offsets.y,cal_offsets.z);
 
     for(i=0;i<20;i++) {
@@ -269,12 +268,12 @@ int main(void) {
 			// Display the y tilt on the LEDs
             if (sw && 0x1) {
 			    LED_from_middle(filtered_data.y>>7); // shift the value down to fit in the 8 LEDs, and display from the middle
-    
+
 			    write_lower_half_to_display(filtered_data.x >> 3); // todo justify right shift amount
 
 
                 write_upper_half_to_display(filtered_data.z >> 3); // todo justify right shift amount
-            
+
 
                 printf("\r x: %4d  y:%4d  z:%4d ", filtered_data.x, filtered_data.y, filtered_data.z);
             }
