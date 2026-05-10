@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="TB_toplevel_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="TB_toplevel" />
+            <top_module name="glbl" />
+            <top_module name="spi_pkg" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <WVObjectSize size="37" />
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/btnCpuResetn" type="logic">
+      <obj_property name="ElementShortName">btnCpuResetn</obj_property>
+      <obj_property name="ObjectShortName">btnCpuResetn</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/clk100" type="logic">
+      <obj_property name="ElementShortName">clk100</obj_property>
+      <obj_property name="ObjectShortName">clk100</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/btnU" type="logic">
+      <obj_property name="ElementShortName">btnU</obj_property>
+      <obj_property name="ObjectShortName">btnU</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/sw" type="array">
+      <obj_property name="ElementShortName">sw[15:0]</obj_property>
+      <obj_property name="ObjectShortName">sw[15:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/LED" type="array">
+      <obj_property name="ElementShortName">LED[15:0]</obj_property>
+      <obj_property name="ObjectShortName">LED[15:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/serialRx" type="logic">
+      <obj_property name="ElementShortName">serialRx</obj_property>
+      <obj_property name="ObjectShortName">serialRx</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/serialTx" type="logic">
+      <obj_property name="ElementShortName">serialTx</obj_property>
+      <obj_property name="ObjectShortName">serialTx</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HWDATA" type="array">
+      <obj_property name="ElementShortName">HWDATA[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HWDATA[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HADDR" type="array">
+      <obj_property name="ElementShortName">HADDR[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HADDR[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HWRITE" type="logic">
+      <obj_property name="ElementShortName">HWRITE</obj_property>
+      <obj_property name="ObjectShortName">HWRITE</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HTRANS" type="array">
+      <obj_property name="ElementShortName">HTRANS[1:0]</obj_property>
+      <obj_property name="ObjectShortName">HTRANS[1:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HPROT" type="array">
+      <obj_property name="ElementShortName">HPROT[3:0]</obj_property>
+      <obj_property name="ObjectShortName">HPROT[3:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HSIZE" type="array">
+      <obj_property name="ElementShortName">HSIZE[2:0]</obj_property>
+      <obj_property name="ObjectShortName">HSIZE[2:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HRDATA" type="array">
+      <obj_property name="ElementShortName">HRDATA[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HRDATA[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HREADY" type="logic">
+      <obj_property name="ElementShortName">HREADY</obj_property>
+      <obj_property name="ObjectShortName">HREADY</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HRESP" type="logic">
+      <obj_property name="ElementShortName">HRESP</obj_property>
+      <obj_property name="ObjectShortName">HRESP</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HSEL_rom" type="logic">
+      <obj_property name="ElementShortName">HSEL_rom</obj_property>
+      <obj_property name="ObjectShortName">HSEL_rom</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HSEL_ram" type="logic">
+      <obj_property name="ElementShortName">HSEL_ram</obj_property>
+      <obj_property name="ObjectShortName">HSEL_ram</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HSEL_dummy" type="logic">
+      <obj_property name="ElementShortName">HSEL_dummy</obj_property>
+      <obj_property name="ObjectShortName">HSEL_dummy</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HSEL_gpio" type="logic">
+      <obj_property name="ElementShortName">HSEL_gpio</obj_property>
+      <obj_property name="ObjectShortName">HSEL_gpio</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/GPIO/gpio_out0" type="array">
+      <obj_property name="ElementShortName">gpio_out0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">gpio_out0[15:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HSEL_uart" type="logic">
+      <obj_property name="ElementShortName">HSEL_uart</obj_property>
+      <obj_property name="ObjectShortName">HSEL_uart</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HSEL_spi" type="logic">
+      <obj_property name="ElementShortName">HSEL_spi</obj_property>
+      <obj_property name="ObjectShortName">HSEL_spi</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HRDATA_rom" type="array">
+      <obj_property name="ElementShortName">HRDATA_rom[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HRDATA_rom[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HRDATA_ram" type="array">
+      <obj_property name="ElementShortName">HRDATA_ram[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HRDATA_ram[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HRDATA_gpio" type="array">
+      <obj_property name="ElementShortName">HRDATA_gpio[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HRDATA_gpio[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HRDATA_uart" type="array">
+      <obj_property name="ElementShortName">HRDATA_uart[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HRDATA_uart[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HRDATA_spi" type="array">
+      <obj_property name="ElementShortName">HRDATA_spi[31:0]</obj_property>
+      <obj_property name="ObjectShortName">HRDATA_spi[31:0]</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HREADYOUT_rom" type="logic">
+      <obj_property name="ElementShortName">HREADYOUT_rom</obj_property>
+      <obj_property name="ObjectShortName">HREADYOUT_rom</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HREADYOUT_ram" type="logic">
+      <obj_property name="ElementShortName">HREADYOUT_ram</obj_property>
+      <obj_property name="ObjectShortName">HREADYOUT_ram</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HREADYOUT_dummy" type="logic">
+      <obj_property name="ElementShortName">HREADYOUT_dummy</obj_property>
+      <obj_property name="ObjectShortName">HREADYOUT_dummy</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HREADYOUT_gpio" type="logic">
+      <obj_property name="ElementShortName">HREADYOUT_gpio</obj_property>
+      <obj_property name="ObjectShortName">HREADYOUT_gpio</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HREADYOUT_uart" type="logic">
+      <obj_property name="ElementShortName">HREADYOUT_uart</obj_property>
+      <obj_property name="ObjectShortName">HREADYOUT_uart</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HREADYOUT_spi" type="logic">
+      <obj_property name="ElementShortName">HREADYOUT_spi</obj_property>
+      <obj_property name="ObjectShortName">HREADYOUT_spi</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HRESP_dummy" type="logic">
+      <obj_property name="ElementShortName">HRESP_dummy</obj_property>
+      <obj_property name="ObjectShortName">HRESP_dummy</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HRESP_uart" type="logic">
+      <obj_property name="ElementShortName">HRESP_uart</obj_property>
+      <obj_property name="ObjectShortName">HRESP_uart</obj_property>
+   </wvobject>
+   <wvobject db_ref_id="1" fp_name="/TB_toplevel/dut/HRESP_spi" type="logic">
+      <obj_property name="ElementShortName">HRESP_spi</obj_property>
+      <obj_property name="ObjectShortName">HRESP_spi</obj_property>
+   </wvobject>
+</wave_config>
